@@ -15,13 +15,15 @@ public class OS {
 
         Interpreter interpreter = new Interpreter();
         ArrayList<Process> processes = new ArrayList<>();
+        int i=1;
         processes.add(p1);
         processes.add(p2);
         processes.add(p3);
+        
         while(!processes.isEmpty()) {
-            Process currentProcess = scheduler.schedule(processes, globalTime);
-            if (currentProcess != null) {
-                
+            for (Process p : processes) {
+                if (p.arrivalTime == globalTime) { {
+                    PCB p1 = new PCB(i,"ready",)
             }
            
         }
