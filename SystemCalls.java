@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.io.*;
+import java.lang.reflect.Member;
 
 public class SystemCalls {
     public static void print(String message) {
@@ -40,8 +41,14 @@ public class SystemCalls {
 
         return content.toString();
     }
-    public void ReadFromMem(){}
-    public void WriteToMem(){}
+    public void ReadFromMem( Memory memory, int address){
+        MemoryWord word = memory.memory[address];
+        if (word != null) {
+            System.out.println(word.value);
+        }
+    }
+    public void WriteToMem(Memory memory, int address, Object value
+    ){}
 
    
 }

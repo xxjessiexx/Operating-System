@@ -1,4 +1,4 @@
 public class Memory {
-    Object[] memory = new Object[40];
+    MemoryWord[] memory = new MemoryWord[40];
 }
 

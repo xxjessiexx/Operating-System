@@ -23,7 +23,7 @@ public class OS {
         while(!processes.isEmpty()) {
             for (Process p : processes) {
                 if (p.arrivalTime == globalTime) { {
-                    PCB p1 = new PCB(i,"ready",)
+                    PCB p1 = new PCB(i,"ready",);
             }
            
         }
