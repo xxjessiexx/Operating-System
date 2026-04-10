@@ -4,11 +4,14 @@ public class Process {
     PCB pcb;
     ArrayList<String> instructions;
     int ArrivalTime;
+    int InstructionCounter;
 
 
     public Process(int ArrivalTime) {
         this.ArrivalTime = ArrivalTime;
         this.instructions = new ArrayList<>(instructions);
+        this.InstructionCounter = instructions.size();
+
     }
     //public String getNextInstruction() {
     //    if (pcb.programCounter < instructions.size()) {

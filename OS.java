@@ -27,8 +27,15 @@ public class OS {
             }
            
         }
-
-        
+        //p1 new process with arrival time 0
+        // process p1 = new Process(0);
+        //p1.pcb = new PCB(i,"ready",0,0,0);
+        //p1.instructions = interpreter.readFile("file.txt"); -- read the instructions from a file and store them in the process
+        //
+        //scheduler.addProcess(p1); -- add the process to the scheduler's ready queue
+        //--LOOP--
+        //px = scheduler.getNextProcess(); -- gets the next process from the scheduler
+        //interpreter.ExecuteInstruction(px.getNextInstruction()); -- execute the next instruction of the process using the interpreter
     }
     public int getGlobalTime() {
         return 0;

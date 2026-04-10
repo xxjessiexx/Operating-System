@@ -37,6 +37,7 @@ public class Interpreter {
                 int y = Integer.parseInt(parts[2]);
 
                 for (int i = x; i <= y; i++) {
+                    
                     System.out.print(i + " ");
                 }
                 System.out.println();
