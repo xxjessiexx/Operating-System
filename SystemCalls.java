@@ -47,8 +47,12 @@ public class SystemCalls {
             System.out.println(word.value);
         }
     }
-    public void WriteToMem(Memory memory, int address, Object value
-    ){}
+    public void WriteToMem(Memory memory, int address,String label, Object value){
+        MemoryWord word = new MemoryWord();
+        word.value = value;
+        word.label = label;
+        memory.memory[address] = word;
+    }
 
    
 }
