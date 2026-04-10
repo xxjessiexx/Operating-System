@@ -40,4 +40,8 @@ public class SystemCalls {
 
         return content.toString();
     }
+    public void ReadFromMem(){}
+    public void WriteToMem(){}
+
+   
 }
