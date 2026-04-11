@@ -1,4 +1,104 @@
 public class Memory {
     MemoryWord[] memory = new MemoryWord[40];
+
+    public Memory() {
+        memory = new MemoryWord[SIZE];
+    }
+
+    public void writeWord(int index, MemoryWord word) {
+        if (index >= 0 && index < SIZE) {
+            memory[index] = word;
+        } else {
+            System.out.println("Invalid memory index.");
+        }
+    }
+
+    public MemoryWord readWord(int index) {
+        if (index >= 0 && index < SIZE) {
+            return memory[index];
+        }
+        System.out.println("Invalid memory index.");
+        return null;
+    }
+
+    public void printMemory() {
+        System.out.println("===== Memory Contents =====");
+        for (int i = 0; i < SIZE; i++) {
+            if (memory[i] == null) {
+                System.out.println(i + ": Empty");
+            } else {
+                System.out.println(i + ": " + memory[i]);
+            }
+        }
+        System.out.println("===========================");
+    }
+
+    public int getRequiredSize(Process process) {
+        return 5 + process.getInstructions().size() + 3;
+    }
+
+    public boolean isFreeBlock(int start, int size) {
+        if (start < 0 || start + size > SIZE) {
+            return false;
+        }
+
+        for (int i = start; i < start + size; i++) {
+            if (memory[i] != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int findFreeBlock(int size) {
+        for (int start = 0; start <= SIZE - size; start++) {
+            if (isFreeBlock(start, size)) {
+                return start;
+            }
+        }
+        return -1;
+    }
+
+    public boolean allocateProcess(Process process) {
+        int requiredSize = getRequiredSize(process);
+        int start = findFreeBlock(requiredSize);
+
+        if (start == -1) {
+            return false;
+        }
+
+        int end = start + requiredSize - 1;
+
+        process.getPcb().setMemStart(start);
+        process.getPcb().setMemEnd(end);
+
+        // Store PCB
+        memory[start] = new MemoryWord("P" + process.getPcb().getProcessID() + "_PID", process.getPcb().getProcessID());
+        memory[start + 1] = new MemoryWord("P" + process.getPcb().getProcessID() + "_State", process.getPcb().getProcessState());
+        memory[start + 2] = new MemoryWord("P" + process.getPcb().getProcessID() + "_PC", process.getPcb().getProgramCounter());
+        memory[start + 3] = new MemoryWord("P" + process.getPcb().getProcessID() + "_MemStart", start);
+        memory[start + 4] = new MemoryWord("P" + process.getPcb().getProcessID() + "_MemEnd", end);
+
+        // Store instructions
+        int currentIndex = start + 5;
+        for (int i = 0; i < process.getInstructions().size(); i++) {
+            memory[currentIndex] = new MemoryWord(
+                    "P" + process.getPcb().getProcessID() + "_Instruction_" + i,
+                    process.getInstructions().get(i)
+            );
+            currentIndex++;
+        }
+
+        // Reserve 3 variable slots
+        for (int i = 1; i <= 3; i++) {
+            memory[currentIndex] = new MemoryWord(
+                    "P" + process.getPcb().getProcessID() + "_Var_" + i,
+                    null
+            );
+            currentIndex++;
+        }
+
+        return true;
+    }
 }
 
