@@ -1,5 +1,6 @@
 public class Memory {
-    MemoryWord[] memory = new MemoryWord[40];
+    private static final int SIZE = 40;
+    private MemoryWord[] memory;
 
     public Memory() {
         memory = new MemoryWord[SIZE];
@@ -72,14 +73,12 @@ public class Memory {
         process.getPcb().setMemStart(start);
         process.getPcb().setMemEnd(end);
 
-        // Store PCB
         memory[start] = new MemoryWord("P" + process.getPcb().getProcessID() + "_PID", process.getPcb().getProcessID());
         memory[start + 1] = new MemoryWord("P" + process.getPcb().getProcessID() + "_State", process.getPcb().getProcessState());
         memory[start + 2] = new MemoryWord("P" + process.getPcb().getProcessID() + "_PC", process.getPcb().getProgramCounter());
         memory[start + 3] = new MemoryWord("P" + process.getPcb().getProcessID() + "_MemStart", start);
         memory[start + 4] = new MemoryWord("P" + process.getPcb().getProcessID() + "_MemEnd", end);
 
-        // Store instructions
         int currentIndex = start + 5;
         for (int i = 0; i < process.getInstructions().size(); i++) {
             memory[currentIndex] = new MemoryWord(
@@ -89,7 +88,6 @@ public class Memory {
             currentIndex++;
         }
 
-        // Reserve 3 variable slots
         for (int i = 1; i <= 3; i++) {
             memory[currentIndex] = new MemoryWord(
                     "P" + process.getPcb().getProcessID() + "_Var_" + i,
@@ -101,4 +99,3 @@ public class Memory {
         return true;
     }
 }
-
