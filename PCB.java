@@ -1,24 +1,78 @@
 public class PCB {
 
     int processID;
-    String processState;
+    ProcessState processState;
     int programCounter;
-    int MemInt;
-    int MemFinal;
+    int memStart;
+    int memEnd;
+
     public PCB() {
         this.processID = 0;
-        this.processState = "New";
+        this.processState = ProcessState.NEW;
         this.programCounter = 0;
-        this.MemInt = 0;
-        this.MemFinal = 0;
+        this.memStart = 0;
+        this.memEnd = 0;
     }
 
-    public PCB(int processID, String processState, int programCounter, int MemInt, int MemFinal) {
+    
+    public PCB(int processID, ProcessState processState, int programCounter, int memStart, int memEnd) {
         this.processID = processID;
         this.processState = processState;
         this.programCounter = programCounter;
-        this.MemInt = MemInt;
-        this.MemFinal = MemFinal;
+        this.memStart = memStart;
+        this.memEnd = memEnd;
     }
 
+   
+    public int getProcessID() {
+        return processID;
+    }
+
+    public void setProcessID(int processID) {
+        this.processID = processID;
+    }
+
+    public ProcessState getProcessState() {
+        return processState;
+    }
+
+    public void setProcessState(ProcessState processState) {
+        this.processState = processState;
+    }
+
+    public int getProgramCounter() {
+        return programCounter;
+    }
+
+    public void setProgramCounter(int programCounter) {
+        this.programCounter = programCounter;
+    }
+
+    public int getMemStart() {
+        return memStart;
+    }
+
+    public void setMemStart(int memStart) {
+        this.memStart = memStart;
+    }
+
+    public int getMemEnd() {
+        return memEnd;
+    }
+
+    public void setMemEnd(int memEnd) {
+        this.memEnd = memEnd;
+    }
+
+    @Override
+    public String toString() {
+        return "PCB{" +
+                "PID=" + processID +
+                ", State=" + processState +
+                ", PC=" + programCounter +
+                ", MemStart=" + memStart +
+                ", MemEnd=" + memEnd +
+                '}';
+    }
 }
+
