@@ -2,7 +2,9 @@ public class MemoryWord {
     String name;
     Object value;
 
-    public MemoryWord() {
+    public MemoryWord(String key, Object value) {     //was empty, takes now the key and the value
+        this.name = key;
+        this.value = value;
     }
 
     public MemoryWord(String name, Object value) {

@@ -6,8 +6,8 @@ public class PCB {
     int memStart;
     int memEnd;
 
-    public PCB() {
-        this.processID = 0;
+    public PCB(int pid) {   //change add pid , it was always setting it to zero
+        this.processID = pid;
         this.processState = ProcessState.NEW;
         this.programCounter = 0;
         this.memStart = 0;
