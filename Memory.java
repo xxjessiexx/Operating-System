@@ -98,4 +98,44 @@ public class Memory {
 
         return true;
     }
+    public int getVariablesStart(Process process) {
+    return process.getPcb().getMemEnd() - 2;
+}
+
+public Object getVariableValue(Process process, String variableName) {
+    int start = getVariablesStart(process);
+
+    for (int i = start; i <= process.getPcb().getMemEnd(); i++) {
+        MemoryWord word = memory[i];
+        if (word != null && word.getName().equals(variableName)) {
+            return word.getValue();
+        }
+    }
+    return null;
+}
+
+public void setVariableValue(Process process, String variableName, Object value) {
+    int start = getVariablesStart(process);
+
+    for (int i = start; i <= process.getPcb().getMemEnd(); i++) {
+        MemoryWord word = memory[i];
+
+        if (word != null && variableName.equals(word.getName())) {
+            word.setValue(value);
+            return;
+        }
+    }
+
+    for (int i = start; i <= process.getPcb().getMemEnd(); i++) {
+        MemoryWord word = memory[i];
+
+        if (word != null && word.getValue() == null) {
+            word.setName(variableName);
+            word.setValue(value);
+            return;
+        }
+    }
+
+    System.out.println("No space available for more variables in process " + process.getPcb().getProcessID());
+}
 }
