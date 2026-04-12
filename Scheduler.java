@@ -7,6 +7,7 @@ import java.util.LinkedList;
 public class Scheduler {
     Deque<Process> readyQueue = new ArrayDeque<>();
     int usedTime = 0;
+    Process HRRNprocess = null;
 
     public Process roundRobin(int timeQuantum) {
         Process currentProcess = readyQueue.poll();
@@ -44,7 +45,7 @@ public class Scheduler {
         double highestResponseRatio = -1;
 
         for (Process process : readyQueue) {
-            double responseRatio = (double) (OS.globalTime - process.arrivalTime) / process.getInstructionCounter();
+            double responseRatio = (double) (globalTime - process.arrivalTime) / process.getInstructionCounter();
             if (responseRatio > highestResponseRatio) {
                 highestResponseRatio = responseRatio;
                 highestResponseRatioProcess = process;
