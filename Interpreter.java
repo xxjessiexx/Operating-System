@@ -23,6 +23,31 @@ public class Interpreter {
 
         return instructions;
     }
+     public void ExecuteInstruction(String instruction) {
+        String[] parts = instruction.split(" ");
+        String command = parts[0];
+
+       switch (command) {
+            case "assign":               
+                break;
+
+            case "print":
+             SystemCalls.print();
+                break;
+            case "printFromTo":
+                int x = Integer.parseInt(parts[1]);
+                int y = Integer.parseInt(parts[2]);
+
+                for (int i = x; i <= y; i++) {
+                    System.out.print(i + " ");
+                }
+                System.out.println();
+                break;
+        }
+
+        
+        ///p.pcb.pc++;
+    }
 
     public void printFromTo(int start, int end) {
         for (int i = start; i <= end; i++) {
