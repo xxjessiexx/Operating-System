@@ -77,10 +77,11 @@ public class Interpreter {
                 operatingSystem.semSignal(p, resource2);
                 break;
 
+
         }
 
+        p.pcb.programCounter++;
         
-        ///p.pcb.pc++;
     }
 
     public void printFromTo(int start, int end) {
@@ -105,7 +106,7 @@ public class Interpreter {
         return instructions;
     }
 
-        ///p.pcb.pc++;
+        
     
 
 }

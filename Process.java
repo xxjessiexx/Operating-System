@@ -5,14 +5,15 @@ public class Process {
     ArrayList<String> instructions;
     int arrivalTime;
     boolean isBlocked;
-    boolean isTerminated;
     boolean inMemory;
+   
 
     public Process(int arrivalTime) {
         this.arrivalTime = arrivalTime;
         this.isBlocked = false;
-        this.isTerminated = false;
+        
         this.inMemory = false;
+       
     }
 
 
@@ -42,6 +43,9 @@ public class Process {
     public int getInstructionCounter() {
         return instructions.size();
     }
+    public boolean isCompleted() {
+       return pcb.programCounter >= instructions.size();
+    }
 
     @Override
     public String toString() {
@@ -50,13 +54,6 @@ public class Process {
                 ", arrivalTime=" + arrivalTime +
                 '}';
     }
-    //public String getNextInstruction() {
-    //    if (pcb.programCounter < instructions.size()) {
-      //      String instruction = instructions.get(pcb.programCounter);
-        //    pcb.programCounter++;
-         //   return instruction;
-        //} else {
-         //   return null; 
-        //}
-    //}
+    
+    
 }

@@ -27,47 +27,6 @@ public class PCB {
         this.memEnd = memEnd;
     }
 
-   
-    public int getProcessID() {
-        return processID;
-    }
-
-    public void setProcessID(int processID) {
-        this.processID = processID;
-    }
-
-    public ProcessState getProcessState() {
-        return processState;
-    }
-
-    public void setProcessState(ProcessState processState) {
-        this.processState = processState;
-    }
-
-    public int getProgramCounter() {
-        return programCounter;
-    }
-
-    public void setProgramCounter(int programCounter) {
-        this.programCounter = programCounter;
-    }
-
-    public int getMemStart() {
-        return memStart;
-    }
-
-    public void setMemStart(int memStart) {
-        this.memStart = memStart;
-    }
-
-    public int getMemEnd() {
-        return memEnd;
-    }
-
-    public void setMemEnd(int memEnd) {
-        this.memEnd = memEnd;
-    }
-
     @Override
     public String toString() {
         return "PCB{" +
