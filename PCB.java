@@ -1,7 +1,15 @@
+
+
+import java.io.Serializable;
+
 public class PCB {
 
     int processID;
     ProcessState processState;
+    
+    public enum ProcessState {
+        NEW, READY, RUNNING, WAITING, TERMINATED
+    }
     int programCounter;
     int memStart;
     int memEnd;
