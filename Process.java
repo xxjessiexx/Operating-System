@@ -4,9 +4,15 @@ public class Process {
     PCB pcb;
     ArrayList<String> instructions;
     int arrivalTime;
+    boolean isBlocked;
+    boolean isTerminated;
+    boolean inMemory;
 
     public Process(int arrivalTime) {
         this.arrivalTime = arrivalTime;
+        this.isBlocked = false;
+        this.isTerminated = false;
+        this.inMemory = false;
     }
 
 
