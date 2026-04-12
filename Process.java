@@ -12,39 +12,7 @@ public class Process {
         this.instructionCount = instructions.size();
         this.pcb = new PCB(processID, ProcessState.NEW, 0, -1, -1);
     }
-      public PCB getPcb() {
-        return pcb;
-    }
-
-    public void setPcb(PCB pcb) {
-        this.pcb = pcb;
-    }
-
-    public ArrayList<String> getInstructions() {
-        return instructions;
-    }
-
-    public void setInstructions(ArrayList<String> instructions) {
-        this.instructions = instructions;
-        this.instructionCount = instructions.size();
-    }
-
-    public int getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public void setArrivalTime(int arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public int getInstructionCount() {
-        return instructionCount;
-    }
-
-    public void setInstructionCount(int instructionCount) {
-        this.instructionCount = instructionCount;
-    }
-
+    
     
     public String toString() {
         return "Process{" +
