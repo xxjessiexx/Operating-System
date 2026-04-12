@@ -41,22 +41,22 @@ public class Scheduler {
     }
 
     public Process HRRN(int globalTime) {
-        Process highestResponseRatioProcess = null;
-        double highestResponseRatio = -1;
 
-        for (Process process : readyQueue) {
-            double responseRatio = (double) (globalTime - process.arrivalTime) / process.getInstructionCounter();
-            if (responseRatio > highestResponseRatio) {
-                highestResponseRatio = responseRatio;
-                highestResponseRatioProcess = process;
+        double highestResponseRatio = -1;
+        if(HRRNprocess==null || !HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)){
+            for (Process process : readyQueue) {
+                double responseRatio = (double) (globalTime - process.arrivalTime) / process.getInstructionCounter();
+                if (responseRatio > highestResponseRatio) {
+                    highestResponseRatio = responseRatio;
+                    HRRNprocess = process;
+                }
             }
         }
-
-        if (highestResponseRatioProcess != null) {
-            readyQueue.remove(highestResponseRatioProcess);
+        if (HRRNprocess != null) {    ///when should we remove it from ready queue 
+            readyQueue.remove(HRRNprocess);
         }
 
-        return highestResponseRatioProcess;
+        return HRRNprocess;
     }
 
     public Process MultilevelFeedbackQueue(int globalTime) {
