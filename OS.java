@@ -15,9 +15,9 @@ public class OS {
         Scheduler scheduler = new Scheduler();
         SystemCalls sys = new SystemCalls();
 
-        Mutex mutex1 = new Mutex("userInput");
-        Mutex mutex2 = new Mutex("userOutput");
-        Mutex mutex3 = new Mutex("file");
+        Mutex userInput = new Mutex("userInput");
+        Mutex userOutput = new Mutex("userOutput");
+        Mutex file = new Mutex("file");
 
         Interpreter interpreter = new Interpreter(sys,memory);
 
@@ -33,11 +33,17 @@ public class OS {
                 if (p.arrivalTime == globalTime) {
                     PCB pcb1 = new PCB(pid);
                     p.pcb = pcb1;
-                    p.instructions = interpreter.readFile("null");   //add att of file name to each process?
+                    p.instructions = interpreter.readProgramFile("null");   //add att of file name to each process?
                     
                     if(!memory.allocateProcess(p)){
                         //swapping
                     }
+
+
+                    //call scheduler ---> returns process to be executed
+                    //os gives instruction to intrpreter 
+
+                    interpreter.ExecuteInstruction(//process,//string instruction);
             }
            
         }
@@ -58,4 +64,13 @@ public class OS {
     public void incrementGlobalTime() {
         this.globalTime++;
     }
+
+    public static void semWait(Process p, String resourceName){
+        
+    }
+
+    public static void semSignal(Process p, String resourceName){
+
+    }
+
 }
