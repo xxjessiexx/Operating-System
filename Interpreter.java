@@ -21,12 +21,12 @@ public class Interpreter {
                 String varvalue= (String) memory.getVariableValue(p, parts[1]);
                 systemCalls.print(varvalue);
                 break;
-                
-            case "printFromTo":
-                int x = Integer.parseInt(parts[1]);
-                int y = Integer.parseInt(parts[2]);
 
-                for (int i = x; i <= y; i++) {
+            case "printFromTo":
+                int xFirst = (int) memory.getVariableValue(p, parts[1]);
+                int ySecond = (int) memory.getVariableValue(p, parts[1]);
+
+                for (int i = xFirst; i <= ySecond; i++) {
                     System.out.print(i + " ");
                 }
                 System.out.println();
