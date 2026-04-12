@@ -3,27 +3,32 @@ import java.io.*;
 import java.lang.reflect.Member;
 
 public class SystemCalls {
-    public static void print(String message) {  // prints the message to the console
-        System.out.println(message);
+    private Scanner scanner;
 
+    public SystemCalls() {
+        scanner = new Scanner(System.in);
     }
-    public static String input(String message) {
-        Scanner scanner = new Scanner(System.in);
+
+    public void print(String message) {
+        System.out.println(message);
+    }
+
+    public String input(String message) {
         System.out.print(message);
-        String userInput = scanner.nextLine();
-        return userInput;
+        return scanner.nextLine();
     }
-      public void writeFile(String fileName, String data) { // writes data to a file
+
+    public void writeFile(String fileName, String data) {
         try {
             FileWriter writer = new FileWriter(fileName);
             writer.write(data);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error writing to file: " + fileName);
         }
     }
 
-    public String readFile(String fileName) {  // reads data from a file and returns it as a string
+    public String readFile(String fileName) {
         StringBuilder content = new StringBuilder();
 
         try {
@@ -31,27 +36,24 @@ public class SystemCalls {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                content.append(line);
+                content.append(line).append("\n");
             }
 
             reader.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error reading file: " + fileName);
         }
 
-        return content.toString();
+        return content.toString().trim();
     }
-    public void ReadFromMem( Memory memory, int address){ // reads data from a specific memory address and prints it to the console
-        MemoryWord word = memory.memory[address];
-        if (word != null) {
-            System.out.println(word.value);
-        }
+
+    public MemoryWord readFromMemory(Memory memory, int address) {
+        return memory.readWord(address);
     }
-    public void WriteToMem(Memory memory, int address,String label, Object value){ // writes data to a specific memory address
-        MemoryWord word = new MemoryWord();
-        word.value = value;
-        word.label = label;
-        memory.memory[address] = word;
+
+    public void writeToMemory(Memory memory, int address, String name, Object value) {
+        MemoryWord word = new MemoryWord(name, value);
+        memory.writeWord(address, word);
     }
 
    
