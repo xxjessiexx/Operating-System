@@ -3,24 +3,13 @@ import java.util.ArrayList;
 public class Process {
     PCB pcb;
     ArrayList<String> instructions;
-    int arrivalTime;
-    int instructionCount;
+    int ArrivalTime;     //removed instruction counter , we can get size arraylist 
 
-    public Process(int processID, int arrivalTime, ArrayList<String> instructions) {
-        this.arrivalTime = arrivalTime;
-        this.instructions = new ArrayList<>(instructions);
-        this.instructionCount = instructions.size();
-        this.pcb = new PCB(processID, ProcessState.NEW, 0, -1, -1);
-    }
-    
-    
-    public String toString() {
-        return "Process{" +
-                "pcb=" + pcb +
-                ", arrivalTime=" + arrivalTime +
-                ", instructionCount=" + instructionCount +
-                ", instructions=" + instructions +
-                '}';
+
+    public Process(int ArrivalTime) {
+        this.ArrivalTime = ArrivalTime;
+        this.instructions = new ArrayList<>();    //not sure like this or we give it the instructions list as a parameter
+
     }
     //public String getNextInstruction() {
     //    if (pcb.programCounter < instructions.size()) {
