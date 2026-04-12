@@ -113,6 +113,18 @@ public Object getVariableValue(Process process, String variableName) {
     }
     return null;
 }
+public String getInstruction(Process process) {
+    int instructionIndex = process.pcb.programCounter; //Might need to get  the pcb from memory
+    int instructionMemoryIndex = process.pcb.memStart + 5 + instructionIndex;
+
+    if (instructionMemoryIndex >= process.pcb.memStart + 5 && instructionMemoryIndex <= process.pcb.memEnd - 3) {
+        MemoryWord word = memory[instructionMemoryIndex];
+        if (word != null) {
+            return (String) word.getValue();
+        }
+    }
+    return null;
+}
 
 public void setVariableValue(Process process, String variableName, Object value) {
     int start = getVariablesStart(process);
