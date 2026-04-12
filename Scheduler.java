@@ -16,11 +16,13 @@ public class Scheduler {
 
             usedTime++;
             readyQueue.addFirst(currentProcess);
+            currentProcess.pcb.processState = ProcessState.RUNNING;
             return currentProcess;
         } else {
             usedTime = 0;
             if (currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()) {
                 readyQueue.addLast(currentProcess);
+                currentProcess.pcb.processState = ProcessState.READY;
 
             } else {
                 currentProcess.pcb.processState = ProcessState.TERMINATED;
@@ -29,6 +31,7 @@ public class Scheduler {
 
             if (newProcess != null) {
                 usedTime++;
+                newProcess.pcb.processState = ProcessState.RUNNING;
             }
 
             return newProcess;
@@ -76,6 +79,7 @@ public class Scheduler {
 
     public void addProcess(Process process) {
         readyQueue.add(process);
+        process.pcb.processState = ProcessState.READY;
     }
 
 }
