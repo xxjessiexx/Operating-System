@@ -6,7 +6,7 @@ public class Scheduler {
     public Process roundRobin(int timeQuantum) {
         while (!readyQueue.isEmpty()) {
             Process currentProcess = readyQueue.poll();
-                if (currentProcess.pcb.programCounter < currentProcess.InstructionCounter) {
+                if (currentProcess.pcb.programCounter < currentProcess.instructions.size()) {
                 readyQueue.add(currentProcess);
             }
             

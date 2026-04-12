@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Mutex {
     String resourceName;
     boolean locked;
@@ -17,7 +20,7 @@ public class Mutex {
             owner = process;
             return true;
         } else {
-            process.getPcb().setProcessState(ProcessState.BLOCKED);
+            process.pcb.processState=ProcessState.BLOCKED;
             blockedQueue.add(process);
             return false;
         }
@@ -25,7 +28,7 @@ public class Mutex {
 
     public Process semSignal(Process process) {
         if (owner != process) {
-            System.out.println("Process " + process.getPcb().getProcessID() +
+            System.out.println("Process " + process.pcb.processID +
                     " cannot release resource " + resourceName + " because it is not the owner.");
             return null;
         }
@@ -37,7 +40,7 @@ public class Mutex {
         } else {
             Process nextProcess = blockedQueue.poll();
             owner = nextProcess;
-            nextProcess.getPcb().setProcessState(ProcessState.READY);
+            nextProcess.pcb.processState=ProcessState.READY;
             return nextProcess;
         }
     }

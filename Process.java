@@ -4,13 +4,9 @@ public class Process {
     PCB pcb;
     ArrayList<String> instructions;
     int arrivalTime;
-    int instructionCount;
 
-    public Process(int processID, int arrivalTime, ArrayList<String> instructions) {
+    public Process(int arrivalTime) {
         this.arrivalTime = arrivalTime;
-        this.instructions = new ArrayList<>(instructions);
-        this.instructionCount = instructions.size();
-        this.pcb = new PCB(processID, ProcessState.NEW, 0, -1, -1);
     }
 
 
@@ -28,7 +24,6 @@ public class Process {
 
     public void setInstructions(ArrayList<String> instructions) {
         this.instructions = instructions;
-        this.instructionCount = instructions.size();
     }
 
     public int getArrivalTime() {
@@ -39,20 +34,11 @@ public class Process {
         this.arrivalTime = arrivalTime;
     }
 
-    public int getInstructionCount() {
-        return instructionCount;
-    }
-
-    public void setInstructionCount(int instructionCount) {
-        this.instructionCount = instructionCount;
-    }
-
     @Override
     public String toString() {
         return "Process{" +
                 "pcb=" + pcb +
                 ", arrivalTime=" + arrivalTime +
-                ", instructionCount=" + instructionCount +
                 '}';
     }
     //public String getNextInstruction() {
