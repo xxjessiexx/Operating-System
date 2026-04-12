@@ -2,75 +2,110 @@ import java.util.ArrayList;
 
 public class OS {
 
+    int globalTime = 0;
+
+    Mutex userInput;
+    Mutex userOutput;
+    Mutex file;
+
+    Memory memory;
+    Scheduler scheduler;
+    SystemCalls sys;
+    Interpreter interpreter;
+
+    public OS() {
+        memory = new Memory();
+        scheduler = new Scheduler();
+        sys = new SystemCalls();
+
+        userInput = new Mutex("userInput");
+        userOutput = new Mutex("userOutput");
+        file = new Mutex("file");
+
+        interpreter = new Interpreter(sys, memory, this);
+    }
+
     public static void main(String[] args) {
+        OS os = new OS();
+        os.run();
+    }
 
-        int globalTime = 0;
-
-        Process p1 = new  Process (0);
-        Process p2 = new  Process (1);
-        Process p3 = new  Process (4);
-
-        Memory memory = new Memory();
-
-        Scheduler scheduler = new Scheduler();
-        SystemCalls sys = new SystemCalls();
-
-        Mutex userInput = new Mutex("userInput");
-        Mutex userOutput = new Mutex("userOutput");
-        Mutex file = new Mutex("file");
-
-        Interpreter interpreter = new Interpreter(sys,memory);
+    public void run() {
+        Process p1 = new Process(0);
+        Process p2 = new Process(1);
+        Process p3 = new Process(4);
 
         ArrayList<Process> processes = new ArrayList<>();
-
-        int pid=1;
         processes.add(p1);
         processes.add(p2);
         processes.add(p3);
-        
-        while(!processes.isEmpty()) {
-            for (Process p : processes) {
+
+        int pid = 1;
+
+        while (!processes.isEmpty()) {
+            for (int i = 0; i < processes.size(); i++) {
+                Process p = processes.get(i);
+
                 if (p.arrivalTime == globalTime) {
-                    PCB pcb1 = new PCB(pid);
+                    PCB pcb1 = new PCB(pid++);
                     p.pcb = pcb1;
-                    p.instructions = interpreter.readProgramFile("null");   //add att of file name to each process?
-                    
-                    if(!memory.allocateProcess(p)){
-                        //swapping
+
+                    p.instructions = interpreter.readProgramFile("null"); 
+                    // later replace "null" with actual program file name
+
+                    if (!memory.allocateProcess(p)) {
+                        // swapping
                     }
 
-
-                    //call scheduler ---> returns process to be executed
-                    //os gives instruction to intrpreter 
-
-                    interpreter.ExecuteInstruction(//process,//string instruction);
+                    // scheduler.addProcess(p);
+                }
             }
-           
+
+            globalTime++;
+            break;     //we need to know when to remove processes from arraylist DELETE BREAK!!!!
         }
     }
-        //p1 new process with arrival time 0
-        // process p1 = new Process(0);
-        //p1.pcb = new PCB(i,"ready",0,0,0);
-        //p1.instructions = interpreter.readFile("file.txt"); -- read the instructions from a file and store them in the process
-        //
-        //scheduler.addProcess(p1); -- add the process to the scheduler's ready queue
-        //--LOOP--
-        //px = scheduler.getNextProcess(); -- gets the next process from the scheduler
-        //interpreter.ExecuteInstruction(px.getNextInstruction()); -- execute the next instruction of the process using the interpreter
-    }
+
     public int getGlobalTime() {
-        return 0;
+        return globalTime;
     }
+
     public void incrementGlobalTime() {
-        this.globalTime++;
+        globalTime++;
     }
 
-    public static void semWait(Process p, String resourceName){
-        
+    public void semWait(Process p, String resourceName) {
+        Mutex mutex = getMutexByName(resourceName);
+
+        if (mutex == null) {
+            System.out.println("Invalid resource name: " + resourceName);
+            return;
+        }
+
+        mutex.semWait(p);
     }
 
-    public static void semSignal(Process p, String resourceName){
+    public void semSignal(Process p, String resourceName) {
+        Mutex mutex = getMutexByName(resourceName);
 
+        if (mutex == null) {
+            System.out.println("Invalid resource name: " + resourceName);
+            return;
+        }
+
+        mutex.semSignal(p);
     }
 
+    private Mutex getMutexByName(String resourceName) {
+        switch (resourceName) {
+            case "userInput":
+                return userInput;
+            case "userOutput":
+                return userOutput;
+            case "file":
+                return file;
+            default:
+                return null;
+        }
+    }
 }

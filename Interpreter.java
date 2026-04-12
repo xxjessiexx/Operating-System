@@ -4,10 +4,12 @@ public class Interpreter {
 
     private SystemCalls systemCalls;
     private Memory memory;
+    OS operatingSystem ;
 
-    public Interpreter(SystemCalls systemCalls, Memory memory) {
+    public Interpreter(SystemCalls systemCalls, Memory memory, OS os) {
         this.systemCalls = systemCalls;
         this.memory = memory;
+        operatingSystem =os;
     }
      public void ExecuteInstruction(Process p, String instruction) {
         String[] parts = instruction.split(" ");
@@ -68,11 +70,11 @@ public class Interpreter {
                 break;
             case "semWait":
                 String resource = parts[1];
-                OS.semWait(p, resource);
+                operatingSystem.semWait(p, resource);
                 break;
             case "semSignal":
                 String resource2= parts[1];
-                OS.semSignal(p, resource2);
+                operatingSystem.semSignal(p, resource2);
                 break;
 
         }
