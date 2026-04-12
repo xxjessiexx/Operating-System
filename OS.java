@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.Scanner;
 public class OS {
 
     int globalTime = 0;
@@ -39,6 +39,10 @@ public class OS {
         processes.add(p1);
         processes.add(p2);
         processes.add(p3);
+        String SchedulerAlgorithm = ""; 
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the scheduling algorithm (RoundRobin, HRRN, MultilevelFeedbackQueue): ");//MIGHT NEED TO REMOVE
+        SchedulerAlgorithm = sc.nextLine();
 
         int pid = 1;
 
@@ -57,9 +61,15 @@ public class OS {
                         // swapping
                     }
 
-                    // scheduler.addProcess(p);
+                     scheduler.addProcess(p);
                 }
             }
+                Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);
+                if (currentProcess != null) {
+                    String instruction = memory.getInstruction(currentProcess);
+                    interpreter.ExecuteInstruction(currentProcess, instruction);
+                    currentProcess.pcb.programCounter++;
+                }
 
             globalTime++;
             break;     //we need to know when to remove processes from arraylist DELETE BREAK!!!!
