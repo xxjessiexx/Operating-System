@@ -90,7 +90,7 @@ public class Memory {
 
         for (int i = 1; i <= 3; i++) {
             memory[currentIndex] = new MemoryWord(
-                    "P" + process.pcb.processID + "_Var_" + i,
+                    "Var_" + i,
                     null
             );
             currentIndex++;

@@ -9,7 +9,7 @@ public class Interpreter {
         this.systemCalls = systemCalls;
         this.memory = memory;
     }
-     public void ExecuteInstruction(String instruction) {
+     public void ExecuteInstruction(Process p, String instruction) {
         String[] parts = instruction.split(" ");
         String command = parts[0];
 
@@ -18,8 +18,10 @@ public class Interpreter {
                 break;
 
             case "print":
-             SystemCalls.print();
+                String varvalue= (String) memory.getVariableValue(p, parts[1]);
+                systemCalls.print(varvalue);
                 break;
+                
             case "printFromTo":
                 int x = Integer.parseInt(parts[1]);
                 int y = Integer.parseInt(parts[2]);
