@@ -39,6 +39,9 @@ public class Process {
     public void setArrivalTime(int arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
+    public int getInstructionCounter() {
+        return instructions.size();
+    }
 
     @Override
     public String toString() {
