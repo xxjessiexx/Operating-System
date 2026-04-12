@@ -1,20 +1,42 @@
 
 import java.util.Queue;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.LinkedList;
+
 public class Scheduler {
-    Queue<Process> readyQueue = new LinkedList<>(); //does the queue hold the pcb or the process
-    
-    public Process roundRobin(int timeQuantum , int globalTime) {
-        while (!readyQueue.isEmpty()) {
-            Process currentProcess = readyQueue.poll();
-                if (currentProcess.pcb.programCounter < currentProcess.InstructionCounter) {
-                readyQueue.add(currentProcess);
+    Deque<Process> readyQueue = new ArrayDeque<>();
+    int usedTime = 0;
+
+    public Process roundRobin(int timeQuantum) {
+        Process currentProcess = readyQueue.poll();
+
+        if (timeQuantum > usedTime && currentProcess != null
+                && currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()) {
+
+            usedTime++;
+            readyQueue.addFirst(currentProcess);
+            return currentProcess;
+        } else {
+            usedTime = 0;
+            if (currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()) {
+                readyQueue.addLast(currentProcess);
+
+            } else {
+                currentProcess.pcb.processState = ProcessState.TERMINATED;
             }
-            
+            Process newProcess = readyQueue.peek();
+
+            if (newProcess != null) {
+                usedTime++;
+            }
+
+            return newProcess;
         }
-        return Process;
+
     }
-    public Process HRRN (int globalTime){
+
+    public Process HRRN(int globalTime) {
         Process highestResponseRatioProcess = null;
         double highestResponseRatio = -1;
 
@@ -32,17 +54,16 @@ public class Scheduler {
 
         return highestResponseRatioProcess;
     }
+
     public Process MultilevelFeedbackQueue(int globalTime) {
         // Implement multilevel feedback queue scheduling logic here
         return null; // Placeholder return statement
     }
 
-
-
-    public Process SchedulingAlgorithm(String algorithm , int globalTime) {
+    public Process SchedulingAlgorithm(String algorithm, int globalTime) {
         switch (algorithm) {
             case "RoundRobin":
-                return roundRobin(2 , globalTime); // Example time quantum of 2
+                return roundRobin(2); // Example time quantum of 2
             case "HRRN":
                 return HRRN(globalTime);
             case "MultilevelFeedbackQueue":
@@ -53,16 +74,8 @@ public class Scheduler {
         }
     }
 
-
-
-
-   public void addProcess(Process process) {
+    public void addProcess(Process process) {
         readyQueue.add(process);
     }
 
-
-
-    //public PCB getNextProcess() {
-        //return readyQueue.poll();
-   // }
 }

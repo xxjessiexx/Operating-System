@@ -68,7 +68,7 @@ public class OS {
                 if (currentProcess != null) {
                     String instruction = memory.getInstruction(currentProcess);
                     interpreter.ExecuteInstruction(currentProcess, instruction);
-                    currentProcess.pcb.programCounter++;
+                    
                 }
 
             globalTime++;
