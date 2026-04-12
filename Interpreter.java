@@ -9,20 +9,6 @@ public class Interpreter {
         this.systemCalls = systemCalls;
         this.memory = memory;
     }
-    public ArrayList<String> loadProgram(String fileName) {
-        ArrayList<String> instructions = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                instructions.add(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Error loading program file: " + fileName);
-        }
-
-        return instructions;
-    }
      public void ExecuteInstruction(String instruction) {
         String[] parts = instruction.split(" ");
         String command = parts[0];
