@@ -7,6 +7,7 @@ import java.util.LinkedList;
 public class Scheduler {
     Deque<Process> readyQueue = new ArrayDeque<>();
     int usedTime = 0;
+    Process HRRNprocess = null;
 
     public Process roundRobin(int timeQuantum) {
         Process currentProcess = readyQueue.poll();
@@ -16,11 +17,13 @@ public class Scheduler {
 
             usedTime++;
             readyQueue.addFirst(currentProcess);
+            currentProcess.pcb.processState = ProcessState.RUNNING;
             return currentProcess;
         } else {
             usedTime = 0;
             if (currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()) {
                 readyQueue.addLast(currentProcess);
+                currentProcess.pcb.processState = ProcessState.READY;
 
             } else {
                 currentProcess.pcb.processState = ProcessState.TERMINATED;
@@ -29,6 +32,7 @@ public class Scheduler {
 
             if (newProcess != null) {
                 usedTime++;
+                newProcess.pcb.processState = ProcessState.RUNNING;
             }
 
             return newProcess;
@@ -41,7 +45,7 @@ public class Scheduler {
         double highestResponseRatio = -1;
 
         for (Process process : readyQueue) {
-            double responseRatio = (double) (OS.globalTime - process.arrivalTime) / process.getInstructionCounter();
+            double responseRatio = (double) (globalTime - process.arrivalTime) / process.getInstructionCounter();
             if (responseRatio > highestResponseRatio) {
                 highestResponseRatio = responseRatio;
                 highestResponseRatioProcess = process;
@@ -76,6 +80,7 @@ public class Scheduler {
 
     public void addProcess(Process process) {
         readyQueue.add(process);
+        process.pcb.processState = ProcessState.READY;
     }
 
 }
