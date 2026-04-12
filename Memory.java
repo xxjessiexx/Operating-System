@@ -70,19 +70,19 @@ public class Memory {
 
         int end = start + requiredSize - 1;
 
-        process.getPcb().setMemStart(start);
-        process.getPcb().setMemEnd(end);
+        process.pcb.memStart=start;
+        process.pcb.memEnd=end;
 
-        memory[start] = new MemoryWord("P" + process.getPcb().getProcessID() + "_PID", process.getPcb().getProcessID());
-        memory[start + 1] = new MemoryWord("P" + process.getPcb().getProcessID() + "_State", process.getPcb().getProcessState());
-        memory[start + 2] = new MemoryWord("P" + process.getPcb().getProcessID() + "_PC", process.getPcb().getProgramCounter());
-        memory[start + 3] = new MemoryWord("P" + process.getPcb().getProcessID() + "_MemStart", start);
-        memory[start + 4] = new MemoryWord("P" + process.getPcb().getProcessID() + "_MemEnd", end);
+        memory[start] = new MemoryWord("P" + process.pcb.processID + "_PID", process.pcb.processID);
+        memory[start + 1] = new MemoryWord("P" + process.pcb.processID + "_State", process.pcb.processState);
+        memory[start + 2] = new MemoryWord("P" + process.pcb.processID + "_PC", process.pcb.programCounter);
+        memory[start + 3] = new MemoryWord("P" + process.pcb.processID + "_MemStart", start);
+        memory[start + 4] = new MemoryWord("P" + process.pcb.processID + "_MemEnd", end);
 
         int currentIndex = start + 5;
         for (int i = 0; i < process.getInstructions().size(); i++) {
             memory[currentIndex] = new MemoryWord(
-                    "P" + process.getPcb().getProcessID() + "_Instruction_" + i,
+                    "P" + process.pcb.processID + "_Instruction_" + i,
                     process.getInstructions().get(i)
             );
             currentIndex++;
@@ -90,7 +90,7 @@ public class Memory {
 
         for (int i = 1; i <= 3; i++) {
             memory[currentIndex] = new MemoryWord(
-                    "P" + process.getPcb().getProcessID() + "_Var_" + i,
+                    "P" + process.pcb.processID + "_Var_" + i,
                     null
             );
             currentIndex++;
@@ -99,13 +99,13 @@ public class Memory {
         return true;
     }
     public int getVariablesStart(Process process) {
-    return process.getPcb().getMemEnd() - 2;
+    return process.pcb.memEnd - 2;
 }
 
 public Object getVariableValue(Process process, String variableName) {
     int start = getVariablesStart(process);
 
-    for (int i = start; i <= process.getPcb().getMemEnd(); i++) {
+    for (int i = start; i <= process.pcb.memEnd; i++) {
         MemoryWord word = memory[i];
         if (word != null && word.getName().equals(variableName)) {
             return word.getValue();
@@ -117,7 +117,7 @@ public Object getVariableValue(Process process, String variableName) {
 public void setVariableValue(Process process, String variableName, Object value) {
     int start = getVariablesStart(process);
 
-    for (int i = start; i <= process.getPcb().getMemEnd(); i++) {
+    for (int i = start; i <= process.pcb.memEnd; i++) {
         MemoryWord word = memory[i];
 
         if (word != null && variableName.equals(word.getName())) {
@@ -126,7 +126,7 @@ public void setVariableValue(Process process, String variableName, Object value)
         }
     }
 
-    for (int i = start; i <= process.getPcb().getMemEnd(); i++) {
+    for (int i = start; i <= process.pcb.memEnd; i++) {
         MemoryWord word = memory[i];
 
         if (word != null && word.getValue() == null) {
@@ -136,6 +136,6 @@ public void setVariableValue(Process process, String variableName, Object value)
         }
     }
 
-    System.out.println("No space available for more variables in process " + process.getPcb().getProcessID());
+    System.out.println("No space available for more variables in process " + process.pcb.processID);
 }
 }
