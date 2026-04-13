@@ -1,0 +1,663 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage[table]{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!50!black,
+    urlcolor=blue!50!black
+}
+
+\definecolor{mainblue}{RGB}{33,76,140}
+\definecolor{lightblue}{RGB}{235,242,252}
+\definecolor{softgray}{RGB}{247,247,247}
+\definecolor{linegray}{RGB}{210,210,210}
+\definecolor{darkgray}{RGB}{65,65,65}
+
+\setstretch{1.12}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.45em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{mainblue}{Operating System Project Documentation}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\titleformat{\section}
+{\Large\bfseries\color{mainblue}}
+{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\large\bfseries\color{mainblue}}
+{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+{\normalsize\bfseries\color{darkgray}}
+{}{0em}{}
+
+\newtcolorbox{purposebox}{
+    colback=lightblue,
+    colframe=mainblue!70,
+    arc=2mm,
+    boxrule=0.6pt,
+    left=8pt,
+    right=8pt,
+    top=6pt,
+    bottom=6pt
+}
+
+\newtcolorbox{signaturebox}{
+    colback=softgray,
+    colframe=linegray,
+    arc=1.5mm,
+    boxrule=0.4pt,
+    left=6pt,
+    right=6pt,
+    top=5pt,
+    bottom=5pt
+}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\title{\textbf{\textcolor{mainblue}{Operating System Project Documentation}}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Overview}
+
+This document describes the classes found in the submitted Operating System project.  
+For each class, it includes:
+\begin{itemize}[leftmargin=1.5em]
+    \item the class purpose
+    \item the attributes exactly as found in the code
+    \item constructors
+    \item method headers with return types
+    \item a short English description
+\end{itemize}
+
+\section{Class: \texttt{Interpreter}}
+
+\begin{purposebox}
+The \texttt{Interpreter} class is responsible for parsing and executing instructions for a process. It uses \texttt{SystemCalls} to interact with input, output, and files, uses \texttt{Memory} to store and retrieve variables, and communicates with the \texttt{OS} when semaphore operations are needed.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+systemCalls & \texttt{SystemCalls} & Stores the system calls object used for input, output, and file operations. \\
+memory & \texttt{Memory} & Stores the memory object used to read instructions and variables. \\
+operatingSystem & \texttt{OS} & Stores a reference to the operating system so semaphore operations can be delegated to it. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public Interpreter(SystemCalls systemCalls, Memory memory, OS os)}
+\end{signaturebox}
+
+Initializes the interpreter with the required \texttt{SystemCalls}, \texttt{Memory}, and \texttt{OS} objects.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public void ExecuteInstruction(Process p, String instruction)}
+\end{signaturebox}
+Parses one instruction and executes it for the given process.
+
+\begin{signaturebox}
+\texttt{public void printFromTo(int start, int end)}
+\end{signaturebox}
+Prints all integer values from \texttt{start} to \texttt{end}, inclusive.
+
+\begin{signaturebox}
+\texttt{public void assign()}
+\end{signaturebox}
+A placeholder method for assignment handling. In the submitted code, it has an empty body.
+
+\begin{signaturebox}
+\texttt{public ArrayList<String> readProgramFile(String fileName)}
+\end{signaturebox}
+Reads a program file line by line and returns its instructions in an \texttt{ArrayList<String>}.
+
+\section{Class: \texttt{Memory}}
+
+\begin{purposebox}
+The \texttt{Memory} class simulates RAM. It stores process metadata, instructions, and variables using an array of \texttt{MemoryWord} objects, and provides methods for allocation, access, and variable management.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+SIZE & \texttt{static final int} & Constant memory size set to 40. \\
+memory & \texttt{MemoryWord[]} & The array that represents memory cells. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public Memory()}
+\end{signaturebox}
+
+Creates a memory object and initializes the array of memory words.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public void writeWord(int index, MemoryWord word)}
+\end{signaturebox}
+Writes a \texttt{MemoryWord} into a specific memory index.
+
+\begin{signaturebox}
+\texttt{public MemoryWord readWord(int index)}
+\end{signaturebox}
+Returns the \texttt{MemoryWord} stored at a specific memory index.
+
+\begin{signaturebox}
+\texttt{public void printMemory()}
+\end{signaturebox}
+Prints the full memory contents to the console.
+
+\begin{signaturebox}
+\texttt{public int getRequiredSize(Process process)}
+\end{signaturebox}
+Calculates how many memory cells are required to store a process.
+
+\begin{signaturebox}
+\texttt{public boolean isFreeBlock(int start, int size)}
+\end{signaturebox}
+Checks whether a block of memory is free starting from a given index.
+
+\begin{signaturebox}
+\texttt{public int findFreeBlock(int size)}
+\end{signaturebox}
+Searches for a contiguous free block of the requested size and returns its start index.
+
+\begin{signaturebox}
+\texttt{public boolean allocateProcess(Process process)}
+\end{signaturebox}
+Allocates memory for a process, stores its PCB information, instructions, and variable slots, and returns whether allocation succeeded.
+
+\begin{signaturebox}
+\texttt{public int getVariablesStart(Process process)}
+\end{signaturebox}
+Returns the starting index of the variable area for the given process.
+
+\begin{signaturebox}
+\texttt{public Object getVariableValue(Process process, String variableName)}
+\end{signaturebox}
+Returns the value of a process variable with the given name.
+
+\begin{signaturebox}
+\texttt{public String getInstruction(Process process)}
+\end{signaturebox}
+Returns the current instruction of a process based on its program counter.
+
+\begin{signaturebox}
+\texttt{public void setVariableValue(Process process, String variableName, Object value)}
+\end{signaturebox}
+Sets or updates a variable value for the given process inside memory.
+
+\section{Class: \texttt{MemoryWord}}
+
+\begin{purposebox}
+The \texttt{MemoryWord} class represents one cell in memory. Each memory word stores a name and a value.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+name & \texttt{String} & The label or identifier of the memory word. \\
+value & \texttt{Object} & The stored value of the memory word. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public MemoryWord(String name, Object value)}
+\end{signaturebox}
+
+Creates a memory word with a name and a value.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public String getName()}
+\end{signaturebox}
+Returns the name of the memory word.
+
+\begin{signaturebox}
+\texttt{public void setName(String name)}
+\end{signaturebox}
+Updates the name of the memory word.
+
+\begin{signaturebox}
+\texttt{public Object getValue()}
+\end{signaturebox}
+Returns the value stored in the memory word.
+
+\begin{signaturebox}
+\texttt{public void setValue(Object value)}
+\end{signaturebox}
+Updates the value stored in the memory word.
+
+\begin{signaturebox}
+\texttt{public String toString()}
+\end{signaturebox}
+Returns a string representation of the memory word.
+
+\section{Class: \texttt{Mutex}}
+
+\begin{purposebox}
+The \texttt{Mutex} class simulates a lock for a named shared resource. It tracks whether the resource is locked, which process owns it, and which processes are blocked waiting for it.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+resourceName & \texttt{String} & The name of the protected resource. \\
+locked & \texttt{boolean} & Indicates whether the mutex is currently locked. \\
+owner & \texttt{Process} & The process that currently owns the mutex. \\
+blockedQueue & \texttt{Queue<Process>} & Queue of processes blocked while waiting for the resource. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public Mutex(String resourceName)}
+\end{signaturebox}
+
+Creates a mutex for a specific resource and initializes it as unlocked.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public boolean semWait(Process process)}
+\end{signaturebox}
+Tries to acquire the mutex. If it is free, the process becomes the owner; otherwise the process is blocked and added to the blocked queue.
+
+\begin{signaturebox}
+\texttt{public Process semSignal(Process process)}
+\end{signaturebox}
+Releases the mutex if the calling process is the owner. It may unblock and return the next waiting process.
+
+\section{Class: \texttt{OS}}
+
+\begin{purposebox}
+The \texttt{OS} class represents the main operating system controller. It initializes the scheduler, memory, interpreter, mutexes, and system calls, and runs the main scheduling and execution loop.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+globalTime & \texttt{int} & Stores the current global time of the simulation. \\
+userInput & \texttt{Mutex} & Mutex for the \texttt{userInput} resource. \\
+userOutput & \texttt{Mutex} & Mutex for the \texttt{userOutput} resource. \\
+file & \texttt{Mutex} & Mutex for the \texttt{file} resource. \\
+memory & \texttt{Memory} & The simulated memory used by the operating system. \\
+scheduler & \texttt{Scheduler} & The scheduler responsible for selecting processes. \\
+sys & \texttt{SystemCalls} & The object used for system call operations. \\
+interpreter & \texttt{Interpreter} & The interpreter used to execute instructions. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public OS()}
+\end{signaturebox}
+
+Initializes the operating system and creates the memory, scheduler, system calls object, mutexes, and interpreter.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public static void main(String[] args)}
+\end{signaturebox}
+Program entry point. Creates an \texttt{OS} object and starts execution by calling \texttt{run()}.
+
+\begin{signaturebox}
+\texttt{public void run()}
+\end{signaturebox}
+Runs the operating system simulation loop, creates sample processes, loads instructions, allocates memory, schedules processes, and executes instructions.
+
+\begin{signaturebox}
+\texttt{public int getGlobalTime()}
+\end{signaturebox}
+Returns the current value of global time.
+
+\begin{signaturebox}
+\texttt{public void incrementGlobalTime()}
+\end{signaturebox}
+Increments global time by one.
+
+\begin{signaturebox}
+\texttt{public void semWait(Process p, String resourceName)}
+\end{signaturebox}
+Gets the correct mutex by name and calls its \texttt{semWait} operation.
+
+\begin{signaturebox}
+\texttt{public void semSignal(Process p, String resourceName)}
+\end{signaturebox}
+Gets the correct mutex by name and calls its \texttt{semSignal} operation.
+
+\begin{signaturebox}
+\texttt{private Mutex getMutexByName(String resourceName)}
+\end{signaturebox}
+Returns the mutex corresponding to a resource name, or \texttt{null} if the name is invalid.
+
+\section{Class: \texttt{PCB}}
+
+\begin{purposebox}
+The \texttt{PCB} class stores the process control block information for a process, including its identifier, state, program counter, and memory boundaries.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+processID & \texttt{int} & The process identifier. \\
+processState & \texttt{ProcessState} & The current state of the process. \\
+programCounter & \texttt{int} & The index of the next instruction to execute. \\
+memStart & \texttt{int} & The starting memory index of the process. \\
+memEnd & \texttt{int} & The ending memory index of the process. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public PCB(int pid)}
+\end{signaturebox}
+
+Creates a PCB for a process and initializes its state to \texttt{NEW}, its program counter to 0, and its memory boundaries to 0.
+
+\begin{signaturebox}
+\texttt{public PCB(int processID, ProcessState processState, int programCounter, int memStart, int memEnd)}
+\end{signaturebox}
+
+Creates a PCB using explicit values for all fields.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public String toString()}
+\end{signaturebox}
+Returns a string representation of the PCB.
+
+\section{Class: \texttt{Process}}
+
+\begin{purposebox}
+The \texttt{Process} class represents a process in the operating system. It stores its PCB, instructions, arrival time, and status flags such as blocking and whether it is currently in memory.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+pcb & \texttt{PCB} & The PCB associated with the process. \\
+instructions & \texttt{ArrayList<String>} & The instruction list of the process. \\
+arrivalTime & \texttt{int} & The time at which the process arrives. \\
+isBlocked & \texttt{boolean} & Indicates whether the process is blocked. \\
+inMemory & \texttt{boolean} & Indicates whether the process is currently loaded in memory. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public Process(int arrivalTime)}
+\end{signaturebox}
+
+Creates a process with a given arrival time and initializes its flags.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public PCB getPcb()}
+\end{signaturebox}
+Returns the PCB of the process.
+
+\begin{signaturebox}
+\texttt{public void setPcb(PCB pcb)}
+\end{signaturebox}
+Sets the PCB of the process.
+
+\begin{signaturebox}
+\texttt{public ArrayList<String> getInstructions()}
+\end{signaturebox}
+Returns the instruction list of the process.
+
+\begin{signaturebox}
+\texttt{public void setInstructions(ArrayList<String> instructions)}
+\end{signaturebox}
+Sets the instruction list of the process.
+
+\begin{signaturebox}
+\texttt{public int getArrivalTime()}
+\end{signaturebox}
+Returns the arrival time of the process.
+
+\begin{signaturebox}
+\texttt{public void setArrivalTime(int arrivalTime)}
+\end{signaturebox}
+Updates the arrival time of the process.
+
+\begin{signaturebox}
+\texttt{public int getInstructionCounter()}
+\end{signaturebox}
+Returns the number of instructions in the process.
+
+\begin{signaturebox}
+\texttt{public boolean isCompleted()}
+\end{signaturebox}
+Returns whether the process has finished all its instructions.
+
+\begin{signaturebox}
+\texttt{public String toString()}
+\end{signaturebox}
+Returns a string representation of the process.
+
+\section{Enum: \texttt{ProcessState}}
+
+\begin{purposebox}
+The \texttt{ProcessState} enum defines the possible states a process can have during execution.
+\end{purposebox}
+
+\subsection{Values}
+
+\begin{itemize}[leftmargin=1.5em]
+    \item \texttt{NEW} --- the process has been created but has not started yet
+    \item \texttt{READY} --- the process is ready to run
+    \item \texttt{RUNNING} --- the process is currently executing
+    \item \texttt{BLOCKED} --- the process is waiting for a resource
+    \item \texttt{TERMINATED} --- the process has finished execution
+\end{itemize}
+
+\section{Class: \texttt{Scheduler}}
+
+\begin{purposebox}
+The \texttt{Scheduler} class manages the ready queue and decides which process should run according to the selected scheduling algorithm.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+readyQueue & \texttt{Deque<Process>} & The queue of ready processes. \\
+usedTime & \texttt{int} & Tracks the amount of time already used in the current Round Robin quantum. \\
+HRRNprocess & \texttt{Process} & Stores the currently selected HRRN process. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+No explicit constructor is defined, so Java provides the default constructor.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public Process roundRobin(int timeQuantum)}
+\end{signaturebox}
+Chooses the next process using the Round Robin policy.
+
+\begin{signaturebox}
+\texttt{public Process HRRN(int globalTime)}
+\end{signaturebox}
+Chooses the next process using the Highest Response Ratio Next policy.
+
+\begin{signaturebox}
+\texttt{public Process MultilevelFeedbackQueue(int globalTime)}
+\end{signaturebox}
+Placeholder method for a future Multilevel Feedback Queue scheduler.
+
+\begin{signaturebox}
+\texttt{public Process SchedulingAlgorithm(String algorithm, int globalTime)}
+\end{signaturebox}
+Selects which scheduling method to use based on the algorithm name.
+
+\begin{signaturebox}
+\texttt{public void addProcess(Process process)}
+\end{signaturebox}
+Adds a process to the ready queue and sets its state to \texttt{READY}.
+
+\section{Class: \texttt{SystemCalls}}
+
+\begin{purposebox}
+The \texttt{SystemCalls} class provides input, output, file operations, and helper methods to read from and write to memory.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+scanner & \texttt{Scanner} & Scanner object used to read user input. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+\begin{signaturebox}
+\texttt{public SystemCalls()}
+\end{signaturebox}
+
+Creates a \texttt{SystemCalls} object and initializes the scanner.
+
+\subsection{Methods}
+
+\begin{signaturebox}
+\texttt{public void print(String message)}
+\end{signaturebox}
+Prints a message to the console.
+
+\begin{signaturebox}
+\texttt{public String input(String message)}
+\end{signaturebox}
+Displays a prompt and returns the user's input.
+
+\begin{signaturebox}
+\texttt{public void writeFile(String fileName, String data)}
+\end{signaturebox}
+Writes data into a file.
+
+\begin{signaturebox}
+\texttt{public String readFile(String fileName)}
+\end{signaturebox}
+Reads a file and returns its contents as a string.
+
+\begin{signaturebox}
+\texttt{public MemoryWord readFromMemory(Memory memory, int address)}
+\end{signaturebox}
+Reads and returns a \texttt{MemoryWord} from the given memory address.
+
+\begin{signaturebox}
+\texttt{public void writeToMemory(Memory memory, int address, String name, Object value)}
+\end{signaturebox}
+Creates a new \texttt{MemoryWord} and writes it to the specified memory address.
+
+\section{Class: \texttt{disk}}
+
+\begin{purposebox}
+The \texttt{disk} class is a very small placeholder for secondary storage. In the submitted code, it only contains one array attribute and no methods.
+\end{purposebox}
+
+\subsection{Attributes}
+
+\rowcolors{2}{softgray}{white}
+\begin{tabularx}{\textwidth}{p{4cm} p{3cm} Y}
+\toprule
+\textbf{Attribute} & \textbf{Type} & \textbf{Description} \\
+\midrule
+disk & \texttt{Object[]} & Array representing the simulated disk contents. Its size is 100. \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Constructors}
+
+No explicit constructor is defined, so Java provides the default constructor.
+
+\subsection{Methods}
+
+No methods are defined in this class.
+
+\section{Notes}
+
+This documentation matches the uploaded code much more closely than the previous version.  
+It documents what is actually present in the source, even when a method is unfinished, placeholder-only, or partially implemented.
+
+\end{document}

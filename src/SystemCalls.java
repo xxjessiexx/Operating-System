@@ -1,3 +1,4 @@
+package src;
 import java.util.Scanner;
 import java.io.*;
 import java.lang.reflect.Member;
@@ -9,15 +10,18 @@ public class SystemCalls {
         scanner = new Scanner(System.in);
     }
 
+
     public void print(String message) {
         System.out.println(message);
     }
 
+    
     public String input(String message) {
         System.out.print(message);
         return scanner.nextLine();
     }
 
+    
     public void writeFile(String fileName, String data) {
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -28,6 +32,7 @@ public class SystemCalls {
         }
     }
 
+   
     public String readFile(String fileName) {
         StringBuilder content = new StringBuilder();
 
@@ -47,10 +52,12 @@ public class SystemCalls {
         return content.toString().trim();
     }
 
+   
     public MemoryWord readFromMemory(Memory memory, int address) {
         return memory.readWord(address);
     }
 
+  
     public void writeToMemory(Memory memory, int address, String name, Object value) {
         MemoryWord word = new MemoryWord(name, value);
         memory.writeWord(address, word);

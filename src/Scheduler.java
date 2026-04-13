@@ -1,3 +1,4 @@
+package src;
 
 import java.util.Queue;
 import java.util.ArrayDeque;
@@ -9,12 +10,14 @@ public class Scheduler {
     int usedTime = 0;
     Process HRRNprocess = null;
 
+   
     public void addProcess(Process process) {
         readyQueue.add(process);
         process.pcb.processState = ProcessState.READY;
     }
 
 
+    
     public Process roundRobin(int timeQuantum) {
     Process currentProcess = readyQueue.peek();
 
@@ -54,6 +57,7 @@ public class Scheduler {
     return newProcess;
 }
 
+    
     public Process HRRN(int globalTime) {
 
     double highestResponseRatio = -1;
@@ -96,11 +100,13 @@ public class Scheduler {
     return HRRNprocess;
 }
 
+   
     public Process MultilevelFeedbackQueue(int globalTime) {
         // Implement multilevel feedback queue scheduling logic here
         return null; // Placeholder return statement
     }
 
+   
     public Process SchedulingAlgorithm(String algorithm, int globalTime) {
         switch (algorithm) {
             case "RoundRobin":

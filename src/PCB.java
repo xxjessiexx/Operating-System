@@ -1,3 +1,4 @@
+package src;
 
 
 import java.io.Serializable;
@@ -27,6 +28,7 @@ public class PCB {
         this.memEnd = memEnd;
     }
 
+    
     @Override
     public String toString() {
         return "PCB{" +

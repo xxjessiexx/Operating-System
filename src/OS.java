@@ -1,3 +1,4 @@
+package src;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class OS {
@@ -25,6 +26,7 @@ public class OS {
         interpreter = new Interpreter(sys, memory, this);
     }
 
+    
     public static void main(String[] args) {
         OS os = new OS();
         os.run();
@@ -76,6 +78,7 @@ public class OS {
         }
     }
 
+    
     public int getGlobalTime() {
         return globalTime;
     }
@@ -84,6 +87,7 @@ public class OS {
         globalTime++;
     }
 
+   
     public void semWait(Process p, String resourceName) {
         Mutex mutex = getMutexByName(resourceName);
 
@@ -95,6 +99,7 @@ public class OS {
         mutex.semWait(p);
     }
 
+    
     public void semSignal(Process p, String resourceName) {
         Mutex mutex = getMutexByName(resourceName);
 
@@ -106,6 +111,7 @@ public class OS {
         mutex.semSignal(p);
     }
 
+  
     private Mutex getMutexByName(String resourceName) {
         switch (resourceName) {
             case "userInput":

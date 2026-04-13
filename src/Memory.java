@@ -1,3 +1,4 @@
+package src;
 public class Memory {
     private static final int SIZE = 40;
     private MemoryWord[] memory;
@@ -6,6 +7,7 @@ public class Memory {
         memory = new MemoryWord[SIZE];
     }
 
+   
     public void writeWord(int index, MemoryWord word) {
         if (index >= 0 && index < SIZE) {
             memory[index] = word;
@@ -14,6 +16,7 @@ public class Memory {
         }
     }
 
+    
     public MemoryWord readWord(int index) {
         if (index >= 0 && index < SIZE) {
             return memory[index];
@@ -34,10 +37,12 @@ public class Memory {
         System.out.println("===========================");
     }
 
+   
     public int getRequiredSize(Process process) {
         return 5 + process.getInstructions().size() + 3;
     }
 
+  
     public boolean isFreeBlock(int start, int size) {
         if (start < 0 || start + size > SIZE) {
             return false;
@@ -51,6 +56,7 @@ public class Memory {
         return true;
     }
 
+    
     public int findFreeBlock(int size) {
         for (int start = 0; start <= SIZE - size; start++) {
             if (isFreeBlock(start, size)) {
@@ -60,6 +66,7 @@ public class Memory {
         return -1;
     }
 
+    
     public boolean allocateProcess(Process process) {
         int requiredSize = getRequiredSize(process);
         int start = findFreeBlock(requiredSize);
@@ -98,9 +105,11 @@ public class Memory {
 
         return true;
     }
+    
     public int getVariablesStart(Process process) {
     return process.pcb.memEnd - 2;
 }
+
 
 public Object getVariableValue(Process process, String variableName) {
     int start = getVariablesStart(process);
@@ -113,6 +122,7 @@ public Object getVariableValue(Process process, String variableName) {
     }
     return null;
 }
+
 public String getInstruction(Process process) {
     int instructionIndex = process.pcb.programCounter; //Might need to get  the pcb from memory
     int instructionMemoryIndex = process.pcb.memStart + 5 + instructionIndex;
@@ -125,6 +135,7 @@ public String getInstruction(Process process) {
     }
     return null;
 }
+
 
 public void setVariableValue(Process process, String variableName, Object value) {
     int start = getVariablesStart(process);

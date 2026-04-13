@@ -1,3 +1,4 @@
+package src;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,6 +15,7 @@ public class Mutex {
         this.blockedQueue = new LinkedList<>();
     }
 
+   
     public boolean semWait(Process process) {
         if (!locked) {
             locked = true;
@@ -26,6 +28,7 @@ public class Mutex {
         }
     }
 
+    
     public Process semSignal(Process process) {
         if (owner != process) {
             System.out.println("Process " + process.pcb.processID +
