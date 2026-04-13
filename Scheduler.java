@@ -45,14 +45,14 @@ public class Scheduler {
         double highestResponseRatio = -1;
         if(HRRNprocess==null || !HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)){
             for (Process process : readyQueue) {
-                double responseRatio = (double) (globalTime - process.arrivalTime) / process.getInstructionCounter();
+                double responseRatio = (double) ((globalTime - process.arrivalTime) + process.getInstructionCounter()) / process.getInstructionCounter();
                 if (responseRatio > highestResponseRatio) {
                     highestResponseRatio = responseRatio;
                     HRRNprocess = process;
                 }
             }
         }
-        if (HRRNprocess != null) {    ///when should we remove it from ready queue 
+        if (HRRNprocess != null && readyQueue.contains(HRRNprocess)) {    ///when should we remove it from ready queue 
             readyQueue.remove(HRRNprocess);
         }
 
