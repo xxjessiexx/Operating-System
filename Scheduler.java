@@ -42,22 +42,45 @@ public class Scheduler {
 
     public Process HRRN(int globalTime) {
 
-        double highestResponseRatio = -1;
-        if(HRRNprocess==null || !HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)){
-            for (Process process : readyQueue) {
-                double responseRatio = (double) ((globalTime - process.arrivalTime) + process.getInstructionCounter()) / process.getInstructionCounter();
-                if (responseRatio > highestResponseRatio) {
-                    highestResponseRatio = responseRatio;
-                    HRRNprocess = process;
-                }
-            }
-        }
-        if (HRRNprocess != null && readyQueue.contains(HRRNprocess)) {    ///when should we remove it from ready queue 
-            readyQueue.remove(HRRNprocess);
-        }
+    double highestResponseRatio = -1;
 
+    if (HRRNprocess != null
+            && HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)
+            && HRRNprocess.pcb.programCounter < HRRNprocess.getInstructionCounter()) { //if the process is still running and has instructions left to execute, return it to continue running
         return HRRNprocess;
     }
+
+    if (HRRNprocess != null
+            && HRRNprocess.pcb.programCounter >= HRRNprocess.getInstructionCounter()) { //if the process doesn't have any more instructions to execute, terminate it and set it to null so that a new process can be selected
+        HRRNprocess.pcb.processState = ProcessState.TERMINATED;
+        HRRNprocess = null;
+    }
+    if (HRRNprocess != null
+            && !HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)
+            && HRRNprocess.pcb.programCounter < HRRNprocess.getInstructionCounter()) { // if the selected process is no longer running (blocked or preempted) but still has instructions to execute, set it to null so that a new process can be selected
+        HRRNprocess = null;
+    }
+
+    if (HRRNprocess == null) {
+        for (Process process : readyQueue) { //get the HRRN ratio for each process still in the ready queue
+
+            double responseRatio =
+                    (double) ((globalTime - process.arrivalTime) + process.getInstructionCounter()) / process.getInstructionCounter(); 
+            if (responseRatio > highestResponseRatio) {  //set the new highest response ratio and the process with it
+                highestResponseRatio = responseRatio;
+                HRRNprocess = process;
+            }
+        }
+        if (HRRNprocess != null && readyQueue.contains(HRRNprocess)) { //if the running process is still in the ready queue, remove it to avoid duplication
+            readyQueue.remove(HRRNprocess);
+        }
+        if (HRRNprocess != null) {  //as long as the process is selected it is running
+            HRRNprocess.pcb.processState = ProcessState.RUNNING;
+        }
+    }
+
+    return HRRNprocess;
+}
 
     public Process MultilevelFeedbackQueue(int globalTime) {
         // Implement multilevel feedback queue scheduling logic here
