@@ -7,74 +7,89 @@ import java.util.LinkedList;
 
 public class Scheduler {
     Deque<Process> readyQueue = new ArrayDeque<>();
-    Deque<Process> PQ0 = new ArrayDeque<>(); // highest priority queue for processes that have been in the ready state the longest --MLFQ
+    Deque<Process> PQ0 = new ArrayDeque<>(); // highest priority queue for processes that have been in the ready state
+                                             // the longest --MLFQ
     Deque<Process> PQ1 = new ArrayDeque<>();
     Deque<Process> PQ2 = new ArrayDeque<>();
-    Deque<Process> PQ3 = new ArrayDeque<>(); // lowest priority queue for processes that have been in the ready state the shortest -- MLFQ
+    Deque<Process> PQ3 = new ArrayDeque<>(); // lowest priority queue for processes that have been in the ready state
+                                             // the shortest -- MLFQ
     int usedTime = 0;
     Process HRRNprocess = null;
+    Process MLFQprocess = null;
 
-    //helper fns
-        // calculate the response ratio for a process in the ready queue
-        public double calculateResponseRatio(Process process, int globalTime) {
+    // helper fns
+    // calculate the response ratio for a process in the ready queue
+    public double calculateResponseRatio(Process process, int globalTime) {
         int waitingTime = globalTime - process.readySince;
         return (double) (waitingTime + process.getInstructionCounter()) / process.getInstructionCounter();
     }
+
     // add a process to the ready queue and set its state to ready
-public void addProcess(Process process, int globalTime) {
-    process.readySince = globalTime;
-    process.pcb.processState = ProcessState.READY;
-    readyQueue.add(process);
-    process.queueLevel = 0;
-    process.timeUsedInLevel = 0;
-    PQ0.add(process);
-}
-public void addUnblockedProcess(Process process, int globalTime) {
-    process.readySince = globalTime;
-    process.pcb.processState = ProcessState.READY;
-    readyQueue.add(process);
-    process.queueLevel = 0;
-    process.timeUsedInLevel = 0;
-    PQ0.add(process);
-}
-    // remove a process from the ready queue 
-   public void removeProcess(Process process) {
-    readyQueue.remove(process);
-    PQ0.remove(process);
-    PQ1.remove(process);
-    PQ2.remove(process);
-    PQ3.remove(process);
-}
+    public void addProcess(Process process, int globalTime) {
+        process.readySince = globalTime;
+        process.pcb.processState = ProcessState.READY;
+        readyQueue.add(process);
+        process.queueLevel = 0;
+        process.timeUsedInLevel = 0;
+        PQ0.add(process);
+    }
 
-    //scheduling algorithms
+    public void addUnblockedProcess(Process process, int globalTime) { // same implementation as addProcess for now
+        process.readySince = globalTime;
+        process.pcb.processState = ProcessState.READY;
+        readyQueue.add(process);
+        process.queueLevel = 0;
+        process.timeUsedInLevel = 0;
+        PQ0.add(process);
+    }
 
-    public Process roundRobin(int timeQuantum, int globalTime ) {
+    // remove a process from all relevant queues
+    public void removeProcess(Process process) {
+        readyQueue.remove(process);
+        PQ0.remove(process);
+        PQ1.remove(process);
+        PQ2.remove(process);
+        PQ3.remove(process);
+        if (MLFQprocess == process) {
+            MLFQprocess = null;
+        }
+    }
+    // scheduling algorithms
+
+    public Process roundRobin(int timeQuantum, int globalTime) {
         Process currentProcess = readyQueue.peek();
 
-        if (currentProcess == null) {
+        if (currentProcess == null) { // if there are no processes in the ready queue, return null
             return null;
         }
 
         if (usedTime < timeQuantum
                 && !currentProcess.isCompleted()
-                && currentProcess.pcb.processState != ProcessState.BLOCKED) {
+                && currentProcess.pcb.processState != ProcessState.BLOCKED) { // if the process still has time left in
+                                                                              // its quantum and is not blocked or
+                                                                              // completed, let it continue running
 
             usedTime++;
             currentProcess.pcb.processState = ProcessState.RUNNING;
             return currentProcess;
         }
 
-        currentProcess = readyQueue.poll();
+        currentProcess = readyQueue.poll(); // if the process has used up its quantum or is blocked or completed, remove
+                                            // it from the ready queue and add it back if it's not completed or blocked
+                                            // to let other processes run
         usedTime = 0;
 
         if (!currentProcess.isCompleted()
-                && currentProcess.pcb.processState != ProcessState.BLOCKED) {
+                && currentProcess.pcb.processState != ProcessState.BLOCKED) { // if the process is not completed or
+                                                                              // blocked, add it back to the ready queue
+                                                                              // to let other processes run
 
             currentProcess.pcb.processState = ProcessState.READY;
             currentProcess.readySince = globalTime;
             readyQueue.addLast(currentProcess);
         }
-        Process newProcess = readyQueue.peek();
+        Process newProcess = readyQueue.peek(); // get the next process to run, if there is one, and set its state to
+                                                // running
 
         if (newProcess != null) {
             usedTime++;
@@ -90,17 +105,22 @@ public void addUnblockedProcess(Process process, int globalTime) {
 
         if (HRRNprocess != null
                 && HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)
-                && !HRRNprocess.isCompleted()) { // if the process is still running and has instructions left to execute, return it to continue running
+                && !HRRNprocess.isCompleted()) { // if the process is still running and has instructions left to
+                                                 // execute, return it to continue running
             return HRRNprocess;
         }
 
         if (HRRNprocess != null
-                && HRRNprocess.isCompleted()) { // if the process doesn't have any more instructions to execute,terminate it and set it to null so that a new process can be selected
+                && HRRNprocess.isCompleted()) { // if the process doesn't have any more instructions to
+                                                // execute,terminate it and set it to null so that a new process can be
+                                                // selected
             HRRNprocess = null;
         }
         if (HRRNprocess != null
                 && !HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)
-                && !HRRNprocess.isCompleted()) { // if the selected process is no longer running (blocked or preempted) but still  has instructions to execute, set it to null so that a new process can be selected
+                && !HRRNprocess.isCompleted()) { // if the selected process is no longer running (blocked or preempted)
+                                                 // but still has instructions to execute, set it to null so that a new
+                                                 // process can be selected
             HRRNprocess = null;
         }
 
@@ -109,12 +129,15 @@ public void addUnblockedProcess(Process process, int globalTime) {
 
                 double responseRatio = calculateResponseRatio(process, globalTime);
 
-                if (responseRatio > highestResponseRatio) { // set the new highest response ratio and the process with it
+                if (responseRatio > highestResponseRatio) { // set the new highest response ratio and the process with
+                                                            // it
                     highestResponseRatio = responseRatio;
                     HRRNprocess = process;
                 }
             }
-            if (HRRNprocess != null && readyQueue.contains(HRRNprocess)) { // if the running process is still in the ready queue, remove it to avoid duplication
+            if (HRRNprocess != null && readyQueue.contains(HRRNprocess)) { // if the running process is still in the
+                                                                           // ready queue, remove it to avoid
+                                                                           // duplication
                 readyQueue.remove(HRRNprocess);
             }
             if (HRRNprocess != null) { // as long as the process is selected it is running
@@ -125,71 +148,110 @@ public void addUnblockedProcess(Process process, int globalTime) {
         return HRRNprocess;
     }
 
+    public Process MultilevelFeedbackQueue(int globalTime) { // chooses according to the highest priority non-empty
+                                                             // queue
+        if (MLFQprocess != null
+                && MLFQprocess.pcb.processState == ProcessState.RUNNING
+                && !MLFQprocess.isCompleted()
+                && MLFQprocess.pcb.processState != ProcessState.BLOCKED) { // if the selected process is still running,
+                                                                           // not completed, and not blocked, return it
+                                                                           // to continue using its quantum before
+                                                                           // preemption
+            int quantum = (int) Math.pow(2, MLFQprocess.queueLevel);
 
-    public Process MultilevelFeedbackQueue(int globalTime) { // chooses according to the highest priority non-empty queue
-    if (PQ0.isEmpty() && PQ1.isEmpty() && PQ2.isEmpty() && PQ3.isEmpty()) {
-        return null;
+            if (MLFQprocess.timeUsedInLevel < quantum) { // if the process has not used up the full quantum of its
+                                                         // current queue level yet, return it to continue running
+                return MLFQprocess;
+            }
+        }
+
+        if (PQ0.isEmpty() && PQ1.isEmpty() && PQ2.isEmpty() && PQ3.isEmpty()) { // if all priority queues are empty,
+                                                                                // return null because there is no
+                                                                                // process to schedule
+            return null;
+        }
+
+        Process process = null;
+
+        if (!PQ0.isEmpty()) { // if the highest priority queue is not empty, select from it
+            process = PQ0.poll();
+        } else if (!PQ1.isEmpty()) {
+            process = PQ1.poll();
+        } else if (!PQ2.isEmpty()) {
+            process = PQ2.poll();
+        } else if (!PQ3.isEmpty()) {
+            process = PQ3.poll();
+        }
+
+        if (process != null) { // if a process is selected, set its state to running
+            process.pcb.processState = ProcessState.RUNNING;
+            MLFQprocess = process;
+        }
+
+        return process;
     }
 
-    Process process = null;
+    public void updateMLFQ(Process process, int globalTime) { // called right after a process is done executing to set
+                                                              // it back into the correct queue
+        if (process == null) {
+            return;
+        }
 
-    if (!PQ0.isEmpty()) {
-        process = PQ0.poll();
-    } else if (!PQ1.isEmpty()) {
-        process = PQ1.poll();
-    } else if (!PQ2.isEmpty()) {
-        process = PQ2.poll();
-    } else if (!PQ3.isEmpty()) {
-        process = PQ3.poll();
-    }
+        if (process.isCompleted()) { // if the process is completed remove it from all queues
+            removeProcess(process);
+            if (MLFQprocess == process) {
+                MLFQprocess = null;
+            }
+            return;
+        }
 
-    if (process != null) {
-        process.pcb.processState = ProcessState.RUNNING; // set the selected process state to running
-    }
+        if (process.pcb.processState == ProcessState.BLOCKED) { // if the process is blocked remove it from all queues
+            removeProcess(process);
+            if (MLFQprocess == process) {
+                MLFQprocess = null;
+            }
+            return;
+        }
 
-    return process;
-}
-public void updateMLFQ(Process process, int globalTime) { // called right after a process is done executing to set it back into the correct queue
-    if (process == null) {
-        return;
-    }
+        process.timeUsedInLevel++;
 
-    if (process.isCompleted()) {
-        removeProcess(process);
-        return;
-    }
+        int quantum = (int) Math.pow(2, process.queueLevel); // gets the quantum for the process's current queue level
+                                                             // (1 for PQ0, 2 for PQ1, 4 for PQ2)
 
-    if (process.pcb.processState == ProcessState.BLOCKED) {
-        removeProcess(process);
-        return;
-    }
+        if (process.timeUsedInLevel < quantum) { // if the process has not used up the full quantum of its current level
+                                                 // yet, keep it running and do not return it to a queue yet
+            process.pcb.processState = ProcessState.RUNNING;
+            MLFQprocess = process;
+            return;
+        }
 
-    process.pcb.processState = ProcessState.READY;
-    process.readySince = globalTime;
-    process.timeUsedInLevel++;
+        process.pcb.processState = ProcessState.READY; // if the process has used up its full quantum and is not
+                                                       // completed or blocked, set it back to ready and add it to the
+                                                       // correct queue
+        process.readySince = globalTime;
 
-    int quantum = (int) Math.pow(2, process.queueLevel);
+        if (process.queueLevel < 3) {
+            process.queueLevel++;
+        }
 
-    if (process.queueLevel < 3 && process.timeUsedInLevel >= quantum) {
-        process.queueLevel++;
         process.timeUsedInLevel = 0;
-    }
+        MLFQprocess = null;
 
-    switch (process.queueLevel) {
-        case 0:
-            PQ0.addLast(process);
-            break;
-        case 1:
-            PQ1.addLast(process);
-            break;
-        case 2:
-            PQ2.addLast(process);
-            break;
-        case 3:
-            PQ3.addLast(process);
-            break;
+        switch (process.queueLevel) {
+            case 0:
+                PQ0.addLast(process);
+                break;
+            case 1:
+                PQ1.addLast(process);
+                break;
+            case 2:
+                PQ2.addLast(process);
+                break;
+            case 3:
+                PQ3.addLast(process);
+                break;
+        }
     }
-}
 
     public Process SchedulingAlgorithm(String algorithm, int globalTime) {
         switch (algorithm) {
@@ -204,6 +266,5 @@ public void updateMLFQ(Process process, int globalTime) { // called right after 
                 return null;
         }
     }
-    
 
 }

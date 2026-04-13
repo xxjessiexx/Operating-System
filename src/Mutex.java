@@ -22,7 +22,7 @@ public class Mutex {
             owner = process;
             return true;
         } else {
-            process.pcb.processState=ProcessState.BLOCKED;
+            process.pcb.processState=ProcessState.BLOCKED; // set the process state to blocked and add it to the blocked queue for this mutex
             blockedQueue.add(process);
             return false;
         }

@@ -79,12 +79,12 @@ public void run() {
                 scheduler.removeProcess(currentProcess);
                 toRemove.add(currentProcess);
             }
-            else if (SchedulerAlgorithm.equals("MultilevelFeedbackQueue")) {
+            else if (SchedulerAlgorithm.equals("MultilevelFeedbackQueue")) { // if we are using MLFQ, after the process is done executing, we need to update its position in the correct queue according to how much time it has used in the current queue level and whether it is blocked or not
                 scheduler.updateMLFQ(currentProcess, globalTime);
          }
         }
 
-        processes.removeAll(toRemove);
+        processes.removeAll(toRemove); // remove completed processes from the list of processes to check
         globalTime++;
     }
 }
@@ -106,10 +106,10 @@ public void semWait(Process p, String resourceName) {
         return;
     }
 
-    boolean acquired = mutex.semWait(p);
+    boolean acquired = mutex.semWait(p); // tries to acquire the resource, if it is not available, it blocks the process and adds it to the mutex's blocked queue
 
     if (!acquired) {
-        scheduler.removeProcess(p);
+        scheduler.removeProcess(p); // if the process is blocked, remove it from the scheduler so it won't be scheduled to run until it is unblocked
     }
 }
     
@@ -121,10 +121,10 @@ public void semWait(Process p, String resourceName) {
         return;
     }
 
-    Process unblockedProcess = mutex.semSignal(p);
+    Process unblockedProcess = mutex.semSignal(p); // unblocks the next process waiting for the resource, if there is one, and returns it
 
     if (unblockedProcess != null) {
-        scheduler.addUnblockedProcess(unblockedProcess, globalTime);
+        scheduler.addUnblockedProcess(unblockedProcess, globalTime); // adds the unblocked process back to the scheduler so it can be scheduled to run
     }
 }
   
