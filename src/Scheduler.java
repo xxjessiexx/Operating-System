@@ -21,14 +21,21 @@ public class Scheduler {
         return (double) (waitingTime + process.getInstructionCounter()) / process.getInstructionCounter();
     }
     // add a process to the ready queue and set its state to ready
-
-   public void addProcess(Process process, int globalTime) {
+public void addProcess(Process process, int globalTime) {
     process.readySince = globalTime;
     process.pcb.processState = ProcessState.READY;
     readyQueue.add(process);
     process.queueLevel = 0;
     process.timeUsedInLevel = 0;
-    PQ0.add(process); // when a process is added to the ready queue it is also added to the highest priority queue in MLFQ
+    PQ0.add(process);
+}
+public void addUnblockedProcess(Process process, int globalTime) {
+    process.readySince = globalTime;
+    process.pcb.processState = ProcessState.READY;
+    readyQueue.add(process);
+    process.queueLevel = 0;
+    process.timeUsedInLevel = 0;
+    PQ0.add(process);
 }
     // remove a process from the ready queue 
    public void removeProcess(Process process) {
@@ -137,7 +144,7 @@ public class Scheduler {
     }
 
     if (process != null) {
-        process.pcb.processState = ProcessState.RUNNING;
+        process.pcb.processState = ProcessState.RUNNING; // set the selected process state to running
     }
 
     return process;

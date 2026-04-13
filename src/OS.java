@@ -56,7 +56,7 @@ public void run() {
                 PCB pcb1 = new PCB(pid++);
                 p.pcb = pcb1;
 
-                p.instructions = interpreter.readProgramFile("null"); 
+                p.instructions = interpreter.readProgramFile("program1.txt"); //i just want to try it so i chose program 1 !! TEMPORARY!!
                 // later replace "null" with actual program file name
 
                 if (!memory.allocateProcess(p)) {
@@ -124,7 +124,7 @@ public void semWait(Process p, String resourceName) {
     Process unblockedProcess = mutex.semSignal(p);
 
     if (unblockedProcess != null) {
-        scheduler.addProcess(unblockedProcess, globalTime);
+        scheduler.addUnblockedProcess(unblockedProcess, globalTime);
     }
 }
   
