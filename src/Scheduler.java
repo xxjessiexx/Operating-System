@@ -117,5 +117,8 @@ public class Scheduler {
                 return null;
         }
     }
+    public void removeProcess(Process process) {
+    readyQueue.remove(process);
+}
 
 }

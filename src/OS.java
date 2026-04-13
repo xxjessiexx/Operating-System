@@ -88,17 +88,20 @@ public class OS {
     }
 
    
-    public void semWait(Process p, String resourceName) {
-        Mutex mutex = getMutexByName(resourceName);
+public void semWait(Process p, String resourceName) {
+    Mutex mutex = getMutexByName(resourceName);
 
-        if (mutex == null) {
-            System.out.println("Invalid resource name: " + resourceName);
-            return;
-        }
-
-        mutex.semWait(p);
+    if (mutex == null) {
+        System.out.println("Invalid resource name: " + resourceName);
+        return;
     }
 
+    boolean acquired = mutex.semWait(p);
+
+    if (!acquired) {
+        scheduler.removeProcess(p);
+    }
+}
     
  public void semSignal(Process p, String resourceName) {
     Mutex mutex = getMutexByName(resourceName);
