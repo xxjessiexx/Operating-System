@@ -24,7 +24,7 @@ public class Scheduler {
         }
 
         if (usedTime < timeQuantum
-                && currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()
+                && !currentProcess.isCompleted()
                 && currentProcess.pcb.processState != ProcessState.BLOCKED) {
 
             usedTime++;
@@ -35,16 +35,12 @@ public class Scheduler {
         currentProcess = readyQueue.poll();
         usedTime = 0;
 
-        if (currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()
+        if (!currentProcess.isCompleted()
                 && currentProcess.pcb.processState != ProcessState.BLOCKED) {
 
             currentProcess.pcb.processState = ProcessState.READY;
             currentProcess.readySince = globalTime;
             readyQueue.addLast(currentProcess);
-        }
-
-        else if (currentProcess.pcb.programCounter >= currentProcess.getInstructionCounter()) {
-            currentProcess.pcb.processState = ProcessState.TERMINATED;
         }
         Process newProcess = readyQueue.peek();
 
@@ -62,18 +58,17 @@ public class Scheduler {
 
         if (HRRNprocess != null
                 && HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)
-                && HRRNprocess.pcb.programCounter < HRRNprocess.getInstructionCounter()) { // if the process is still running and has instructions left to execute, return it to continue running
+                && !HRRNprocess.isCompleted()) { // if the process is still running and has instructions left to execute, return it to continue running
             return HRRNprocess;
         }
 
         if (HRRNprocess != null
-                && HRRNprocess.pcb.programCounter >= HRRNprocess.getInstructionCounter()) { // if the process doesn't have any more instructions to execute,terminate it and set it to null so that a new process can be selected
-            HRRNprocess.pcb.processState = ProcessState.TERMINATED;
+                && HRRNprocess.isCompleted()) { // if the process doesn't have any more instructions to execute,terminate it and set it to null so that a new process can be selected
             HRRNprocess = null;
         }
         if (HRRNprocess != null
                 && !HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)
-                && HRRNprocess.pcb.programCounter < HRRNprocess.getInstructionCounter()) { // if the selected process is no longer running (blocked or preempted) but still  has instructions to execute, set it to null so that a new process can be selected
+                && !HRRNprocess.isCompleted()) { // if the selected process is no longer running (blocked or preempted) but still  has instructions to execute, set it to null so that a new process can be selected
             HRRNprocess = null;
         }
 

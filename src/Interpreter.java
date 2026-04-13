@@ -79,9 +79,7 @@ public class Interpreter {
                 break;
 
 
-        }
-
-        p.pcb.programCounter++;
+       }
         
     }
 
