@@ -10,11 +10,25 @@ public class Scheduler {
     int usedTime = 0;
     Process HRRNprocess = null;
 
+    //helper fns
+        // calculate the response ratio for a process in the ready queue
+        public double calculateResponseRatio(Process process, int globalTime) {
+        int waitingTime = globalTime - process.readySince;
+        return (double) (waitingTime + process.getInstructionCounter()) / process.getInstructionCounter();
+    }
+    // add a process to the ready queue and set its state to ready
+
     public void addProcess(Process process, int globalTime) {
         process.readySince = globalTime;
         process.pcb.processState = ProcessState.READY;
         readyQueue.add(process);
     }
+    // remove a process from the ready queue 
+    public void removeProcess(Process process) {
+    readyQueue.remove(process);
+    }
+
+    //scheduling algorithms
 
     public Process roundRobin(int timeQuantum, int globalTime) {
         Process currentProcess = readyQueue.peek();
@@ -92,10 +106,7 @@ public class Scheduler {
 
         return HRRNprocess;
     }
-    public double calculateResponseRatio(Process process, int globalTime) {
-        int waitingTime = globalTime - process.readySince;
-        return (double) (waitingTime + process.getInstructionCounter()) / process.getInstructionCounter();
-    }
+
 
     public Process MultilevelFeedbackQueue(int globalTime) {
         // Implement multilevel feedback queue scheduling logic here
@@ -115,8 +126,6 @@ public class Scheduler {
                 return null;
         }
     }
-    public void removeProcess(Process process) {
-    readyQueue.remove(process);
-}
+    
 
 }
