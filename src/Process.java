@@ -7,7 +7,8 @@ public class Process {
     int arrivalTime;
     boolean inMemory;
     public int readySince; // for HRRN scheduling to calculate the total time a process has been in the ready state
-   
+    public int queueLevel = 0; // for MLFQ to track which queue level a process is currently in
+    public int timeUsedInLevel = 0; // for MLFQ to track how much time a process has used in its current queue level
 
     public Process(int arrivalTime) {
         this.arrivalTime = arrivalTime;

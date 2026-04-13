@@ -79,6 +79,9 @@ public void run() {
                 scheduler.removeProcess(currentProcess);
                 toRemove.add(currentProcess);
             }
+            else if (SchedulerAlgorithm.equals("MultilevelFeedbackQueue")) {
+                scheduler.updateMLFQ(currentProcess, globalTime);
+         }
         }
 
         processes.removeAll(toRemove);

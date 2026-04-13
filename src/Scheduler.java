@@ -7,6 +7,10 @@ import java.util.LinkedList;
 
 public class Scheduler {
     Deque<Process> readyQueue = new ArrayDeque<>();
+    Deque<Process> PQ0 = new ArrayDeque<>(); // highest priority queue for processes that have been in the ready state the longest --MLFQ
+    Deque<Process> PQ1 = new ArrayDeque<>();
+    Deque<Process> PQ2 = new ArrayDeque<>();
+    Deque<Process> PQ3 = new ArrayDeque<>(); // lowest priority queue for processes that have been in the ready state the shortest -- MLFQ
     int usedTime = 0;
     Process HRRNprocess = null;
 
@@ -18,19 +22,26 @@ public class Scheduler {
     }
     // add a process to the ready queue and set its state to ready
 
-    public void addProcess(Process process, int globalTime) {
-        process.readySince = globalTime;
-        process.pcb.processState = ProcessState.READY;
-        readyQueue.add(process);
-    }
+   public void addProcess(Process process, int globalTime) {
+    process.readySince = globalTime;
+    process.pcb.processState = ProcessState.READY;
+    readyQueue.add(process);
+    process.queueLevel = 0;
+    process.timeUsedInLevel = 0;
+    PQ0.add(process); // when a process is added to the ready queue it is also added to the highest priority queue in MLFQ
+}
     // remove a process from the ready queue 
-    public void removeProcess(Process process) {
+   public void removeProcess(Process process) {
     readyQueue.remove(process);
-    }
+    PQ0.remove(process);
+    PQ1.remove(process);
+    PQ2.remove(process);
+    PQ3.remove(process);
+}
 
     //scheduling algorithms
 
-    public Process roundRobin(int timeQuantum, int globalTime) {
+    public Process roundRobin(int timeQuantum, int globalTime ) {
         Process currentProcess = readyQueue.peek();
 
         if (currentProcess == null) {
@@ -108,10 +119,70 @@ public class Scheduler {
     }
 
 
-    public Process MultilevelFeedbackQueue(int globalTime) {
-        // Implement multilevel feedback queue scheduling logic here
-        return null; // Placeholder return statement
+    public Process MultilevelFeedbackQueue(int globalTime) { // chooses according to the highest priority non-empty queue
+    if (PQ0.isEmpty() && PQ1.isEmpty() && PQ2.isEmpty() && PQ3.isEmpty()) {
+        return null;
     }
+
+    Process process = null;
+
+    if (!PQ0.isEmpty()) {
+        process = PQ0.poll();
+    } else if (!PQ1.isEmpty()) {
+        process = PQ1.poll();
+    } else if (!PQ2.isEmpty()) {
+        process = PQ2.poll();
+    } else if (!PQ3.isEmpty()) {
+        process = PQ3.poll();
+    }
+
+    if (process != null) {
+        process.pcb.processState = ProcessState.RUNNING;
+    }
+
+    return process;
+}
+public void updateMLFQ(Process process, int globalTime) { // called right after a process is done executing to set it back into the correct queue
+    if (process == null) {
+        return;
+    }
+
+    if (process.isCompleted()) {
+        removeProcess(process);
+        return;
+    }
+
+    if (process.pcb.processState == ProcessState.BLOCKED) {
+        removeProcess(process);
+        return;
+    }
+
+    process.pcb.processState = ProcessState.READY;
+    process.readySince = globalTime;
+    process.timeUsedInLevel++;
+
+    int quantum = (int) Math.pow(2, process.queueLevel);
+
+    if (process.queueLevel < 3 && process.timeUsedInLevel >= quantum) {
+        process.queueLevel++;
+        process.timeUsedInLevel = 0;
+    }
+
+    switch (process.queueLevel) {
+        case 0:
+            PQ0.addLast(process);
+            break;
+        case 1:
+            PQ1.addLast(process);
+            break;
+        case 2:
+            PQ2.addLast(process);
+            break;
+        case 3:
+            PQ3.addLast(process);
+            break;
+    }
+}
 
     public Process SchedulingAlgorithm(String algorithm, int globalTime) {
         switch (algorithm) {
