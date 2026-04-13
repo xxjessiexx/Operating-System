@@ -63,7 +63,7 @@ public class OS {
                         // swapping
                     }
 
-                     scheduler.addProcess(p);
+                     scheduler.addProcess(p, globalTime);
                 }
             }
                 Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);
@@ -74,7 +74,7 @@ public class OS {
                 }
 
             globalTime++;
-            break;     //we need to know when to remove processes from arraylist DELETE BREAK!!!!
+           
         }
     }
 
@@ -100,17 +100,20 @@ public class OS {
     }
 
     
-    public void semSignal(Process p, String resourceName) {
-        Mutex mutex = getMutexByName(resourceName);
+ public void semSignal(Process p, String resourceName) {
+    Mutex mutex = getMutexByName(resourceName);
 
-        if (mutex == null) {
-            System.out.println("Invalid resource name: " + resourceName);
-            return;
-        }
-
-        mutex.semSignal(p);
+    if (mutex == null) {
+        System.out.println("Invalid resource name: " + resourceName);
+        return;
     }
 
+    Process unblockedProcess = mutex.semSignal(p);
+
+    if (unblockedProcess != null) {
+        scheduler.addProcess(unblockedProcess, globalTime);
+    }
+}
   
     private Mutex getMutexByName(String resourceName) {
         switch (resourceName) {

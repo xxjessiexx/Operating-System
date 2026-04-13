@@ -7,12 +7,13 @@ public class Process {
     int arrivalTime;
     boolean isBlocked;
     boolean inMemory;
+    public int readySince; // for HRRN scheduling to calculate the total time a process has been in the ready state
    
 
     public Process(int arrivalTime) {
         this.arrivalTime = arrivalTime;
         this.isBlocked = false;
-        
+        this.readySince = arrivalTime;
         this.inMemory = false;
        
     }

@@ -30,22 +30,21 @@ public class Mutex {
 
     
     public Process semSignal(Process process) {
-        if (owner != process) {
-            System.out.println("Process " + process.pcb.processID +
-                    " cannot release resource " + resourceName + " because it is not the owner.");
-            return null;
-        }
-
-        if (blockedQueue.isEmpty()) {
-            locked = false;
-            owner = null;
-            return null;
-        } else {
-            Process nextProcess = blockedQueue.poll();
-            owner = nextProcess;
-            nextProcess.pcb.processState=ProcessState.READY;
-            return nextProcess;
-        }
+    if (owner != process) {
+        System.out.println("Process " + process.pcb.processID +
+                " cannot release resource " + resourceName + " because it is not the owner.");
+        return null;
     }
+
+    if (blockedQueue.isEmpty()) {
+        locked = false;
+        owner = null;
+        return null;
+    } else {
+        Process nextProcess = blockedQueue.poll();
+        owner = nextProcess;
+        return nextProcess;
+    }
+}
 
 }
