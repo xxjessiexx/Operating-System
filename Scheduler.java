@@ -9,36 +9,50 @@ public class Scheduler {
     int usedTime = 0;
     Process HRRNprocess = null;
 
-    public Process roundRobin(int timeQuantum) {
-        Process currentProcess = readyQueue.poll();
-
-        if (timeQuantum > usedTime && currentProcess != null
-                && currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()) {
-
-            usedTime++;
-            readyQueue.addFirst(currentProcess);
-            currentProcess.pcb.processState = ProcessState.RUNNING;
-            return currentProcess;
-        } else {
-            usedTime = 0;
-            if (currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()) {
-                readyQueue.addLast(currentProcess);
-                currentProcess.pcb.processState = ProcessState.READY;
-
-            } else {
-                currentProcess.pcb.processState = ProcessState.TERMINATED;
-            }
-            Process newProcess = readyQueue.peek();
-
-            if (newProcess != null) {
-                usedTime++;
-                newProcess.pcb.processState = ProcessState.RUNNING;
-            }
-
-            return newProcess;
-        }
-
+    public void addProcess(Process process) {
+        readyQueue.add(process);
+        process.pcb.processState = ProcessState.READY;
     }
+
+
+    public Process roundRobin(int timeQuantum) {
+    Process currentProcess = readyQueue.peek();
+
+    if (currentProcess == null) {
+        return null;
+    }
+
+    if (usedTime < timeQuantum
+            && currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()
+            && currentProcess.pcb.processState != ProcessState.BLOCKED) {
+
+        usedTime++;
+        currentProcess.pcb.processState = ProcessState.RUNNING;
+        return currentProcess;
+    }
+
+    currentProcess = readyQueue.poll();
+    usedTime = 0;
+
+    if (currentProcess.pcb.programCounter < currentProcess.getInstructionCounter()
+            && currentProcess.pcb.processState != ProcessState.BLOCKED) {
+
+        currentProcess.pcb.processState = ProcessState.READY;
+        readyQueue.addLast(currentProcess);
+    }
+    
+    else if (currentProcess.pcb.programCounter >= currentProcess.getInstructionCounter()) {
+        currentProcess.pcb.processState = ProcessState.TERMINATED;
+    }
+    Process newProcess = readyQueue.peek();
+
+    if (newProcess != null) {
+        usedTime++;
+        newProcess.pcb.processState = ProcessState.RUNNING;
+    }
+
+    return newProcess;
+}
 
     public Process HRRN(int globalTime) {
 
@@ -101,9 +115,6 @@ public class Scheduler {
         }
     }
 
-    public void addProcess(Process process) {
-        readyQueue.add(process);
-        process.pcb.processState = ProcessState.READY;
-    }
+    
 
 }
