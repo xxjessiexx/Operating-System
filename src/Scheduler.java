@@ -75,9 +75,8 @@ public class Scheduler {
         if (HRRNprocess == null) {
             for (Process process : readyQueue) { // get the HRRN ratio for each process still in the ready queue
 
-                int waitingTime = globalTime - process.readySince;
-                double responseRatio = (double) (waitingTime + process.getInstructionCounter())
-                        / process.getInstructionCounter();
+                double responseRatio = calculateResponseRatio(process, globalTime);
+
                 if (responseRatio > highestResponseRatio) { // set the new highest response ratio and the process with it
                     highestResponseRatio = responseRatio;
                     HRRNprocess = process;
@@ -92,6 +91,10 @@ public class Scheduler {
         }
 
         return HRRNprocess;
+    }
+    public double calculateResponseRatio(Process process, int globalTime) {
+        int waitingTime = globalTime - process.readySince;
+        return (double) (waitingTime + process.getInstructionCounter()) / process.getInstructionCounter();
     }
 
     public Process MultilevelFeedbackQueue(int globalTime) {
