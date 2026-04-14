@@ -30,6 +30,7 @@ public class OS {
     public static void main(String[] args) {
         OS os = new OS();
         os.run();
+
     }
 public void run() {
     Process p1 = new Process(0);
@@ -40,7 +41,7 @@ public void run() {
     processes.add(p1);
     processes.add(p2);
     processes.add(p3);
-    String SchedulerAlgorithm = ""; 
+    String SchedulerAlgorithm = "";
     Scanner sc = new Scanner(System.in); //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
     System.out.println("Enter the scheduling algorithm (RoundRobin, HRRN, MultilevelFeedbackQueue): ");//MIGHT NEED TO REMOVE //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
     SchedulerAlgorithm = sc.nextLine();//////remove , through gui!!!!!!!!!!!!!!!!!!!!!
@@ -53,12 +54,12 @@ public void run() {
         for (Process p : processes) {
 
             if (p.arrivalTime == globalTime && p.pcb == null) {
-                PCB pcb1 = new PCB(pid++);
+                PCB pcb1 = new PCB(pid);
                 p.pcb = pcb1;
 
-                p.instructions = interpreter.readProgramFile("program1.txt"); //i just want to try it so i chose program 1 !! TEMPORARY!!
+                p.instructions = interpreter.readProgramFile("test programs/program"+pid+".txt"); //i just want to try it so i chose program 1 !! TEMPORARY!!
                 // later replace "null" with actual program file name
-
+                pid++;
                 if (!memory.allocateProcess(p)) {
                     // swapping
                 }
@@ -144,4 +145,7 @@ public void semSignal(Process p, String resourceName) {
     public void incrementGlobalTime() {
         globalTime++;
     }
+
+
+
 }

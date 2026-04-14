@@ -58,6 +58,7 @@ public class Scheduler {
         if (MLFQprocess == process) {
             MLFQprocess = null;
         }
+        usedTime=0;
     }
     public void removeBlockedProcess(Process process) {
         process.pcb.processState = ProcessState.BLOCKED;
@@ -70,6 +71,8 @@ public class Scheduler {
         if (MLFQprocess == process) {
             MLFQprocess = null;
         }
+        usedTime=0;
+
     }
 
     // scheduling algorithms
@@ -91,9 +94,9 @@ public class Scheduler {
             currentProcess.pcb.processState = ProcessState.RUNNING;
             return currentProcess;
         }
-
+        if (usedTime>= timeQuantum){
         currentProcess = readyQueue.poll(); // if the process has used up its quantum or is blocked or completed, remove
-                                            // it from the ready queue and add it back if it's not completed or blocked
+        }                                    // it from the ready queue and add it back if it's not completed or blocked
                                             // to let other processes run
         usedTime = 0;
 
@@ -101,11 +104,15 @@ public class Scheduler {
                 && currentProcess.pcb.processState != ProcessState.BLOCKED) { // if the process is not completed or
                                                                               // blocked, add it back to the ready queue
                                                                               // to let other processes run
-
             currentProcess.pcb.processState = ProcessState.READY;
             currentProcess.readySince = globalTime;
             readyQueue.addLast(currentProcess);
         }
+        else if(!currentProcess.isCompleted()
+                && currentProcess.pcb.processState == ProcessState.BLOCKED){
+            removeBlockedProcess(currentProcess);
+        }
+
         Process newProcess = readyQueue.peek(); // get the next process to run, if there is one, and set its state to
                                                 // running
 
@@ -281,6 +288,11 @@ public class Scheduler {
                 System.out.println("Invalid scheduling algorithm: " + algorithm);
                 return null;
         }
+    }
+
+    public static void main (String args[]){
+        
+
     }
 
 }
