@@ -47,7 +47,7 @@ public void run() {
 
     int pid = 1;
 
-    while (!processes.isEmpty()) {
+    while (!processes.isEmpty()) {       //////runs as long as there are processes still not created or not terminated
         ArrayList<Process> toRemove = new ArrayList<>();
 
         for (Process p : processes) {
@@ -67,16 +67,17 @@ public void run() {
             }
         }
 
-        Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);
+        Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);  ///returns the process that should run
+
         if (currentProcess != null) {
-            String instruction = memory.getInstruction(currentProcess);
-            interpreter.ExecuteInstruction(currentProcess, instruction);
+            String instruction = memory.getInstruction(currentProcess); //get next instruction to execute
+            interpreter.ExecuteInstruction(currentProcess, instruction); //execute this instruction 
             currentProcess.pcb.programCounter++;
 
             if(currentProcess.isCompleted()) { // if the process has completed all its instructions, deallocate its memory, remove it from the scheduler and from the list of processes
-                currentProcess.pcb.processState = ProcessState.TERMINATED;
+            
                // memory.deallocateProcess(p); when it is done it should be removed from memory but we don't have a deallocate process method yet
-                scheduler.removeProcess(currentProcess);
+                scheduler.removeTerminatedProcess(currentProcess);  //remove from all queues + chnage state to terminated
                 toRemove.add(currentProcess);
             }
             else if (SchedulerAlgorithm.equals("MultilevelFeedbackQueue")) { // if we are using MLFQ, after the process is done executing, we need to update its position in the correct queue according to how much time it has used in the current queue level and whether it is blocked or not
@@ -88,20 +89,12 @@ public void run() {
         globalTime++;
     }
 }
-    
-    public int getGlobalTime() {
-        return globalTime;
-    }
 
-    public void incrementGlobalTime() {
-        globalTime++;
-    }
-
-   
+///////////semwait
 public void semWait(Process p, String resourceName) {
     Mutex mutex = getMutexByName(resourceName);
 
-    if (mutex == null) {  
+    if (mutex == null) {
         System.out.println("Invalid resource name: " + resourceName);
         return;
     }
@@ -109,11 +102,13 @@ public void semWait(Process p, String resourceName) {
     boolean acquired = mutex.semWait(p); // tries to acquire the resource, if it is not available, it blocks the process and adds it to the mutex's blocked queue
 
     if (!acquired) {
-        scheduler.removeProcess(p); // if the process is blocked, remove it from the scheduler so it won't be scheduled to run until it is unblocked
-    }   //////didnt add to the blocked queue in scheduler????
+        ///the proces state is already set to blocked in mutex's semwait
+        scheduler.removeBlockedProcess(p); // if the process is blocked, remove it from the scheduler so it won't be scheduled to run until it is unblocked
+    }   //////THIS removes the process from the ready queues + add it to the blocked queue + change its state to blocked
 }
     
- public void semSignal(Process p, String resourceName) {
+///////////semsignal
+public void semSignal(Process p, String resourceName) {
     Mutex mutex = getMutexByName(resourceName);
 
     if (mutex == null) {
@@ -125,9 +120,10 @@ public void semWait(Process p, String resourceName) {
 
     if (unblockedProcess != null) {
         scheduler.addUnblockedProcess(unblockedProcess, globalTime); // adds the unblocked process back to the scheduler so it can be scheduled to run
+        //+ remove from blocked queue + change state to ready
     }
 }
-  
+///////////getting mutex for semwait and semsignal
     private Mutex getMutexByName(String resourceName) {
         switch (resourceName) {
             case "userInput":
@@ -139,5 +135,13 @@ public void semWait(Process p, String resourceName) {
             default:
                 return null;
         }
+    }
+
+    public int getGlobalTime() {
+        return globalTime;
+    }
+
+    public void incrementGlobalTime() {
+        globalTime++;
     }
 }

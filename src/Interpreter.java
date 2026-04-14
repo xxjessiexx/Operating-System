@@ -31,12 +31,12 @@ public class Interpreter {
                 else if (parts[2].equals("readFile")) {
 
                 String fileNameVariable = parts[3];
-                System.out.println(fileNameVariable);
+                
                 Object fileNameValue = memory.getVariableValue(p, fileNameVariable);
-System.out.println(fileNameValue);
+
                 if (fileNameValue != null) {
                     String fileContent = systemCalls.readFile((String)fileNameValue);
-                    System.out.println(fileContent);
+                    
                     memory.setVariableValue(p, parts[1], fileContent);
                 } else {
                     System.out.println("File name variable " + fileNameVariable + " not found.");

@@ -9,6 +9,7 @@ public class Process {
     int readySince; // for HRRN scheduling to calculate the total time a process has been in the ready state
     int queueLevel; // for MLFQ to track which queue level a process is currently in
     int timeUsedInLevel; // for MLFQ to track how much time a process has used in its current queue level
+    int finishedInstructions;
 
     public Process(int arrivalTime) {
         this.arrivalTime = arrivalTime;
@@ -16,6 +17,7 @@ public class Process {
         this.inMemory = true;       ///assuming at first keda keda it must be loaded even if no space smth else will be swapped
         this.queueLevel=0;
         this.timeUsedInLevel=0;
+        this.finishedInstructions=0;
     }
 
 

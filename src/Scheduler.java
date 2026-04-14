@@ -1,3 +1,4 @@
+
 package src;
 
 import java.util.Queue;
@@ -7,6 +8,7 @@ import java.util.LinkedList;
 
 public class Scheduler {
     Deque<Process> readyQueue = new ArrayDeque<>();
+    Deque<Process> blockedQueue= new ArrayDeque<>();
     Deque<Process> PQ0 = new ArrayDeque<>(); // highest priority queue for processes that have been in the ready state
                                              // the longest --MLFQ
     Deque<Process> PQ1 = new ArrayDeque<>();
@@ -21,7 +23,8 @@ public class Scheduler {
     // calculate the response ratio for a process in the ready queue
     public double calculateResponseRatio(Process process, int globalTime) {
         int waitingTime = globalTime - process.readySince;
-        return (double) (waitingTime + process.getInstructionCounter()) / process.getInstructionCounter();
+        int burstTime = process.getInstructionCounter() - process.finishedInstructions;
+        return (double) ((waitingTime + burstTime) / burstTime);
     }
 
     // add a process to the ready queue and set its state to ready
@@ -37,14 +40,16 @@ public class Scheduler {
     public void addUnblockedProcess(Process process, int globalTime) { // same implementation as addProcess for now
         process.readySince = globalTime;
         process.pcb.processState = ProcessState.READY;
+        blockedQueue.remove(process);
         readyQueue.add(process);
         process.queueLevel = 0;
         process.timeUsedInLevel = 0;
         PQ0.add(process);
     }
 
-    // remove a process from all relevant queues
-    public void removeProcess(Process process) {
+    // remove a process from all relevant queues if terminated 
+    public void removeTerminatedProcess(Process process) {
+        process.pcb.processState = ProcessState.TERMINATED;
         readyQueue.remove(process);
         PQ0.remove(process);
         PQ1.remove(process);
@@ -54,6 +59,19 @@ public class Scheduler {
             MLFQprocess = null;
         }
     }
+    public void removeBlockedProcess(Process process) {
+        process.pcb.processState = ProcessState.BLOCKED;
+        readyQueue.remove(process);
+        blockedQueue.add(process);
+        PQ0.remove(process);
+        PQ1.remove(process);
+        PQ2.remove(process);
+        PQ3.remove(process);
+        if (MLFQprocess == process) {
+            MLFQprocess = null;
+        }
+    }
+
     // scheduling algorithms
 
     public Process roundRobin(int timeQuantum, int globalTime) {
@@ -99,8 +117,8 @@ public class Scheduler {
         return newProcess;
     }
 
-    public Process HRRN(int globalTime) {
-
+    public Process HRRN(int globalTime) {   //check lw fe process and running and not finished return it else lw finished set hrrnprocess=null to fund a new
+        //process else blocked but not finished add to blocked queue + find another
         double highestResponseRatio = -1;
 
         if (HRRNprocess != null
@@ -119,12 +137,11 @@ public class Scheduler {
         if (HRRNprocess != null
                 && !HRRNprocess.pcb.processState.equals(ProcessState.RUNNING)
                 && !HRRNprocess.isCompleted()) { // if the selected process is no longer running (blocked or preempted)
-                                                 // but still has instructions to execute, set it to null so that a new
-                                                 // process can be selected
+                                                 // but still has instructions to execute, set it to null so that a new                            // process can be selected
             HRRNprocess = null;
         }
 
-        if (HRRNprocess == null) {
+        if (HRRNprocess == null) { ///if null i need to find a process calculate rr + set state running + remove from ready queue
             for (Process process : readyQueue) { // get the HRRN ratio for each process still in the ready queue
 
                 double responseRatio = calculateResponseRatio(process, globalTime);
@@ -136,8 +153,7 @@ public class Scheduler {
                 }
             }
             if (HRRNprocess != null && readyQueue.contains(HRRNprocess)) { // if the running process is still in the
-                                                                           // ready queue, remove it to avoid
-                                                                           // duplication
+                                                                           // ready queue, remove it to avoid duplication                                                    // duplication
                 readyQueue.remove(HRRNprocess);
             }
             if (HRRNprocess != null) { // as long as the process is selected it is running
@@ -198,7 +214,7 @@ public class Scheduler {
         }
 
         if (process.isCompleted()) { // if the process is completed remove it from all queues
-            removeProcess(process);
+            removeTerminatedProcess(process);
             if (MLFQprocess == process) {
                 MLFQprocess = null;
             }
@@ -206,7 +222,7 @@ public class Scheduler {
         }
 
         if (process.pcb.processState == ProcessState.BLOCKED) { // if the process is blocked remove it from all queues
-            removeProcess(process);
+            removeBlockedProcess(process);
             if (MLFQprocess == process) {
                 MLFQprocess = null;
             }
