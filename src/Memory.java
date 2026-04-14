@@ -5,9 +5,12 @@ import java.util.ArrayList;
 public class Memory {
     private static final int SIZE = 40;
     private MemoryWord[] memory;
+    Process lastaddedProcess;
+    disk d;
 
     public Memory() {
         memory = new MemoryWord[SIZE];
+        d= new disk();
     }
 
    
@@ -77,6 +80,7 @@ public class Memory {
         if (start == -1) {
             return false;       
         }
+        lastaddedProcess = process;  /// the last process added to the memory 
 
         int end = start + requiredSize - 1;
 
@@ -164,11 +168,27 @@ public void setVariableValue(Process process, String variableName, Object value)
 
     System.out.println("No space available for more variables in process " + process.pcb.processID);
 }
+
+public boolean swap(Process process){
+    deallocate(lastaddedProcess);
+    lastaddedProcess.inMemory=false;
+    d.addtoDisk(lastaddedProcess);
+    return allocateProcess(process);
+}
+
+public void deallocate(Process p){
+    int lowbound = p.pcb.memStart;
+    int highbound = p.pcb.memEnd;
+
+    for(int i=lowbound; i<= highbound; i++){
+        memory[i]=null;
+    }
+}
     public static void main (String args[]){
         Memory m = new Memory();
         ArrayList inst = new ArrayList<>();
         inst.add("PrintFromTo x y");
-        inst.add("assign x");
+        
 
         Process p = new Process(2);
         p.pcb = new PCB(1);
@@ -181,7 +201,10 @@ public void setVariableValue(Process process, String variableName, Object value)
         p1.instructions=inst;
         System.out.println(m.allocateProcess(p1));
 
+        
+        m.swap(p);
         m.printMemory();
+        System.out.println(m.d);
     }
 
 }

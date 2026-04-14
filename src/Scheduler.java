@@ -172,7 +172,11 @@ public class Scheduler {
     }
 
     public Process MultilevelFeedbackQueue(int globalTime) { // chooses according to the highest priority non-empty
-                                                             // queue
+        System.out.println("START OF MLFQ");                                                  // queue
+        System.out.println(PQ0);      
+        System.out.println(PQ1);                                               
+        System.out.println(PQ2);  
+        System.out.println(PQ3);  
         if (MLFQprocess != null
                 && MLFQprocess.pcb.processState == ProcessState.RUNNING
                 && !MLFQprocess.isCompleted()
@@ -210,7 +214,11 @@ public class Scheduler {
             process.pcb.processState = ProcessState.RUNNING;
             MLFQprocess = process;
         }
-
+        System.out.println("END OF MLFQ FUNC");
+        System.out.println(PQ0);      
+        System.out.println(PQ1);                                               
+        System.out.println(PQ2);  
+        System.out.println(PQ3);  
         return process;
     }
 
@@ -253,6 +261,13 @@ public class Scheduler {
                                                        // correct queue
         process.readySince = globalTime;
 
+        boolean checkEmpty = true;     //true if all queues other than mine is empty
+        for(int i=0; i<=3; i++){
+            if(i!=process.queueLevel){
+                checkEmpty= checkEmpty && mlfqQueue(i).isEmpty();
+            }
+        }
+        if(!checkEmpty){
         if (process.queueLevel < 3) {
             process.queueLevel++;
         }
@@ -275,6 +290,17 @@ public class Scheduler {
                 break;
         }
     }
+    else{
+        mlfqQueue(process.queueLevel).addLast(process);
+        MLFQprocess = null;
+        process.timeUsedInLevel = 0;  /////////IS THISSSS CORRECTTTTT???????????????????????????????/
+    }
+        System.out.println("AFTER UPDATEMLFQ");
+        System.out.println(PQ0);     
+        System.out.println(PQ1);                                             
+        System.out.println(PQ2); 
+        System.out.println(PQ3);  
+    }
 
     public Process SchedulingAlgorithm(String algorithm, int globalTime) {
         switch (algorithm) {
@@ -290,8 +316,27 @@ public class Scheduler {
         }
     }
 
+    public Deque mlfqQueue(int i){
+        switch(i){
+            case 0:
+                return PQ0;
+                
+            case 1:
+                return PQ1;
+                
+            case 2:
+                return PQ2;
+                
+            case 3:
+                return PQ3;
+            default:
+                return PQ0;  //keda keda mesh hnwslha
+
+        }
+    }
+
     public static void main (String args[]){
-        
+
 
     }
 

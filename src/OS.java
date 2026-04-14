@@ -35,12 +35,12 @@ public class OS {
 public void run() {
     Process p1 = new Process(0);
     Process p2 = new Process(1);
-    Process p3 = new Process(4);
+    //Process p3 = new Process(4);
 
     ArrayList<Process> processes = new ArrayList<>();
     processes.add(p1);
     processes.add(p2);
-    processes.add(p3);
+    //processes.add(p3);
     String SchedulerAlgorithm = "";
     Scanner sc = new Scanner(System.in); //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
     System.out.println("Enter the scheduling algorithm (RoundRobin, HRRN, MultilevelFeedbackQueue): ");//MIGHT NEED TO REMOVE //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
@@ -60,8 +60,9 @@ public void run() {
                 p.instructions = interpreter.readProgramFile("test programs/program"+pid+".txt"); //i just want to try it so i chose program 1 !! TEMPORARY!!
                 // later replace "null" with actual program file name
                 pid++;
-                if (!memory.allocateProcess(p)) {
+                if(!memory.allocateProcess(p)) {
                     // swapping
+                    while(!memory.swap(p));
                 }
 
                 scheduler.addProcess(p, globalTime);
@@ -71,6 +72,12 @@ public void run() {
         Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);  ///returns the process that should run
 
         if (currentProcess != null) {
+            if(!currentProcess.inMemory){      ///if process not in memory , ie in disk
+                memory.d.removeProcess(currentProcess);   //remove it from disk 
+                if(!memory.allocateProcess(currentProcess))     //try to allocate in memeory if no space
+                    while(!memory.swap(currentProcess));          //swap and keep swaping until a free space is found
+            }
+            currentProcess.inMemory=true;
             String instruction = memory.getInstruction(currentProcess); //get next instruction to execute
             interpreter.ExecuteInstruction(currentProcess, instruction); //execute this instruction 
             currentProcess.pcb.programCounter++;
