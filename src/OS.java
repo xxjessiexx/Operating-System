@@ -84,7 +84,7 @@ public void run() {
 
             if(currentProcess.isCompleted()) { // if the process has completed all its instructions, deallocate its memory, remove it from the scheduler and from the list of processes
             
-               // memory.deallocateProcess(p); when it is done it should be removed from memory but we don't have a deallocate process method yet
+                memory.deallocate(currentProcess); //when it is done it should be removed from memory but we don't have a deallocate process method yet
                 scheduler.removeTerminatedProcess(currentProcess);  //remove from all queues + chnage state to terminated
                 toRemove.add(currentProcess);
             }

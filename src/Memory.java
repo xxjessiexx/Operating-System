@@ -73,14 +73,14 @@ public class Memory {
     }
 
     
-    public boolean allocateProcess(Process process) {    //return false if no space true if space found 
+    public boolean allocateProcess(Process process) {    //return false if no space true if space found
         int requiredSize = getRequiredSize(process);     //get required size for process
-        int start = findFreeBlock(requiredSize);         //find starting index of free block to accomadte process 
+        int start = findFreeBlock(requiredSize);         //find starting index of free block to accomadte process
 
         if (start == -1) {
-            return false;       
+            return false;
         }
-        lastaddedProcess = process;  /// the last process added to the memory 
+        lastaddedProcess = process;  /// the last process added to the memory
 
         int end = start + requiredSize - 1;
 
@@ -113,7 +113,7 @@ public class Memory {
         return true;
     }
     
-    public int getVariablesStart(Process process) {    ///return the index of the first variable of the 3 
+    public int getVariablesStart(Process process) {    ///return the index of the first variable of the 3
     return process.pcb.memEnd - 2;
 }
 
