@@ -16,8 +16,7 @@ public class SystemCalls {
     }
 
     
-    public String input(String message) {
-        System.out.print(message);
+    public String input() {
         return scanner.nextLine();
     }
 
@@ -63,5 +62,4 @@ public class SystemCalls {
         memory.writeWord(address, word);
     }
 
-   
 }

@@ -18,7 +18,7 @@ public class MemoryWord {
         this.name = name;
     }
 
-  
+ 
     public Object getValue() {
         return value;
     }

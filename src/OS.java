@@ -41,9 +41,9 @@ public void run() {
     processes.add(p2);
     processes.add(p3);
     String SchedulerAlgorithm = ""; 
-    Scanner sc = new Scanner(System.in);
-    System.out.println("Enter the scheduling algorithm (RoundRobin, HRRN, MultilevelFeedbackQueue): ");//MIGHT NEED TO REMOVE
-    SchedulerAlgorithm = sc.nextLine();
+    Scanner sc = new Scanner(System.in); //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
+    System.out.println("Enter the scheduling algorithm (RoundRobin, HRRN, MultilevelFeedbackQueue): ");//MIGHT NEED TO REMOVE //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
+    SchedulerAlgorithm = sc.nextLine();//////remove , through gui!!!!!!!!!!!!!!!!!!!!!
 
     int pid = 1;
 
@@ -81,7 +81,7 @@ public void run() {
             }
             else if (SchedulerAlgorithm.equals("MultilevelFeedbackQueue")) { // if we are using MLFQ, after the process is done executing, we need to update its position in the correct queue according to how much time it has used in the current queue level and whether it is blocked or not
                 scheduler.updateMLFQ(currentProcess, globalTime);
-         }
+        }
         }
 
         processes.removeAll(toRemove); // remove completed processes from the list of processes to check
@@ -101,7 +101,7 @@ public void run() {
 public void semWait(Process p, String resourceName) {
     Mutex mutex = getMutexByName(resourceName);
 
-    if (mutex == null) {
+    if (mutex == null) {  
         System.out.println("Invalid resource name: " + resourceName);
         return;
     }
@@ -110,7 +110,7 @@ public void semWait(Process p, String resourceName) {
 
     if (!acquired) {
         scheduler.removeProcess(p); // if the process is blocked, remove it from the scheduler so it won't be scheduled to run until it is unblocked
-    }
+    }   //////didnt add to the blocked queue in scheduler????
 }
     
  public void semSignal(Process p, String resourceName) {

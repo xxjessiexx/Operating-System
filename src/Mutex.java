@@ -5,7 +5,7 @@ import java.util.Queue;
 public class Mutex {
     String resourceName;
     boolean locked;
-    Process owner;
+    Process owner;    //process who is currently holding the rescource
     Queue<Process> blockedQueue;
 
     public Mutex(String resourceName) {
@@ -16,7 +16,7 @@ public class Mutex {
     }
 
    
-    public boolean semWait(Process process) {
+    public boolean semWait(Process process) {   //i need to lock resource return true if i accquired rescource else false (resource already locked)
         if (!locked) {
             locked = true;
             owner = process;
@@ -29,7 +29,7 @@ public class Mutex {
     }
 
     
-    public Process semSignal(Process process) {
+    public Process semSignal(Process process) {       //////return process that will accquire resource else null if no process is locking resource
     if (owner != process) {
         System.out.println("Process " + process.pcb.processID +
                 " cannot release resource " + resourceName + " because it is not the owner.");
@@ -40,7 +40,7 @@ public class Mutex {
         locked = false;
         owner = null;
         return null;
-    } else {
+    } else {       //////change state here or in scheduler????????????????????????????????????????????????????????/
         Process nextProcess = blockedQueue.poll();
         owner = nextProcess;
         return nextProcess;
