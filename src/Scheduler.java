@@ -76,13 +76,18 @@ public class Scheduler {
     // scheduling algorithms
 
     public Process roundRobin(int timeQuantum, int globalTime) {
-    RRprocess = readyQueue.peek();
 
-    if (RRprocess == null) { // if there are no processes in the ready queue, return null
-        return null;
-    }
+        if(readyQueue.isEmpty()){
+            return RRprocess;
+        }
 
-    if (usedTime < timeQuantum
+        if(RRprocess==null){
+            RRprocess= readyQueue.poll();
+            RRprocess.pcb.processState = ProcessState.RUNNING;
+            return RRprocess;
+        }
+
+        if (usedTime < timeQuantum
             && !RRprocess.isCompleted()
             && RRprocess.pcb.processState != ProcessState.BLOCKED) { // if the process still has time left in
                                                                      // its quantum and is not blocked or
@@ -94,10 +99,12 @@ public class Scheduler {
     if (usedTime >= timeQuantum
             || RRprocess.isCompleted()
             || RRprocess.pcb.processState == ProcessState.BLOCKED) {
+            usedTime = 0;
+        readyQueue.addLast(RRprocess);
         RRprocess = readyQueue.poll(); // if the process has used up its quantum or is blocked or completed, remove
     }                                  // it from the ready queue and add it back if it's not completed or blocked
                                        // to let other processes run
-    usedTime = 0;
+    
 
     if (!RRprocess.isCompleted()
             && RRprocess.pcb.processState != ProcessState.BLOCKED) { // if the process is not completed or
@@ -112,9 +119,8 @@ public class Scheduler {
         removeBlockedProcess(RRprocess);
     }
 
-    RRprocess = readyQueue.peek(); // get the next process to run, if there is one, and set its state to
+    //RRprocess = readyQueue.peek(); // get the next process to run, if there is one, and set its state to
                                    // running
-
     if (RRprocess != null) {
         RRprocess.pcb.processState = ProcessState.RUNNING;
     }

@@ -84,7 +84,9 @@ public void run() {
             }
         }
         memory.printMemory();
+        System.out.println(memory.d);
         System.out.println("-----------------");
+
 
 
         Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);  ///returns the process that should run
@@ -110,9 +112,9 @@ public void run() {
             else if (SchedulerAlgorithm.equals("MultilevelFeedbackQueue")) { // if we are using MLFQ, after the process is done executing, we need to update its position in the correct queue according to how much time it has used in the current queue level and whether it is blocked or not
                 scheduler.updateMLFQ(currentProcess, globalTime);
         }
-            else if SchedulerAlgorithm.equals("RoundRobin")(
+            else if (SchedulerAlgorithm.equals("RoundRobin")){
                 scheduler.usedTime++;
-            )
+            }
         }
 
         processes.removeAll(toRemove); // remove completed processes from the list of processes to check
