@@ -64,10 +64,15 @@ public void run() {
                     // swapping
                     while(!memory.swap(p));
                 }
+                
+            if(p.pcb!=null && !p.pcb.processState.equals(ProcessState.RUNNING)){
+                p.waitingTime++;
+            }
 
                 scheduler.addProcess(p, globalTime);
             }
         }
+
 
         Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);  ///returns the process that should run
 

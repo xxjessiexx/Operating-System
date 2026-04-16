@@ -22,14 +22,13 @@ public class Scheduler {
     // helper fns
     // calculate the response ratio for a process in the ready queue
     public double calculateResponseRatio(Process process, int globalTime) {
-        int waitingTime = globalTime - process.readySince;
-        int burstTime = process.getInstructionCounter() - process.finishedInstructions;
-        return (double) ((waitingTime + burstTime) / burstTime);
+        int burstTime = process.getInstructionCounter();
+        return (double) ((process.waitingTime + burstTime) / burstTime);
     }
 
     // add a process to the ready queue and set its state to ready
     public void addProcess(Process process, int globalTime) {
-        process.readySince = globalTime;
+        process.waitingTime = globalTime;
         process.pcb.processState = ProcessState.READY;
         readyQueue.add(process);
         process.queueLevel = 0;
@@ -38,13 +37,12 @@ public class Scheduler {
     }
 
     public void addUnblockedProcess(Process process, int globalTime) { // same implementation as addProcess for now
-        process.readySince = globalTime;
         process.pcb.processState = ProcessState.READY;
         blockedQueue.remove(process);
         readyQueue.add(process);
-        process.queueLevel = 0;
+        
         process.timeUsedInLevel = 0;
-        PQ0.add(process);
+        mlfqQueue(process.queueLevel).add(process);
     }
 
     // remove a process from all relevant queues if terminated 
@@ -105,7 +103,7 @@ public class Scheduler {
                                                                               // blocked, add it back to the ready queue
                                                                               // to let other processes run
             currentProcess.pcb.processState = ProcessState.READY;
-            currentProcess.readySince = globalTime;
+            
             readyQueue.addLast(currentProcess);
         }
         else if(!currentProcess.isCompleted()
@@ -259,15 +257,8 @@ public class Scheduler {
         process.pcb.processState = ProcessState.READY; // if the process has used up its full quantum and is not
                                                        // completed or blocked, set it back to ready and add it to the
                                                        // correct queue
-        process.readySince = globalTime;
+        
 
-        boolean checkEmpty = true;     //true if all queues other than mine is empty
-        for(int i=0; i<=3; i++){
-            if(i!=process.queueLevel){
-                checkEmpty= checkEmpty && mlfqQueue(i).isEmpty();
-            }
-        }
-        if(!checkEmpty){
         if (process.queueLevel < 3) {
             process.queueLevel++;
         }
@@ -289,12 +280,6 @@ public class Scheduler {
                 PQ3.addLast(process);
                 break;
         }
-    }
-    else{
-        mlfqQueue(process.queueLevel).addLast(process);
-        MLFQprocess = null;
-        process.timeUsedInLevel = 0;  /////////IS THISSSS CORRECTTTTT???????????????????????????????/
-    }
         System.out.println("AFTER UPDATEMLFQ");
         System.out.println(PQ0);     
         System.out.println(PQ1);                                             
