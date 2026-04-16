@@ -110,8 +110,8 @@ public void run() {
             else if (SchedulerAlgorithm.equals("MultilevelFeedbackQueue")) { // if we are using MLFQ, after the process is done executing, we need to update its position in the correct queue according to how much time it has used in the current queue level and whether it is blocked or not
                 scheduler.updateMLFQ(currentProcess, globalTime);
         }
-            else ifSchedulerAlgorithm.equals("RoundRobin")(
-                //increment used time
+            else if SchedulerAlgorithm.equals("RoundRobin")(
+                scheduler.usedTime++;
             )
         }
 
