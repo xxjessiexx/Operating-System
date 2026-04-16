@@ -18,6 +18,7 @@ public class Scheduler {
     int usedTime = 0;
     Process HRRNprocess = null;
     Process MLFQprocess = null;
+    Process RRprocess = null;
 
     // helper fns
     // calculate the response ratio for a process in the ready queue
@@ -75,50 +76,51 @@ public class Scheduler {
     // scheduling algorithms
 
     public Process roundRobin(int timeQuantum, int globalTime) {
-        Process currentProcess = readyQueue.peek();
+    RRprocess = readyQueue.peek();
 
-        if (currentProcess == null) { // if there are no processes in the ready queue, return null
-            return null;
-        }
-
-        if (usedTime < timeQuantum
-                && !currentProcess.isCompleted()
-                && currentProcess.pcb.processState != ProcessState.BLOCKED) { // if the process still has time left in
-                                                                              // its quantum and is not blocked or
-                                                                              // completed, let it continue running
-
-            usedTime++;
-            currentProcess.pcb.processState = ProcessState.RUNNING;
-            return currentProcess;
-        }
-        currentProcess=readyQueue.poll();
-                                       
-        usedTime = 0;
-
-        if (!currentProcess.isCompleted()
-                && currentProcess.pcb.processState != ProcessState.BLOCKED) { // if the process is not completed or
-                                                                              // blocked, add it back to the ready queue
-                                                                              // to let other processes run
-            currentProcess.pcb.processState = ProcessState.READY;
-            
-            readyQueue.addLast(currentProcess);
-        }
-        else if(!currentProcess.isCompleted()
-                && currentProcess.pcb.processState == ProcessState.BLOCKED){
-            removeBlockedProcess(currentProcess);
-        }
-
-        Process newProcess = readyQueue.peek(); // get the next process to run, if there is one, and set its state to
-                                                // running
-
-        if (newProcess != null) {
-            usedTime++;
-            newProcess.pcb.processState = ProcessState.RUNNING;
-        }
-
-        return newProcess;
+    if (RRprocess == null) { // if there are no processes in the ready queue, return null
+        return null;
     }
 
+    if (usedTime < timeQuantum
+            && !RRprocess.isCompleted()
+            && RRprocess.pcb.processState != ProcessState.BLOCKED) { // if the process still has time left in
+                                                                     // its quantum and is not blocked or
+                                                                     // completed, let it continue running
+
+        RRprocess.pcb.processState = ProcessState.RUNNING;
+        return RRprocess;
+    }
+    if (usedTime >= timeQuantum
+            || RRprocess.isCompleted()
+            || RRprocess.pcb.processState == ProcessState.BLOCKED) {
+        RRprocess = readyQueue.poll(); // if the process has used up its quantum or is blocked or completed, remove
+    }                                  // it from the ready queue and add it back if it's not completed or blocked
+                                       // to let other processes run
+    usedTime = 0;
+
+    if (!RRprocess.isCompleted()
+            && RRprocess.pcb.processState != ProcessState.BLOCKED) { // if the process is not completed or
+                                                                     // blocked, add it back to the ready queue
+                                                                     // to let other processes run
+        RRprocess.pcb.processState = ProcessState.READY;
+
+        readyQueue.addLast(RRprocess);
+    }
+    else if (!RRprocess.isCompleted()
+            && RRprocess.pcb.processState == ProcessState.BLOCKED) {
+        removeBlockedProcess(RRprocess);
+    }
+
+    RRprocess = readyQueue.peek(); // get the next process to run, if there is one, and set its state to
+                                   // running
+
+    if (RRprocess != null) {
+        RRprocess.pcb.processState = ProcessState.RUNNING;
+    }
+
+    return RRprocess;
+}
     public Process HRRN(int globalTime) {   //check lw fe process and running and not finished return it else lw finished set hrrnprocess=null to fund a new
         //process else blocked but not finished add to blocked queue + find another
         double highestResponseRatio = -1;
