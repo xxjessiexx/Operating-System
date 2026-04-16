@@ -73,7 +73,7 @@ public void run() {
                 scheduler.addProcess(p, globalTime);
             }
 
-            if(p.pcb!=null &&( p.pcb.processState.equals(ProcessState.BLOCKED)||p.pcb.processState.equals(ProcessState.READY))){
+            if(p.pcb!=null&&p.arrivalTime!=globalTime &&( p.pcb.processState.equals(ProcessState.BLOCKED)||p.pcb.processState.equals(ProcessState.READY))){
                 p.waitingTime++;
             }
         }
