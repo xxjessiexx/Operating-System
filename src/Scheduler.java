@@ -212,11 +212,7 @@ public class Scheduler {
             process.pcb.processState = ProcessState.RUNNING;
             MLFQprocess = process;
         }
-        System.out.println("END OF MLFQ FUNC");
-        System.out.println(PQ0);      
-        System.out.println(PQ1);                                               
-        System.out.println(PQ2);  
-        System.out.println(PQ3);  
+       
         return process;
     }
 
@@ -279,15 +275,11 @@ public class Scheduler {
             case 3:
                 PQ3.addLast(process);
                 break;
-        }
-        System.out.println("AFTER UPDATEMLFQ");
-        System.out.println(PQ0);     
-        System.out.println(PQ1);                                             
-        System.out.println(PQ2); 
-        System.out.println(PQ3);  
+        }  
     }
 
     public Process SchedulingAlgorithm(String algorithm, int globalTime) {
+        printQueues();
         switch (algorithm) {
             case "RoundRobin":
                 return roundRobin(2, globalTime); // Example time quantum of 2
@@ -318,6 +310,18 @@ public class Scheduler {
                 return PQ0;  //keda keda mesh hnwslha
 
         }
+    }
+    public void printQueues(){
+        System.out.println("AFTER UPDATEQueues");
+        System.out.print("Ready queue: ");
+        System.out.println(readyQueue);  
+        System.out.print("blocked queue: ");
+        System.out.println(blockedQueue);
+        System.out.print("MLFQ 0 to 3: ");
+        System.out.println(PQ0);     
+        System.out.println(PQ1);                                             
+        System.out.println(PQ2); 
+        System.out.println(PQ3);
     }
 
     public static void main (String args[]){

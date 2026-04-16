@@ -20,12 +20,17 @@ public class Mutex {
         if (!locked) {
             locked = true;
             owner = process;
+            System.out.println("Process "+ owner +" has locked " +resourceName);
             return true;
+            
         } else {
              // set the process state to blocked and add it to the blocked queue for this mutex
             blockedQueue.add(process);
+            System.out.println("mutex's blocked queue: " + blockedQueue);
             return false;
+            
         }
+        
     }
 
     
@@ -39,10 +44,12 @@ public class Mutex {
     if (blockedQueue.isEmpty()) {
         locked = false;
         owner = null;
+        System.out.println(resourceName +" released");
         return null;
     } else {       //////change state here or in scheduler????????????????????????????????????????????????????????/
         Process nextProcess = blockedQueue.poll();
         owner = nextProcess;
+         System.out.println(resourceName +" released" + " new owner "+ owner);
         return nextProcess;
     }
 }

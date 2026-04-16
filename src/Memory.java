@@ -206,5 +206,12 @@ public void deallocate(Process p){
         m.printMemory();
         System.out.println(m.d);
     }
+    public void updateMemory(Process p){
+        if(!p.pcb.processState.equals(ProcessState.TERMINATED)){
+        int memStart = p.pcb.memStart;
+        memory[memStart+1].value = p.pcb.processState; //updateing process state
+        memory[memStart+2].value = p.pcb.programCounter;
+        }
+    }
 
 }

@@ -13,7 +13,7 @@ public class Process {
 
     public Process(int arrivalTime) {
         this.arrivalTime = arrivalTime;
-        this.waitingTime = -1;
+        this.waitingTime = 0;
         this.inMemory = true;       ///assuming at first keda keda it must be loaded even if no space smth else will be swapped
         this.queueLevel=0;
         this.timeUsedInLevel=0;

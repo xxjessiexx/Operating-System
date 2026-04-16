@@ -35,12 +35,12 @@ public class OS {
 public void run() {
     Process p1 = new Process(0);
     Process p2 = new Process(1);
-    //Process p3 = new Process(4);
+    Process p3 = new Process(4);
 
     ArrayList<Process> processes = new ArrayList<>();
     processes.add(p1);
     processes.add(p2);
-    //processes.add(p3);
+    processes.add(p3);
     String SchedulerAlgorithm = "";
     Scanner sc = new Scanner(System.in); //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
     System.out.println("Enter the scheduling algorithm (RoundRobin, HRRN, MultilevelFeedbackQueue): ");//MIGHT NEED TO REMOVE //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
@@ -50,10 +50,13 @@ public void run() {
 
     while (!processes.isEmpty()) {       //////runs as long as there are processes still not created or not terminated
         ArrayList<Process> toRemove = new ArrayList<>();
+        System.out.println("Global time: " +globalTime);
 
         for (Process p : processes) {
 
             if (p.arrivalTime == globalTime && p.pcb == null) {
+                System.out.println(p +" arrived");
+
                 PCB pcb1 = new PCB(pid);
                 p.pcb = pcb1;
 
@@ -64,18 +67,23 @@ public void run() {
                     // swapping
                     while(!memory.swap(p));
                 }
-                
-            if(p.pcb!=null && !p.pcb.processState.equals(ProcessState.RUNNING)){
-                p.waitingTime++;
-            }
+
+            
 
                 scheduler.addProcess(p, globalTime);
             }
+
+            if(p.pcb!=null &&( p.pcb.processState.equals(ProcessState.BLOCKED)||p.pcb.processState.equals(ProcessState.READY))){
+                p.waitingTime++;
+            }
         }
+        memory.printMemory();
+        System.out.println("-----------------");
 
 
         Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);  ///returns the process that should run
-
+        System.out.println("waiting time: "+ currentProcess.waitingTime);
+        System.err.println("Process returned from scheduler: " + currentProcess);
         if (currentProcess != null) {
             if(!currentProcess.inMemory){      ///if process not in memory , ie in disk
                 memory.d.removeProcess(currentProcess);   //remove it from disk 
@@ -84,11 +92,12 @@ public void run() {
             }
             currentProcess.inMemory=true;
             String instruction = memory.getInstruction(currentProcess); //get next instruction to execute
+            System.out.println("Instruction executing: " + instruction);
             interpreter.ExecuteInstruction(currentProcess, instruction); //execute this instruction 
             currentProcess.pcb.programCounter++;
 
             if(currentProcess.isCompleted()) { // if the process has completed all its instructions, deallocate its memory, remove it from the scheduler and from the list of processes
-            
+                System.out.println(currentProcess+" terminated");
                 memory.deallocate(currentProcess); //when it is done it should be removed from memory but we don't have a deallocate process method yet
                 scheduler.removeTerminatedProcess(currentProcess);  //remove from all queues + chnage state to terminated
                 toRemove.add(currentProcess);
@@ -100,6 +109,7 @@ public void run() {
 
         processes.removeAll(toRemove); // remove completed processes from the list of processes to check
         globalTime++;
+        memory.updateMemory(currentProcess);
     }
 }
 
