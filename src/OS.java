@@ -50,10 +50,12 @@ public void run() {
 
     while (!processes.isEmpty()) {       //////runs as long as there are processes still not created or not terminated
         ArrayList<Process> toRemove = new ArrayList<>();
+        System.out.println("===================================================");
+        System.out.println();
         System.out.println("Global time: " +globalTime);
-
+        
         for (Process p : processes) {
-
+            
             if (p.arrivalTime == globalTime && p.pcb == null) {
                 System.out.println(p +" arrived");
 
@@ -71,10 +73,14 @@ public void run() {
             
 
                 scheduler.addProcess(p, globalTime);
+                if(p.pcb!=null){
+                    memory.updateMemory(p);
+                }
             }
 
             if(p.pcb!=null&&p.arrivalTime!=globalTime &&( p.pcb.processState.equals(ProcessState.BLOCKED)||p.pcb.processState.equals(ProcessState.READY))){
                 p.waitingTime++;
+                System.out.println("at process: "+p + "global time incremented  : "+ globalTime);
             }
         }
         memory.printMemory();
@@ -82,7 +88,6 @@ public void run() {
 
 
         Process currentProcess = scheduler.SchedulingAlgorithm(SchedulerAlgorithm , globalTime);  ///returns the process that should run
-        System.out.println("waiting time: "+ currentProcess.waitingTime);
         System.err.println("Process returned from scheduler: " + currentProcess);
         if (currentProcess != null) {
             if(!currentProcess.inMemory){      ///if process not in memory , ie in disk
@@ -110,6 +115,11 @@ public void run() {
         processes.removeAll(toRemove); // remove completed processes from the list of processes to check
         globalTime++;
         memory.updateMemory(currentProcess);
+        try {
+            Thread.sleep(1000); // 1000 ms = 1 second delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 

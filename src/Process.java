@@ -64,6 +64,7 @@ public class Process {
         return "Process{" +
                 "pcb=" + pcb +
                 ", arrivalTime=" + arrivalTime +
+                ", waitingTime=" + waitingTime + 
                 '}';
     }
     

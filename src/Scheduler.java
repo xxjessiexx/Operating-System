@@ -28,7 +28,6 @@ public class Scheduler {
 
     // add a process to the ready queue and set its state to ready
     public void addProcess(Process process, int globalTime) {
-        process.waitingTime = globalTime;
         process.pcb.processState = ProcessState.READY;
         readyQueue.add(process);
         process.queueLevel = 0;
@@ -92,10 +91,8 @@ public class Scheduler {
             currentProcess.pcb.processState = ProcessState.RUNNING;
             return currentProcess;
         }
-        if (usedTime>= timeQuantum){
-        currentProcess = readyQueue.poll(); // if the process has used up its quantum or is blocked or completed, remove
-        }                                    // it from the ready queue and add it back if it's not completed or blocked
-                                            // to let other processes run
+        currentProcess=readyQueue.poll();
+                                       
         usedTime = 0;
 
         if (!currentProcess.isCompleted()
