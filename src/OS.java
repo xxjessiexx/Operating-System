@@ -32,6 +32,13 @@ public class OS {
         os.run();
 
     }
+    public void updateAllProcessesInMemory(ArrayList<Process> processes) { //new updates all porcesses not just current one
+    for (Process p : processes) {
+        if (p != null && p.pcb != null && p.inMemory) {
+            memory.updateMemory(p);
+        }
+    }
+    }
 public void run() {
     Process p1 = new Process(0);
     Process p2 = new Process(1);
@@ -119,9 +126,7 @@ public void run() {
 
         processes.removeAll(toRemove); // remove completed processes from the list of processes to check
         globalTime++;
-        if (currentProcess != null) {
-            memory.updateMemory(currentProcess);
-        }
+        updateAllProcessesInMemory(processes); //update all porcesses not only current process
         try {
             Thread.sleep(1000); // 1000 ms = 1 second delay
         } catch (InterruptedException e) {
