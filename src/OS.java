@@ -73,7 +73,7 @@ public void run() {
             
 
                 scheduler.addProcess(p, globalTime);
-                if(p.pcb!=null){
+                if(p.pcb!=null && p.inMemory){
                     memory.updateMemory(p);
                 }
             }
@@ -119,7 +119,9 @@ public void run() {
 
         processes.removeAll(toRemove); // remove completed processes from the list of processes to check
         globalTime++;
-        memory.updateMemory(currentProcess);
+        if (currentProcess != null) {
+            memory.updateMemory(currentProcess);
+        }
         try {
             Thread.sleep(1000); // 1000 ms = 1 second delay
         } catch (InterruptedException e) {

@@ -207,6 +207,9 @@ public void deallocate(Process p){
         System.out.println(m.d);
     }
     public void updateMemory(Process p){
+        if (p == null || p.pcb == null) {
+            return;
+        }
         if(!p.pcb.processState.equals(ProcessState.TERMINATED)){
         int memStart = p.pcb.memStart;
         memory[memStart+1].value = p.pcb.processState; //updateing process state
