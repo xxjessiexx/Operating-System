@@ -1,8 +1,10 @@
 package src;
 
-import java.util.*;
-import java.io.*;
-import java.lang.classfile.Instruction;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
 
 public class Interpreter {
 

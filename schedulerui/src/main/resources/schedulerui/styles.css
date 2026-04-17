@@ -1,0 +1,73 @@
+.root-pane {
+}
+
+.small-title {
+    -fx-font-size: 30px;
+}
+
+.program-circle {
+    -fx-stroke: transparent;
+}
+
+.p1 {
+    -fx-fill: #F6BE55;
+}
+
+.p2 {
+    -fx-fill: #FFA34E;
+}
+
+.p3 {
+    -fx-fill: #FF7F1E;
+}
+
+.program-label {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+}
+
+.queue-pill {
+    -fx-background-color: #95A8BF;
+    -fx-background-radius: 40;
+    -fx-text-fill: #EEF5FF;
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+.memory-content {
+    -fx-text-fill: #EEF5FF;
+    -fx-font-size: 22px;
+    -fx-font-weight: 700;
+}
+
+.chip-panel {
+    -fx-background-color: #45408D;
+    -fx-background-radius: 30;
+}
+
+.chip-svg {
+    -fx-fill: transparent;
+    -fx-stroke: #D6E6FF;
+    -fx-stroke-width: 4;
+    -fx-stroke-line-cap: round;
+    -fx-stroke-line-join: round;
+}
+
+.control-button {
+    -fx-background-color: #000000;
+    -fx-background-radius: 29;
+    -fx-cursor: hand;
+}
+
+.control-icon {
+    -fx-fill: #2D2A85;
+}
+
+.control-button:hover {
+    -fx-background-color: #08172E;
+}
+
+.control-button:hover .control-icon {
+    -fx-fill: #4653D9;
+}

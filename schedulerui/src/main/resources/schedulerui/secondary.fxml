@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                <Label layoutX="175.0" layoutY="80.0" styleClass="program-label" text="P2" />
+                <Label layoutX="275.0" layoutY="80.0" styleClass="program-label" text="P3" />
+            </children>
+        </Pane>
+
+        <Pane layoutX="355.0" layoutY="220.0" prefHeight="310.0" prefWidth="475.0" styleClass="panel queue-panel">
+            <children>
+                <Label layoutX="136.0" layoutY="18.0" styleClass="section-title" text="Ready Queue" />
+                <Label fx:id="readyQueueLabel" alignment="CENTER_LEFT" layoutX="52.0" layoutY="78.0" prefHeight="82.0" prefWidth="375.0" styleClass="queue-pill" text="      Waiting for execution" />
+
+                <Label layoutX="120.0" layoutY="180.0" styleClass="section-title small-title" text="Blocked Queue" />
+                <Label fx:id="blockedQueueLabel" alignment="CENTER_LEFT" layoutX="52.0" layoutY="230.0" prefHeight="82.0" prefWidth="375.0" styleClass="queue-pill" text="      No blocked processes" />
+            </children>
+        </Pane>
+
+        <Pane layoutX="900.0" layoutY="150.0" prefHeight="430.0" prefWidth="355.0" styleClass="panel memory-panel">
+            <children>
+                <Label layoutX="105.0" layoutY="16.0" styleClass="section-title" text="Memory" />
+                <Label fx:id="memoryContentLabel" alignment="TOP_LEFT" layoutX="30.0" layoutY="78.0" prefHeight="320.0" prefWidth="295.0" styleClass="memory-content" text="No data loaded yet" wrapText="true" />
+            </children>
+        </Pane>
+
+        <Pane layoutX="110.0" layoutY="300.0" prefHeight="115.0" prefWidth="150.0" styleClass="chip-panel">
+            <children>
+                <SVGPath content="M 45 18 H 95 V 68 H 45 Z M 35 8 V 18 M 55 8 V 18 M 75 8 V 18 M 95 8 V 18 M 35 68 V 78 M 55 68 V 78 M 75 68 V 78 M 95 68 V 78 M 25 18 H 35 M 25 38 H 35 M 25 58 H 35 M 25 78 H 35 M 95 18 H 105 M 95 38 H 105 M 95 58 H 105 M 95 78 H 105"
+                         layoutX="8.0" layoutY="8.0" styleClass="chip-svg" />
+            </children>
+        </Pane>
+
+        <Pane layoutX="260.0" layoutY="620.0" prefHeight="128.0" prefWidth="690.0" styleClass="panel controls-panel">
+            <children>
+                <Button layoutX="60.0" layoutY="34.0" mnemonicParsing="false" onAction="#handlePlay" prefHeight="58.0" prefWidth="58.0" styleClass="control-button">
+                    <graphic>
+                        <SVGPath content="M 16 12 L 16 44 L 42 28 Z" styleClass="control-icon" />
+                    </graphic>
+                </Button>
+                <Button layoutX="316.0" layoutY="34.0" mnemonicParsing="false" onAction="#handlePause" prefHeight="58.0" prefWidth="58.0" styleClass="control-button">
+                    <graphic>
+                        <SVGPath content="M 16 12 H 24 V 44 H 16 Z M 34 12 H 42 V 44 H 34 Z" styleClass="control-icon" />
+                    </graphic>
+                </Button>
+                <Button layoutX="572.0" layoutY="34.0" mnemonicParsing="false" onAction="#handleNext" prefHeight="58.0" prefWidth="58.0" styleClass="control-button">
+                    <graphic>
+                        <SVGPath content="M 14 24 H 34 V 14 L 46 28 L 34 42 V 32 H 14 Z" styleClass="control-icon" />
+                    </graphic>
+                </Button>
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>
