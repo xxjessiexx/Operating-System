@@ -9,11 +9,11 @@ public class Process {
     int waitingTime; // for HRRN scheduling to calculate the total time a process has been in the ready state
     int queueLevel; // for MLFQ to track which queue level a process is currently in
     int timeUsedInLevel; // for MLFQ to track how much time a process has used in its current queue level
-    
+    int orderNo; 
     String[] variableNames; //to store variable name
     Object[] variableValues; //variable values stored here so they can be restored
 
-    public Process(int arrivalTime) {
+    public Process(int arrivalTime, int orderNo) {
         this.arrivalTime = arrivalTime;
         this.waitingTime = 0;
         this.inMemory = true;       ///assuming at first keda keda it must be loaded even if no space smth else will be swapped
@@ -21,7 +21,7 @@ public class Process {
         this.timeUsedInLevel=0;
         variableNames = new String[3];
         variableValues = new Object[3];
-
+        this.orderNo=orderNo;
         for (int i = 0; i < 3; i++) { //var initialized with null
             variableNames[i] = "Var_" + (i + 1);
             variableValues[i] = null;

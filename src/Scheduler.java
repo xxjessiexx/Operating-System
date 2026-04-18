@@ -288,7 +288,7 @@ public class Scheduler {
         printQueues();
         switch (algorithm) {
             case "RoundRobin":
-                return roundRobin(2, globalTime); // Example time quantum of 2
+                return roundRobin(4, globalTime); // Example time quantum of 2
             case "HRRN":
                 return HRRN(globalTime);
             case "MultilevelFeedbackQueue":

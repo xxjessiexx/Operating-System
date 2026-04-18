@@ -40,9 +40,9 @@ public class OS {
     }
     }
 public void run() {
-    Process p1 = new Process(0);
-    Process p2 = new Process(1);
-    Process p3 = new Process(4);
+    Process p1 = new Process(3,1);
+    Process p2 = new Process(1,2);
+    Process p3 = new Process(4,3);
 
     ArrayList<Process> processes = new ArrayList<>();
     processes.add(p1);
@@ -53,7 +53,6 @@ public void run() {
     System.out.println("Enter the scheduling algorithm (RoundRobin, HRRN, MultilevelFeedbackQueue): ");//MIGHT NEED TO REMOVE //////remove , through gui!!!!!!!!!!!!!!!!!!!!!
     SchedulerAlgorithm = sc.nextLine();//////remove , through gui!!!!!!!!!!!!!!!!!!!!!
 
-    int pid = 1;
 
     while (!processes.isEmpty()) {       //////runs as long as there are processes still not created or not terminated
         ArrayList<Process> toRemove = new ArrayList<>();
@@ -66,12 +65,12 @@ public void run() {
             if (p.arrivalTime == globalTime && p.pcb == null) {
                 System.out.println(p +" arrived");
 
-                PCB pcb1 = new PCB(pid);
+                PCB pcb1 = new PCB(p.orderNo);
                 p.pcb = pcb1;
-
-                p.instructions = interpreter.readProgramFile("test programs/program"+pid+".txt"); //i just want to try it so i chose program 1 !! TEMPORARY!!
+                System.out.println(p.orderNo);
+                p.instructions = interpreter.readProgramFile("test programs/program"+p.pcb.processID+".txt"); //i just want to try it so i chose program 1 !! TEMPORARY!!
                 // later replace "null" with actual program file name
-                pid++;
+                
                 if(!memory.allocateProcess(p)) {
                     // swapping
                     while(!memory.swap(p));
