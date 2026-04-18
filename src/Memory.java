@@ -208,26 +208,7 @@ public class Memory {
         p.inMemory = false;
     }
 
-    public static void main(String args[]) {
-        Memory m = new Memory();
-        ArrayList inst = new ArrayList<>();
-        inst.add("PrintFromTo x y");
-
-        Process p = new Process(2);
-        p.pcb = new PCB(1);
-        p.instructions = inst;
-
-        System.out.println(m.allocateProcess(p));
-
-        Process p1 = new Process(2);
-        p1.pcb = new PCB(2);
-        p1.instructions = inst;
-        System.out.println(m.allocateProcess(p1));
-
-        m.swap(p);
-        m.printMemory();
-        System.out.println(m.d);
-    }
+    
 
     public void updateMemory(Process p) {
         if (p == null || p.pcb == null) {

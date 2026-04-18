@@ -40,9 +40,9 @@ public class OS {
     }
     }
 public void run() {
-    Process p1 = new Process(3,1);
+    Process p1 = new Process(0,1);
     Process p2 = new Process(1,2);
-    Process p3 = new Process(4,3);
+    Process p3 = new Process(0,3);
 
     ArrayList<Process> processes = new ArrayList<>();
     processes.add(p1);

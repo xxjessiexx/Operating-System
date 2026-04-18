@@ -22,7 +22,7 @@ public class Scheduler {
     // calculate the response ratio for a process in the ready queue
     public double calculateResponseRatio(Process process, int globalTime) {
         int burstTime = process.getInstructionCounter();
-        return (double) ((process.waitingTime + burstTime) / burstTime);
+        return  (double) ((process.waitingTime + burstTime) / (double) burstTime);
     }
 
     // add a process to the ready queue and set its state to ready
@@ -157,7 +157,7 @@ public class Scheduler {
             for (Process process : readyQueue) { // get the HRRN ratio for each process still in the ready queue
 
                 double responseRatio = calculateResponseRatio(process, globalTime);
-
+                System.out.println("process: "+ process + responseRatio);
                 if (responseRatio > highestResponseRatio) { // set the new highest response ratio and the process with
                     // it
                     highestResponseRatio = responseRatio;
@@ -177,11 +177,7 @@ public class Scheduler {
     }
 
     public Process MultilevelFeedbackQueue(int globalTime) { // chooses according to the highest priority non-empty
-        System.out.println("START OF MLFQ");                                                  // queue
-        System.out.println(PQ0);
-        System.out.println(PQ1);
-        System.out.println(PQ2);
-        System.out.println(PQ3);
+        
         if (MLFQprocess != null
                 && MLFQprocess.pcb.processState == ProcessState.RUNNING
                 && !MLFQprocess.isCompleted()

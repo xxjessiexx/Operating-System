@@ -59,19 +59,6 @@ public class Mutex {
         }
     }
 
-    public static void main(String[] args) {
-        Mutex m = new Mutex("userInput");
-        Process p = new Process(1);
-        Process p1 = new Process(2);
-        p.pcb = new PCB(1);
-        p1.pcb = new PCB(2);
-        System.out.println(m.semWait(p));
-        System.out.println(m.semWait(p1));
-        System.out.println(m.blockedQueue);
-        System.out.println(m.semSignal(p1));
-        System.out.println(m.blockedQueue);
-        System.out.println(m.semSignal(p));
-        System.out.println(m.blockedQueue);
-    }
+    
 
 }

@@ -109,37 +109,8 @@ public class Interpreter {
         return instructions;
     }
 
-    public static void main (String args[]){
-        Memory m = new Memory();
-        SystemCalls s = new SystemCalls();
-        OS os = new OS();
+    
 
-        Interpreter i = new Interpreter(s, m, os);
-        
-        
-        String instruction = "printFromTo x y";
-        ArrayList inst = new ArrayList<>();
-        inst.add(instruction);
-        inst.add("assign b readFile x");
-        inst.add("assign b readFile x");
-        
-       
-
-        Process p = new Process(2);
-        p.pcb = new PCB(1);
-        p.instructions=inst;
-        m.allocateProcess(p);
-        i.ExecuteInstruction(p, "assign x input");
-        i.ExecuteInstruction(p, "assign y input");
-        i.ExecuteInstruction(p, instruction);
-
-        
-
-
-        m.printMemory();
-
-        
-
-    }
+    
 
 }
