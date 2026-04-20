@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controller.ProcessSetupController">
+
+    <VBox alignment="CENTER" spacing="20" maxWidth="420" styleClass="card">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <Label text="OS Simulation Setup" styleClass="title-label"/>
+        <Label text="Enter the arrival time for each process" styleClass="section-title"/>
+
+        <TextField fx:id="p1ArrivalField" promptText="Process 1 Arrival Time"/>
+        <TextField fx:id="p2ArrivalField" promptText="Process 2 Arrival Time"/>
+        <TextField fx:id="p3ArrivalField" promptText="Process 3 Arrival Time"/>
+
+        <Button text="Next" onAction="#handleNext"/>
+    </VBox>
+</StackPane>

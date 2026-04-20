@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controller.SchedulerSetupController">
+
+    <VBox alignment="CENTER" spacing="20" maxWidth="420" styleClass="card">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <Label text="Scheduler Configuration" styleClass="title-label"/>
+        <Label text="Choose the scheduling algorithm" styleClass="section-title"/>
+
+        <ComboBox fx:id="algorithmComboBox" promptText="Choose Scheduling Algorithm"/>
+        <TextField fx:id="quantumField" promptText="Enter Quantum (Round Robin only)"/>
+
+        <Button text="Start Simulation" onAction="#handleStart" styleClass="success-button"/>
+    </VBox>
+</StackPane>

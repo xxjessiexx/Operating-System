@@ -1,0 +1,17 @@
+app\MainApp.class
+app\SimulationConfig.class
+backend\Memory.class
+backend\MemoryWord.class
+controller\SchedulerSetupController.class
+backend\SystemCalls.class
+controller\SimulationController.class
+app\SceneManager.class
+backend\Interpreter.class
+backend\ProcessState.class
+controller\ProcessSetupController.class
+backend\disk.class
+backend\Mutex.class
+backend\OS.class
+backend\PCB.class
+backend\Process.class
+backend\Scheduler.class
