@@ -110,4 +110,11 @@
                 <Label text="Process States" styleClass="section-title"/>
                 <Label fx:id="p1StateLabel" text="P1: -" styleClass="state-label"/>
                 <Label fx:id="p2StateLabel" text="P2: -" styleClass="state-label"/>
-                <Label fx:id="p3StateLabel" text="P3
+                <Label fx:id="p3StateLabel" text="P3: -" styleClass="state-label"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+        </HBox>
+    </center>
+</BorderPane>
