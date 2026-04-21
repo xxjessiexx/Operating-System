@@ -88,44 +88,53 @@ public class SimulationController {
         System.out.println("Quantum = " + config.getQuantum());
         refreshUI();
     }
+    private void advanceOneStep() {
+    if (!os.isFinished()) {
+        os.runOneStep();
+        refreshUI();
+    }
 
-    @FXML
-    private void handleNextStep() {
-        if (!os.isFinished()) {
-            os.runOneStep();
-            refreshUI();
+    if (os.isFinished()) {
+        if (timeline != null) {
+            timeline.stop();
         }
-
-        if (os.isFinished() && !completionShown) {
+        if (!completionShown) {
             completionShown = true;
             showCompletionPopup();
         }
     }
+    }
 
     @FXML
-    private void handleRunAuto() {
-        if (timeline != null) {
+    private void handleNextStep() {
+        advanceOneStep();
+    }
+
+   @FXML
+private void handleRunAuto() {
+    if (timeline != null) {
+        timeline.stop();
+    }
+
+    // Execute one step immediately
+    advanceOneStep();
+
+    // If simulation already finished after that step, stop here
+    if (os.isFinished()) {
+        return;
+    }
+
+    timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        advanceOneStep();
+
+        if (os.isFinished()) {
             timeline.stop();
         }
+    }));
 
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            if (!os.isFinished()) {
-                os.runOneStep();
-                refreshUI();
-            }
-
-            if (os.isFinished()) {
-                timeline.stop();
-                if (!completionShown) {
-                    completionShown = true;
-                    showCompletionPopup();
-                }
-            }
-        }));
-
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-    }
+    timeline.setCycleCount(Timeline.INDEFINITE);
+    timeline.play();
+}
 
     @FXML
     private void handlePause() {

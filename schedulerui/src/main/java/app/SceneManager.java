@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 public class SceneManager {
     private static Stage stage;
     private static final SimulationConfig config = new SimulationConfig();
+    
+
+    public static Stage getStage() {
+        return stage;
+    }
 
     public static void init(Stage primaryStage) {
         stage = primaryStage;

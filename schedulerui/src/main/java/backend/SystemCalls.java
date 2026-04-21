@@ -1,11 +1,13 @@
 package backend;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
-
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
-import java.io.*;
-import java.lang.reflect.Member;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 
 public class SystemCalls {
     private Scanner scanner;
@@ -21,6 +23,7 @@ public class SystemCalls {
 
     public void showOutput(int processId, String instruction, String output) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.initOwner(app.SceneManager.getStage());
         alert.setTitle("Process Output");
         alert.setHeaderText("Program " + processId + " / Process P" + processId);
         alert.setContentText("Instruction: " + instruction + "\n\nOutput:\n" + output);
@@ -29,6 +32,7 @@ public class SystemCalls {
 
     public String input(int processId, String instruction, String variableName) {
         TextInputDialog dialog = new TextInputDialog();
+        dialog.initOwner(app.SceneManager.getStage());
         dialog.setTitle("Process Input");
         dialog.setHeaderText("Process P" + processId);
         dialog.setContentText("Instruction: " + instruction + "\nEnter value for " + variableName + ":");
