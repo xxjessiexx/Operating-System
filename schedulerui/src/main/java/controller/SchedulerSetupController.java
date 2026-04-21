@@ -37,31 +37,55 @@ public class SchedulerSetupController {
             boolean isRR = "RoundRobin".equals(newValue);
             quantumField.setVisible(isRR);
             quantumField.setManaged(isRR);
+
+            if (!isRR) {
+                quantumField.clear();
+            }
         });
     }
 
     @FXML
     private void handleStart() {
-        try {
-            String algorithm = algorithmComboBox.getValue();
+        String algorithm = algorithmComboBox.getValue();
 
-            if (algorithm == null) {
-                showError("Please choose a scheduling algorithm.");
+        if (algorithm == null) {
+            showError("Please choose a scheduling algorithm.");
+            return;
+        }
+
+        config.setAlgorithm(algorithm);
+
+        if ("RoundRobin".equals(algorithm)) {
+            String qText = quantumField.getText();
+
+            if (qText == null || qText.trim().isEmpty()) {
+                showError("Please enter a quantum value.");
                 return;
             }
 
-            config.setAlgorithm(algorithm);
-
-            if ("RoundRobin".equals(algorithm)) {
-                config.setQuantum(Integer.parseInt(quantumField.getText().trim()));
-            } else {
-                config.setQuantum(0);
+            int quantum;
+            try {
+                quantum = Integer.parseInt(qText.trim());
+            } catch (NumberFormatException e) {
+                showError("Please enter a valid quantum value.");
+                return;
             }
 
-            SceneManager.showSimulation();
+            if (quantum <= 0) {
+                showError("Quantum must be greater than zero.");
+                return;
+            }
 
+            config.setQuantum(quantum);
+        } else {
+            config.setQuantum(0);
+        }
+
+        try {
+            SceneManager.showSimulation();
         } catch (Exception e) {
-            showError("Please enter a valid quantum value.");
+            e.printStackTrace();
+            showError("Failed to open the simulation screen.");
         }
     }
 

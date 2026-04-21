@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -8,91 +7,87 @@
             fx:controller="controller.SimulationController">
 
     <top>
-        <VBox spacing="12" styleClass="card">
-            <padding>
-                <Insets top="12" right="18" bottom="12" left="18"/>
-            </padding>
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-bar">
+            <Label text="OS Simulation Dashboard" styleClass="title"/>
+            <Region HBox.hgrow="ALWAYS"/>
 
-            <Label text="Operating System Simulation Dashboard" styleClass="title-label"/>
+            <Label text="Global Time:" styleClass="section-title"/>
+            <Label fx:id="globalTimeLabel" text="0" styleClass="global-time"/>
 
-            <HBox spacing="15" alignment="CENTER_LEFT">
-                <Label text="Global Time:" styleClass="section-title"/>
-                <Label fx:id="globalTimeLabel" text="0" styleClass="state-label"/>
+            <Region HBox.hgrow="ALWAYS"/>
 
-                <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Next Step"
+                    onAction="#handleNextStep"
+                    styleClass="button,next-btn"/>
 
-                <Button text="Next Step"
-                        onAction="#handleNextStep"
-                        styleClass="button,next-btn"/>
+            <Button text="Run Auto"
+                    onAction="#handleRunAuto"
+                    styleClass="button,auto-btn"/>
 
-                <Button text="Run Auto"
-                        onAction="#handleRunAuto"
-                        styleClass="button,auto-btn"/>
+            <Button text="Pause"
+                    onAction="#handlePause"
+                    styleClass="button,pause-btn"/>
 
-                <Button text="Pause"
-                        onAction="#handlePause"
-                        styleClass="button,pause-btn"/>
-
-                <Button text="Reset"
-                        onAction="#handleReset"
-                        styleClass="button,reset-btn"/>
-            </HBox>
-        </VBox>
+            <Button text="Reset"
+                    onAction="#handleReset"
+                    styleClass="button,reset-btn"/>
+        </HBox>
     </top>
 
     <center>
-        <HBox spacing="15" style="-fx-padding: 15;">
+        <HBox spacing="12" style="-fx-padding: 12;">
 
             <!-- LEFT COLUMN -->
-            <VBox spacing="10" styleClass="card" prefWidth="520" HBox.hgrow="ALWAYS">
+            <VBox spacing="8" styleClass="card" prefWidth="470" HBox.hgrow="ALWAYS">
                 <Label text="Memory Contents" styleClass="section-title"/>
                 <TextArea fx:id="memoryArea"
                           wrapText="true"
+                          prefHeight="560"
                           VBox.vgrow="ALWAYS"/>
             </VBox>
 
             <!-- MIDDLE COLUMN -->
-            <VBox spacing="12" prefWidth="430">
+            <VBox spacing="10" prefWidth="420">
 
-                <VBox spacing="8" styleClass="card">
+                <VBox spacing="6" styleClass="card">
                     <Label text="Disk Contents" styleClass="section-title"/>
-                    <TextArea fx:id="diskArea" prefHeight="90" wrapText="true"/>
+                    <TextArea fx:id="diskArea" prefHeight="75" wrapText="true"/>
                 </VBox>
 
-                <VBox spacing="8" styleClass="card">
+                <VBox spacing="6" styleClass="card">
                     <Label text="Ready Queue" styleClass="section-title"/>
-                    <TextArea fx:id="readyQueueArea" prefHeight="85" wrapText="true"/>
+                    <TextArea fx:id="readyQueueArea" prefHeight="65" wrapText="true"/>
 
                     <Label text="Blocked Queue" styleClass="section-title"/>
-                    <TextArea fx:id="blockedQueueArea" prefHeight="85" wrapText="true"/>
+                    <TextArea fx:id="blockedQueueArea" prefHeight="65" wrapText="true"/>
                 </VBox>
 
                 <VBox spacing="8" styleClass="card" VBox.vgrow="ALWAYS">
                     <Label text="MLFQ Priority Queues" styleClass="section-title"/>
 
-                    <GridPane hgap="10" vgap="8">
+                    <GridPane hgap="8" vgap="6">
                         <columnConstraints>
                             <ColumnConstraints percentWidth="50"/>
                             <ColumnConstraints percentWidth="50"/>
                         </columnConstraints>
 
-                        <Label text="PQ0" styleClass="section-title" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-                        <Label text="PQ1" styleClass="section-title" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <Label text="PQ0" styleClass="small-section-title" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label text="PQ1" styleClass="small-section-title" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                        <TextArea fx:id="pq0Area" prefHeight="90" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-                        <TextArea fx:id="pq1Area" prefHeight="90" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <TextArea fx:id="pq0Area" prefHeight="55" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextArea fx:id="pq1Area" prefHeight="55" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                        <Label text="PQ2" styleClass="section-title" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                        <Label text="PQ3" styleClass="section-title" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="PQ2" styleClass="small-section-title" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label text="PQ3" styleClass="small-section-title" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                        <TextArea fx:id="pq2Area" prefHeight="90" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-                        <TextArea fx:id="pq3Area" prefHeight="90" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <TextArea fx:id="pq2Area" prefHeight="55" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextArea fx:id="pq3Area" prefHeight="55" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                     </GridPane>
                 </VBox>
             </VBox>
 
             <!-- RIGHT COLUMN -->
-            <VBox spacing="12" styleClass="card" prefWidth="360">
+            <VBox spacing="10" styleClass="card" prefWidth="320">
 
                 <Label text="Running Process" styleClass="section-title"/>
                 <Label fx:id="runningProcessLabel" text="-" styleClass="state-label"/>
@@ -107,10 +102,19 @@
 
                 <Separator/>
 
+                <Label text="Scheduler Info" styleClass="section-title"/>
+                <Label fx:id="algorithmLabel" text="Algorithm: -" styleClass="state-label"/>
+                <Label fx:id="quantumLabel" text="Quantum: -" styleClass="state-label"/>
+                <Label fx:id="usedTimeLabel" text="Used Time: -" styleClass="state-label"/>
+
+                <Separator/>
+
                 <Label text="Process States" styleClass="section-title"/>
-                <Label fx:id="p1StateLabel" text="P1: -" styleClass="state-label"/>
-                <Label fx:id="p2StateLabel" text="P2: -" styleClass="state-label"/>
-                <Label fx:id="p3StateLabel" text="P3: -" styleClass="state-label"/>
+                <VBox spacing="8">
+                    <Label fx:id="p1StateLabel" text="P1: -" styleClass="state-label"/>
+                    <Label fx:id="p2StateLabel" text="P2: -" styleClass="state-label"/>
+                    <Label fx:id="p3StateLabel" text="P3: -" styleClass="state-label"/>
+                </VBox>
 
                 <Region VBox.vgrow="ALWAYS"/>
             </VBox>

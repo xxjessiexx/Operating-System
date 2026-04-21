@@ -4,8 +4,10 @@ import controller.ProcessSetupController;
 import controller.SchedulerSetupController;
 import controller.SimulationController;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class SceneManager {
@@ -28,8 +30,10 @@ public class SceneManager {
         ProcessSetupController controller = loader.getController();
         controller.setConfig(config);
 
-        Scene scene = new Scene(root, 1500, 850);
+        Scene scene = new Scene(root, 700, 450);
         scene.getStylesheets().add(SceneManager.class.getResource("/view/styles.css").toExternalForm());
+        stage.setResizable(true);
+        stage.centerOnScreen();
 
         stage.setScene(scene);
         stage.show();
@@ -42,9 +46,10 @@ public class SceneManager {
         SchedulerSetupController controller = loader.getController();
         controller.setConfig(config);
 
-        Scene scene = new Scene(root, 1500, 850);
+        Scene scene = new Scene(root, 700, 450);
         scene.getStylesheets().add(SceneManager.class.getResource("/view/styles.css").toExternalForm());
-
+        stage.setResizable(true);
+        stage.centerOnScreen();
         stage.setScene(scene);
         stage.show();
     }
@@ -57,8 +62,16 @@ public class SceneManager {
         controller.setConfig(config);
         controller.initializeSimulation();
 
-        Scene scene = new Scene(root, 1500, 850);
+        Rectangle2D screen = Screen.getPrimary().getVisualBounds();
+
+        Scene scene = new Scene(
+                root,
+                screen.getWidth() * 0.97,
+                screen.getHeight() * 0.92
+        );
         scene.getStylesheets().add(SceneManager.class.getResource("/view/styles.css").toExternalForm());
+        stage.setResizable(true);
+        stage.centerOnScreen();
 
         stage.setScene(scene);
         stage.show();

@@ -151,6 +151,16 @@ public class SimulationController {
     runningProcessLabel.setText(os.getRunningProcessSnapshot());
     currentInstructionLabel.setText(os.getCurrentInstructionSnapshot());
 
+    algorithmLabel.setText("Algorithm: " + os.getSchedulerAlgorithm());
+
+    if ("RoundRobin".equals(os.getSchedulerAlgorithm())) {
+        quantumLabel.setText("Quantum: " + os.getQuantum());
+        usedTimeLabel.setText("Used Time: " + os.getUsedTime());
+    } else {
+        quantumLabel.setText("Quantum: N/A");
+        usedTimeLabel.setText("Used Time: N/A");
+    }
+
     p1StateLabel.setText("P1: " + os.getProcessStateSnapshot(1));
     p2StateLabel.setText("P2: " + os.getProcessStateSnapshot(2));
     p3StateLabel.setText("P3: " + os.getProcessStateSnapshot(3));
