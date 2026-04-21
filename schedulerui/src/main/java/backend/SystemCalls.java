@@ -1,4 +1,5 @@
 package backend;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,12 +11,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
 
 public class SystemCalls {
+
     private Scanner scanner;
 
     public SystemCalls() {
         scanner = new Scanner(System.in);
     }
-
 
     public void print(String message) {
         System.out.println(message);
@@ -41,7 +42,6 @@ public class SystemCalls {
         return result.orElse("");
     }
 
-    
     public void writeFile(String fileName, String data) {
         try {
             FileWriter writer = new FileWriter(fileName);
@@ -52,7 +52,6 @@ public class SystemCalls {
         }
     }
 
-   
     public String readFile(String fileName) {
         StringBuilder content = new StringBuilder();
 
@@ -72,13 +71,11 @@ public class SystemCalls {
         return content.toString().trim();
     }
 
-   
     public MemoryWord readFromMemory(Memory memory, int address) {
 
         return memory.readWord(address);
     }
 
-  
     public void writeToMemory(Memory memory, int address, String name, Object value) {
         MemoryWord word = new MemoryWord(name, value);
         memory.writeWord(address, word);

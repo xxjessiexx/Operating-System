@@ -1,17 +1,17 @@
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\controller\SchedulerSetupController.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\PCB.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\Process.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\Mutex.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\app\SimulationConfig.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\MemoryWord.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\app\MainApp.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\controller\ProcessSetupController.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\disk.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\app\SceneManager.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\Interpreter.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\SystemCalls.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\ProcessState.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\Scheduler.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\Memory.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\controller\SimulationController.java
-c:\Users\salma\OneDrive\Desktop\OS proj\Operating-System\schedulerui\src\main\java\backend\OS.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\Interpreter.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\Memory.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\SystemCalls.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\Process.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\Mutex.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\app\MainApp.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\app\SceneManager.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\OS.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\controller\ProcessSetupController.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\ProcessState.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\disk.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\controller\SimulationController.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\PCB.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\app\SimulationConfig.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\MemoryWord.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\backend\Scheduler.java
+C:\Users\lenovo\OneDrive\Desktop\OS\Operating-System\schedulerui\src\main\java\controller\SchedulerSetupController.java

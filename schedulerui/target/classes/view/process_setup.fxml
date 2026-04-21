@@ -11,6 +11,10 @@
         <padding>
             <Insets top="30" right="30" bottom="30" left="30"/>
         </padding>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+    <Button text="← Back" onAction="#handleBack" styleClass="reset-btn"/>
+    <Button text="Home" onAction="#handleHome" styleClass="auto-btn"/>
+</HBox>
 
         <Label text="OS Simulation Setup" styleClass="title-label"/>
         <Label text="Enter the arrival time for each process" styleClass="section-title"/>
@@ -19,6 +23,6 @@
         <TextField fx:id="p2ArrivalField" promptText="Process 2 Arrival Time"/>
         <TextField fx:id="p3ArrivalField" promptText="Process 3 Arrival Time"/>
 
-        <Button text="Next" onAction="#handleNext"/>
+        <Button fx:id="nextButton" text="Next" onAction="#handleNext"/>
     </VBox>
 </StackPane>

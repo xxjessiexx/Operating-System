@@ -3,7 +3,10 @@
     -fx-background-color: #F5F7FA;
 }
 
-/* TOP BAR */
+/* =========================
+   TOP BAR / TITLES
+   ========================= */
+
 .top-bar {
     -fx-background-color: white;
     -fx-padding: 12 16 12 16;
@@ -13,6 +16,12 @@
 
 .title {
     -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #355C7D;
+}
+
+.title-label {
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
     -fx-text-fill: #355C7D;
 }
@@ -35,17 +44,78 @@
     -fx-text-fill: #355C7D;
 }
 
-/* CARDS */
+/* =========================
+   CARDS
+   ========================= */
+
 .card {
     -fx-background-color: white;
-    -fx-background-radius: 14;
-    -fx-padding: 12;
+    -fx-background-radius: 16;
+    -fx-padding: 18;
     -fx-border-color: #E2E8F0;
-    -fx-border-radius: 14;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 10, 0, 0, 2);
 }
 
-/* BUTTONS */
+/* =========================
+   LABELS / GENERAL TEXT
+   ========================= */
+
+.label {
+    -fx-text-fill: #355C7D;
+}
+
+.state-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #355C7D;
+}
+
+.separator {
+    -fx-background-color: #D9E2EC;
+}
+
+/* =========================
+   INPUTS
+   ========================= */
+
+.text-field,
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #D8DEE9;
+    -fx-border-radius: 10;
+    -fx-font-size: 14px;
+    -fx-padding: 10 12;
+    -fx-pref-height: 42px;
+}
+
+.text-field:focused,
+.combo-box:focused {
+    -fx-border-color: #355C7D;
+    -fx-background-color: white;
+}
+
+/* =========================
+   TEXT AREAS
+   ========================= */
+
+.text-area {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #D8DEE9;
+    -fx-font-size: 13px;
+    -fx-control-inner-background: #F9FBFD;
+}
+
+.text-area .content {
+    -fx-background-color: #F9FBFD;
+}
+
+/* =========================
+   BASE BUTTONS
+   ========================= */
+
 .button {
     -fx-background-radius: 10;
     -fx-font-size: 14px;
@@ -53,6 +123,21 @@
     -fx-text-fill: white;
     -fx-padding: 8 18;
 }
+
+.button:hover {
+    -fx-opacity: 0.90;
+    -fx-cursor: hand;
+}
+
+.button:focused {
+    -fx-border-color: #355C7D;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+}
+
+/* =========================
+   DASHBOARD BUTTONS
+   ========================= */
 
 .next-btn {
     -fx-background-color: #F67280;
@@ -70,35 +155,48 @@
     -fx-background-color: #6C5B7B;
 }
 
-.button:hover {
-    -fx-opacity: 0.88;
-    -fx-cursor: hand;
+/* =========================
+   SETUP / HOME BUTTONS
+   ========================= */
+
+.success-button {
+    -fx-background-color: #355C7D;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 42px;
 }
 
-/* TEXT AREAS */
-.text-area {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-border-color: #D8DEE9;
-    -fx-font-size: 13px;
-    -fx-control-inner-background: #F9FBFD;
+.success-button:hover {
+    -fx-background-color: #2C4E69;
 }
 
-.text-area .content {
-    -fx-background-color: #F9FBFD;
+.danger-button {
+    -fx-background-color: #F67280;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 42px;
 }
 
-/* LABELS */
-.state-label {
-    -fx-font-size: 14px;
+.danger-button:hover {
+    -fx-background-color: #E85E6D;
+}
+
+.algo-button {
+    -fx-background-color: #355C7D;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: #355C7D;
+    -fx-pref-width: 260px;
+    -fx-pref-height: 45px;
+    -fx-background-radius: 10;
 }
 
-.label {
-    -fx-text-fill: #355C7D;
+.algo-button:hover {
+    -fx-background-color: #2C4E69;
+}
+.nav-btn {
+    -fx-background-color: #355C7D;
+    -fx-text-fill: white;
 }
 
-.separator {
-    -fx-background-color: #D9E2EC;
+.nav-btn:hover {
+    -fx-background-color: #2C4E69;
 }

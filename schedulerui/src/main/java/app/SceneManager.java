@@ -11,9 +11,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class SceneManager {
+
     private static Stage stage;
     private static final SimulationConfig config = new SimulationConfig();
-    
 
     public static Stage getStage() {
         return stage;
@@ -26,6 +26,19 @@ public class SceneManager {
 
     public static SimulationConfig getConfig() {
         return config;
+    }
+
+    public static void showHome() throws Exception {
+        FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/view/home.fxml"));
+        Parent root = loader.load();
+
+        Scene scene = new Scene(root, 700, 450);
+        scene.getStylesheets().add(SceneManager.class.getResource("/view/styles.css").toExternalForm());
+        stage.setResizable(true);
+        stage.centerOnScreen();
+
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void showProcessSetup() throws Exception {
@@ -60,7 +73,15 @@ public class SceneManager {
     }
 
     public static void showSimulation() throws Exception {
-        FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource("/view/simulation.fxml"));
+        String fxmlPath;
+
+        if ("MultilevelFeedbackQueue".equals(config.getAlgorithm())) {
+            fxmlPath = "/view/simulation_mlfq.fxml";
+        } else {
+            fxmlPath = "/view/simulation_standard.fxml";
+        }
+
+        FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
         Parent root = loader.load();
 
         SimulationController controller = loader.getController();

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.SimulationController"
+            styleClass="root">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="top-bar">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+    <Button text="← Back" onAction="#handleBack" styleClass="reset-btn"/>
+    <Button text="Home" onAction="#handleHome" styleClass="auto-btn"/>
+</HBox>
+            <Label text="OS Simulation Dashboard" styleClass="title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label text="Global Time:" styleClass="section-title"/>
+            <Label fx:id="globalTimeLabel" text="0" styleClass="global-time"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Next Step" onAction="#handleNextStep" styleClass="next-btn"/>
+            <Button text="Run Auto" onAction="#handleRunAuto" styleClass="auto-btn"/>
+            <Button text="Pause" onAction="#handlePause" styleClass="pause-btn"/>
+            <Button text="Reset" onAction="#handleReset" styleClass="reset-btn"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox spacing="16" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
+
+            <!-- LEFT: MEMORY -->
+            <VBox spacing="12" HBox.hgrow="ALWAYS" prefWidth="700" styleClass="card">
+                <Label text="Memory Contents" styleClass="section-title"/>
+                <TextArea fx:id="memoryArea" editable="false" wrapText="false" VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+            <!-- MIDDLE: DISK + QUEUES -->
+            <VBox spacing="16" prefWidth="360">
+                <VBox spacing="10" styleClass="card">
+                    <Label text="Disk Contents" styleClass="section-title"/>
+                    <TextArea fx:id="diskArea" editable="false" wrapText="true" prefRowCount="5"/>
+                </VBox>
+
+                <VBox spacing="10" styleClass="card">
+                    <Label text="Ready Queue" styleClass="section-title"/>
+                    <TextArea fx:id="readyQueueArea" editable="false" wrapText="true" prefRowCount="4"/>
+
+                    <Label text="Blocked Queue" styleClass="section-title"/>
+                    <TextArea fx:id="blockedQueueArea" editable="false" wrapText="true" prefRowCount="4"/>
+                </VBox>
+            </VBox>
+
+            <!-- RIGHT: INFO -->
+            <VBox spacing="16" prefWidth="260" styleClass="card">
+                <Label text="Running Process" styleClass="section-title"/>
+                <Label fx:id="runningProcessLabel" text="-" styleClass="state-label"/>
+
+                <Separator/>
+
+                <Label text="Current Instruction" styleClass="section-title"/>
+                <Label fx:id="currentInstructionLabel" text="-" wrapText="true"/>
+
+                <Separator/>
+
+                <Label text="Scheduler Info" styleClass="section-title"/>
+                <Label fx:id="algorithmLabel" text="Algorithm: -"/>
+                <Label fx:id="quantumLabel" text="Quantum: -"/>
+                <Label fx:id="usedTimeLabel" text="Used Time: -"/>
+
+                <Separator/>
+
+                <Label text="Process States" styleClass="section-title"/>
+                <Label fx:id="p1StateLabel" text="P1: -"/>
+                <Label fx:id="p2StateLabel" text="P2: -"/>
+                <Label fx:id="p3StateLabel" text="P3: -"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>
