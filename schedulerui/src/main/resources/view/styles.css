@@ -83,3 +83,26 @@
     -fx-font-weight: bold;
     -fx-text-fill: #355C7D;
 }
+.text-area {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #D8DEE9;
+    -fx-font-size: 14px;
+    -fx-control-inner-background: #F9FBFD;
+}
+
+.text-area .content {
+    -fx-background-color: #F9FBFD;
+}
+
+.separator {
+    -fx-background-color: #D9E2EC;
+}
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-padding: 16;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 18;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 12, 0, 0, 3);
+}

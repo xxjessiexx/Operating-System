@@ -28,7 +28,7 @@ public class SceneManager {
         ProcessSetupController controller = loader.getController();
         controller.setConfig(config);
 
-        Scene scene = new Scene(root, 700, 500);
+        Scene scene = new Scene(root, 1500, 850);
         scene.getStylesheets().add(SceneManager.class.getResource("/view/styles.css").toExternalForm());
 
         stage.setScene(scene);
@@ -42,7 +42,7 @@ public class SceneManager {
         SchedulerSetupController controller = loader.getController();
         controller.setConfig(config);
 
-        Scene scene = new Scene(root, 700, 500);
+        Scene scene = new Scene(root, 1500, 850);
         scene.getStylesheets().add(SceneManager.class.getResource("/view/styles.css").toExternalForm());
 
         stage.setScene(scene);
@@ -57,7 +57,7 @@ public class SceneManager {
         controller.setConfig(config);
         controller.initializeSimulation();
 
-        Scene scene = new Scene(root, 700, 500);
+        Scene scene = new Scene(root, 1500, 850);
         scene.getStylesheets().add(SceneManager.class.getResource("/view/styles.css").toExternalForm());
 
         stage.setScene(scene);

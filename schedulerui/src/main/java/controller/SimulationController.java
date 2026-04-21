@@ -1,14 +1,14 @@
 package controller;
 
 import app.SimulationConfig;
+import backend.OS;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.util.Duration;
-import backend.OS;
-import javafx.scene.control.Alert;
 
 public class SimulationController {
     private OS os;
@@ -59,6 +59,9 @@ public class SimulationController {
 
     @FXML
     private Label usedTimeLabel;
+
+    @FXML
+    private Label currentInstructionLabel;
 
     private SimulationConfig config;
     private Timeline timeline;
@@ -140,49 +143,40 @@ public class SimulationController {
     }
 
     private void refreshUI() {
-        globalTimeLabel.setText(String.valueOf(os.getGlobalTime()));
-        algorithmLabel.setText(os.getSchedulerAlgorithm());
+    globalTimeLabel.setText(String.valueOf(os.getGlobalTime()));
+    memoryArea.setText(os.getMemorySnapshot());
+    diskArea.setText(os.getDiskSnapshot());
+    readyQueueArea.setText(os.getReadyQueueSnapshot());
+    blockedQueueArea.setText(os.getBlockedQueueSnapshot());
+    runningProcessLabel.setText(os.getRunningProcessSnapshot());
+    currentInstructionLabel.setText(os.getCurrentInstructionSnapshot());
 
-        if ("RoundRobin".equals(os.getSchedulerAlgorithm())) {
-            quantumLabel.setText(String.valueOf(os.getQuantum()));
-            usedTimeLabel.setText(String.valueOf(os.getUsedTime()));
-        } else {
-            quantumLabel.setText("-");
-            usedTimeLabel.setText("-");
-        }
-        globalTimeLabel.setText(String.valueOf(os.getGlobalTime()));
-        memoryArea.setText(os.getMemorySnapshot());
-        diskArea.setText(os.getDiskSnapshot());
-        readyQueueArea.setText(os.getReadyQueueSnapshot());
-        blockedQueueArea.setText(os.getBlockedQueueSnapshot());
-        runningProcessLabel.setText(os.getRunningProcessSnapshot());
+    p1StateLabel.setText("P1: " + os.getProcessStateSnapshot(1));
+    p2StateLabel.setText("P2: " + os.getProcessStateSnapshot(2));
+    p3StateLabel.setText("P3: " + os.getProcessStateSnapshot(3));
 
-        p1StateLabel.setText("P1: " + os.getProcessStateSnapshot(1));
-        p2StateLabel.setText("P2: " + os.getProcessStateSnapshot(2));
-        p3StateLabel.setText("P3: " + os.getProcessStateSnapshot(3));
+    if ("MultilevelFeedbackQueue".equals(os.getAlgorithm())) {
+        pq0Area.setText(os.getPQ0Snapshot());
+        pq1Area.setText(os.getPQ1Snapshot());
+        pq2Area.setText(os.getPQ2Snapshot());
+        pq3Area.setText(os.getPQ3Snapshot());
 
-        if ("MultilevelFeedbackQueue".equals(os.getAlgorithm())) {
-            pq0Area.setText(os.getPQ0Snapshot());
-            pq1Area.setText(os.getPQ1Snapshot());
-            pq2Area.setText(os.getPQ2Snapshot());
-            pq3Area.setText(os.getPQ3Snapshot());
+        pq0Area.setVisible(true);
+        pq1Area.setVisible(true);
+        pq2Area.setVisible(true);
+        pq3Area.setVisible(true);
+    } else {
+        pq0Area.setText("");
+        pq1Area.setText("");
+        pq2Area.setText("");
+        pq3Area.setText("");
 
-            pq0Area.setVisible(true);
-            pq1Area.setVisible(true);
-            pq2Area.setVisible(true);
-            pq3Area.setVisible(true);
-        } else {
-            pq0Area.setText("");
-            pq1Area.setText("");
-            pq2Area.setText("");
-            pq3Area.setText("");
-
-            pq0Area.setVisible(false);
-            pq1Area.setVisible(false);
-            pq2Area.setVisible(false);
-            pq3Area.setVisible(false);
-        }
+        pq0Area.setVisible(false);
+        pq1Area.setVisible(false);
+        pq2Area.setVisible(false);
+        pq3Area.setVisible(false);
     }
+}
     private void showCompletionPopup() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Simulation Complete");

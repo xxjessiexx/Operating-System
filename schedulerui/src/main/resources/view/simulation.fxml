@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.control.ScrollPane?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.SimulationController">
@@ -11,18 +10,11 @@
     <top>
         <VBox spacing="12" styleClass="card">
             <padding>
-                <Insets top="10" right="15" bottom="10" left="15"/>
+                <Insets top="12" right="18" bottom="12" left="18"/>
             </padding>
 
             <Label text="Operating System Simulation Dashboard" styleClass="title-label"/>
-            <Label text="Algorithm:" layoutX="30.0" layoutY="110.0" />
-            <Label fx:id="algorithmLabel" layoutX="140.0" layoutY="110.0" />
 
-            <Label text="Quantum:" layoutX="250.0" layoutY="110.0" />
-            <Label fx:id="quantumLabel" layoutX="340.0" layoutY="110.0" />
-
-            <Label text="Used Time:" layoutX="430.0" layoutY="110.0" />
-            <Label fx:id="usedTimeLabel" layoutX="540.0" layoutY="110.0" />
             <HBox spacing="15" alignment="CENTER_LEFT">
                 <Label text="Global Time:" styleClass="section-title"/>
                 <Label fx:id="globalTimeLabel" text="0" styleClass="state-label"/>
@@ -49,68 +41,80 @@
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" pannable="true" style="-fx-background-color: transparent;">
-            <content>
-                <GridPane hgap="15" vgap="15" style="-fx-padding: 15;">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="33"/>
-                        <ColumnConstraints percentWidth="34"/>
-                        <ColumnConstraints percentWidth="33"/>
-                    </columnConstraints>
+        <HBox spacing="15" style="-fx-padding: 15;">
 
-                    <VBox spacing="10" GridPane.columnIndex="0" styleClass="card">
-                        <Label text="Memory Contents" styleClass="section-title"/>
-                        <TextArea fx:id="memoryArea" prefHeight="520" wrapText="true"/>
-                    </VBox>
+            <!-- LEFT COLUMN -->
+            <VBox spacing="10" styleClass="card" prefWidth="520" HBox.hgrow="ALWAYS">
+                <Label text="Memory Contents" styleClass="section-title"/>
+                <TextArea fx:id="memoryArea"
+                          wrapText="true"
+                          VBox.vgrow="ALWAYS"/>
+            </VBox>
 
-                    <VBox spacing="10" GridPane.columnIndex="1">
-                        <VBox spacing="10" styleClass="card">
-                            <Label text="Disk Contents" styleClass="section-title"/>
-                            <TextArea fx:id="diskArea" prefHeight="110" wrapText="true"/>
-                        </VBox>
+            <!-- MIDDLE COLUMN -->
+            <VBox spacing="12" prefWidth="430">
 
-                        <VBox spacing="10" styleClass="card">
-                            <Label text="Ready Queue" styleClass="section-title"/>
-                            <TextArea fx:id="readyQueueArea" prefHeight="70" wrapText="true"/>
+                <VBox spacing="8" styleClass="card">
+                    <Label text="Disk Contents" styleClass="section-title"/>
+                    <TextArea fx:id="diskArea" prefHeight="90" wrapText="true"/>
+                </VBox>
 
-                            <Label text="Blocked Queue" styleClass="section-title"/>
-                            <TextArea fx:id="blockedQueueArea" prefHeight="70" wrapText="true"/>
-                        </VBox>
+                <VBox spacing="8" styleClass="card">
+                    <Label text="Ready Queue" styleClass="section-title"/>
+                    <TextArea fx:id="readyQueueArea" prefHeight="85" wrapText="true"/>
 
-                        <VBox spacing="10" styleClass="card">
-                            <Label text="MLFQ Priority Queues" styleClass="section-title"/>
+                    <Label text="Blocked Queue" styleClass="section-title"/>
+                    <TextArea fx:id="blockedQueueArea" prefHeight="85" wrapText="true"/>
+                </VBox>
 
-                            <Label text="PQ0" styleClass="section-title"/>
-                            <TextArea fx:id="pq0Area" prefHeight="55"/>
+                <VBox spacing="8" styleClass="card" VBox.vgrow="ALWAYS">
+                    <Label text="MLFQ Priority Queues" styleClass="section-title"/>
 
-                            <Label text="PQ1" styleClass="section-title"/>
-                            <TextArea fx:id="pq1Area" prefHeight="55"/>
+                    <GridPane hgap="10" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
 
-                            <Label text="PQ2" styleClass="section-title"/>
-                            <TextArea fx:id="pq2Area" prefHeight="55"/>
+                        <Label text="PQ0" styleClass="section-title" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label text="PQ1" styleClass="section-title" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-                            <Label text="PQ3" styleClass="section-title"/>
-                            <TextArea fx:id="pq3Area" prefHeight="55"/>
-                        </VBox>
-                    </VBox>
+                        <TextArea fx:id="pq0Area" prefHeight="90" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextArea fx:id="pq1Area" prefHeight="90" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                    <VBox spacing="12" GridPane.columnIndex="2" styleClass="card">
-                        <Label text="Running Process" styleClass="section-title"/>
-                        <Label fx:id="runningProcessLabel" text="-" styleClass="state-label"/>
+                        <Label text="PQ2" styleClass="section-title" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label text="PQ3" styleClass="section-title" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                        <Separator/>
+                        <TextArea fx:id="pq2Area" prefHeight="90" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <TextArea fx:id="pq3Area" prefHeight="90" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </GridPane>
+                </VBox>
+            </VBox>
 
-                        <Label text="Process States" styleClass="section-title"/>
-                        <Label fx:id="p1StateLabel" text="P1: -" styleClass="state-label"/>
-                        <Label fx:id="p2StateLabel" text="P2: -" styleClass="state-label"/>
-                        <Label fx:id="p3StateLabel" text="P3: -" styleClass="state-label"/>
-                    </VBox>
+            <!-- RIGHT COLUMN -->
+            <VBox spacing="12" styleClass="card" prefWidth="360">
 
-                    <padding>
-                        <Insets top="15" right="15" bottom="15" left="15"/>
-                    </padding>
-                </GridPane>
-            </content>
-        </ScrollPane>
+                <Label text="Running Process" styleClass="section-title"/>
+                <Label fx:id="runningProcessLabel" text="-" styleClass="state-label"/>
+
+                <Separator/>
+
+                <Label text="Current Instruction" styleClass="section-title"/>
+                <Label fx:id="currentInstructionLabel"
+                       text="-"
+                       wrapText="true"
+                       styleClass="state-label"/>
+
+                <Separator/>
+
+                <Label text="Process States" styleClass="section-title"/>
+                <Label fx:id="p1StateLabel" text="P1: -" styleClass="state-label"/>
+                <Label fx:id="p2StateLabel" text="P2: -" styleClass="state-label"/>
+                <Label fx:id="p3StateLabel" text="P3: -" styleClass="state-label"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+        </HBox>
     </center>
 </BorderPane>
