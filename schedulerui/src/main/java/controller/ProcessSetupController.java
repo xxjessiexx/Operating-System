@@ -67,16 +67,21 @@ public class ProcessSetupController {
         try {
             SceneManager.showSchedulerSetup();
         } catch (Exception e) {
-            e.printStackTrace(); // 🔥 THIS WILL SHOW REAL ERROR
+            e.printStackTrace();
             showError("invalid input. Please enter valid integer arrival times.");
         }
     }
 
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(SceneManager.getStage());
         alert.setTitle("Input Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        alert.getDialogPane().getStylesheets().add(
+                SceneManager.class.getResource("/view/styles.css").toExternalForm()
+        );
+        alert.getDialogPane().getStyleClass().add("dialog-pane-dark");
         alert.showAndWait();
     }
 }

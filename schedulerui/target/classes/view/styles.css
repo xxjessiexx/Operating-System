@@ -484,3 +484,138 @@
     -fx-background-radius: 14;
     -fx-border-radius: 14;
 }
+
+/* ===== DISK PANEL FIXES ===== */
+.disk-display-shell {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.disk-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 10;
+}
+
+.disk-scroll-pane > .viewport {
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(21, 18, 69, 0.98), rgba(13, 11, 43, 0.99));
+    -fx-background-radius: 22;
+}
+
+.disk-scroll-pane .corner {
+    -fx-background-color: transparent;
+}
+
+.disk-scroll-pane .track {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-radius: 999;
+}
+
+.disk-scroll-pane .thumb {
+    -fx-background-color: linear-gradient(to bottom, #7cd4ff, #5f7dff);
+    -fx-background-radius: 999;
+}
+
+.disk-slots-box {
+    -fx-padding: 8;
+    -fx-background-color: transparent;
+}
+
+.disk-process-card {
+    -fx-padding: 10 12 10 12;
+    -fx-spacing: 8;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(23, 20, 76, 0.98), rgba(14, 12, 48, 0.99));
+    -fx-border-color: rgba(151, 165, 255, 0.14);
+    -fx-border-width: 1;
+}
+
+.disk-process-chip {
+    -fx-max-width: 88;
+}
+
+.disk-card-rows {
+    -fx-spacing: 6;
+}
+
+.disk-detail-row {
+    -fx-alignment: center-left;
+    -fx-spacing: 10;
+    -fx-background-color: transparent;
+}
+
+.disk-mini-chip {
+    -fx-padding: 5 10 5 10;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #eef2ff;
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(93, 110, 208, 0.55), rgba(45, 54, 137, 0.42));
+    -fx-border-color: rgba(151, 165, 255, 0.12);
+    -fx-min-width: 58;
+    -fx-alignment: center;
+}
+
+.output-dialog-content {
+    -fx-padding: 18;
+    -fx-spacing: 12;
+}
+
+.output-subtitle {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9faee8;
+}
+
+.output-instruction {
+    -fx-font-size: 13px;
+    -fx-text-fill: #e4e9ff;
+    -fx-wrap-text: true;
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(33, 26, 88, 0.95), rgba(19, 15, 58, 0.98));
+    -fx-background-radius: 14;
+    -fx-padding: 10 12;
+    -fx-border-color: rgba(123, 143, 255, 0.18);
+    -fx-border-radius: 14;
+}
+
+.output-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.output-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.output-scroll .corner {
+    -fx-background-color: transparent;
+}
+
+.output-area {
+    -fx-text-fill: #e8edff;
+    -fx-font-size: 13px;
+    -fx-highlight-fill: rgba(120, 204, 255, 0.35);
+    -fx-highlight-text-fill: white;
+    -fx-control-inner-background:
+        linear-gradient(to bottom, rgba(23, 20, 76, 0.98), rgba(14, 12, 48, 0.99));
+    -fx-background-color:
+        linear-gradient(to bottom, rgba(23, 20, 76, 0.98), rgba(14, 12, 48, 0.99));
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: rgba(151, 165, 255, 0.12);
+    -fx-padding: 10;
+}
+
+.output-area .content {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+}

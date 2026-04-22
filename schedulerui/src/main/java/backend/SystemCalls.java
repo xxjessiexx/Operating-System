@@ -8,11 +8,12 @@ import java.util.Optional;
 import java.util.Scanner;
 
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
@@ -29,12 +30,47 @@ public class SystemCalls {
     }
 
     public void showOutput(int processId, String instruction, String output) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(app.SceneManager.getStage());
-        alert.setTitle("Process Output");
-        alert.setHeaderText("Program " + processId + " / Process P" + processId);
-        alert.setContentText("Instruction: " + instruction + "\n\nOutput:\n" + output);
-        alert.showAndWait();
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.initOwner(app.SceneManager.getStage());
+        dialog.setTitle("Process Output");
+        dialog.setHeaderText(null);
+
+        ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(closeButtonType);
+
+        VBox content = new VBox(12);
+        content.getStyleClass().add("output-dialog-content");
+
+        Label title = new Label("Program " + processId + " / Process P" + processId);
+        title.getStyleClass().add("section-title");
+
+        Label instructionTitle = new Label("Instruction");
+        instructionTitle.getStyleClass().add("output-subtitle");
+
+        Label instructionLabel = new Label(instruction);
+        instructionLabel.getStyleClass().add("output-instruction");
+        instructionLabel.setWrapText(true);
+
+        Label outputTitle = new Label("Output");
+        outputTitle.getStyleClass().add("output-subtitle");
+
+        TextArea outputArea = new TextArea(output == null || output.isBlank() ? "(no output)" : output);
+        outputArea.setEditable(false);
+        outputArea.setWrapText(true);
+        outputArea.setFocusTraversable(false);
+        outputArea.getStyleClass().add("output-area");
+        outputArea.setPrefRowCount(8);
+
+        ScrollPane scrollPane = new ScrollPane(outputArea);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.getStyleClass().add("output-scroll");
+
+        content.getChildren().addAll(title, instructionTitle, instructionLabel, outputTitle, scrollPane);
+
+        dialog.getDialogPane().setContent(content);
+        styleDialog(dialog);
+        dialog.showAndWait();
     }
 
     public String input(int processId, String instruction, String variableName) {
@@ -43,10 +79,8 @@ public class SystemCalls {
         dialog.setTitle("Process Input");
         dialog.setHeaderText(null);
 
-        ButtonType okButtonType
-                = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        ButtonType cancelButtonType
-                = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         dialog.getDialogPane().getButtonTypes().addAll(okButtonType, cancelButtonType);
 
@@ -67,10 +101,7 @@ public class SystemCalls {
         content.getChildren().addAll(title, info, inputField);
         dialog.getDialogPane().setContent(content);
 
-        dialog.getDialogPane().getStylesheets().add(
-                app.SceneManager.class.getResource("/view/styles.css").toExternalForm()
-        );
-        dialog.getDialogPane().getStyleClass().add("dialog-pane-dark");
+        styleDialog(dialog);
 
         Platform.runLater(inputField::requestFocus);
 
@@ -83,6 +114,14 @@ public class SystemCalls {
 
         Optional<String> result = dialog.showAndWait();
         return result.orElse("");
+    }
+
+    private void styleDialog(Dialog<?> dialog) {
+        dialog.getDialogPane().getStylesheets().add(
+                app.SceneManager.class.getResource("/view/styles.css").toExternalForm()
+        );
+        dialog.getDialogPane().getStyleClass().add("dialog-pane-dark");
+        dialog.getDialogPane().setGraphic(null);
     }
 
     public void writeFile(String fileName, String data) {

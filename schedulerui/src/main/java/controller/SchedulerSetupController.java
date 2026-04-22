@@ -106,9 +106,14 @@ public class SchedulerSetupController {
 
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(SceneManager.getStage());
         alert.setTitle("Invalid Input");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        alert.getDialogPane().getStylesheets().add(
+                SceneManager.class.getResource("/view/styles.css").toExternalForm()
+        );
+        alert.getDialogPane().getStyleClass().add("dialog-pane-dark");
         alert.showAndWait();
     }
 }

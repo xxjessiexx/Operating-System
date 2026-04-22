@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -34,6 +35,7 @@ public class SimulationController {
     private OS os;
     private boolean completionShown = false;
     private boolean stepScheduled = false;
+    private boolean autoRunning = false;
 
     @FXML
     private Label globalTimeLabel;
@@ -55,6 +57,9 @@ public class SimulationController {
 
     @FXML
     private VBox diskSlotsBox;
+
+    @FXML
+    private ScrollPane diskScrollPane;
 
     @FXML
     private FlowPane readyQueuePane;
@@ -101,6 +106,12 @@ public class SimulationController {
         os = new OS(config.getAlgorithm(), config.getQuantum());
         completionShown = false;
         stepScheduled = false;
+        autoRunning = false;
+
+        if (timeline != null) {
+            timeline.stop();
+            timeline = null;
+        }
 
         previousQueueSnapshots.clear();
         previousMemoryValues.clear();
@@ -115,78 +126,91 @@ public class SimulationController {
         );
 
         refreshUI();
+        forceDiskScrollTheme();
     }
 
-    private void advanceOneStep() {
-        if (stepScheduled) {
+    private void advanceOneStep(boolean resumeAutoAfterStep) {
+        if (stepScheduled || os == null) {
             return;
         }
 
-        if (!os.isFinished()) {
-            stepScheduled = true;
-
-            if (timeline != null) {
-                timeline.pause();
-            }
-
-            Platform.runLater(() -> {
-                try {
-                    if (!os.isFinished()) {
-                        os.runOneStep();
-                        refreshUI();
-                    }
-
-                    if (os.isFinished()) {
-                        if (timeline != null) {
-                            timeline.stop();
-                        }
-                        if (!completionShown) {
-                            completionShown = true;
-                            showCompletionPopup();
-                        }
-                    } else {
-                        if (timeline != null) {
-                            timeline.play();
-                        }
-                    }
-                } finally {
-                    stepScheduled = false;
-                }
-            });
-        } else {
+        if (os.isFinished()) {
+            autoRunning = false;
             if (timeline != null) {
                 timeline.stop();
+                timeline = null;
             }
             if (!completionShown) {
                 completionShown = true;
                 showCompletionPopup();
             }
+            return;
         }
+
+        stepScheduled = true;
+
+        Platform.runLater(() -> {
+            try {
+                if (!autoRunning && timeline != null && !resumeAutoAfterStep) {
+                    timeline.stop();
+                    timeline = null;
+                }
+
+                if (!os.isFinished()) {
+                    os.runOneStep();
+                    refreshUI();
+                }
+
+                if (os.isFinished()) {
+                    autoRunning = false;
+                    if (timeline != null) {
+                        timeline.stop();
+                        timeline = null;
+                    }
+                    if (!completionShown) {
+                        completionShown = true;
+                        showCompletionPopup();
+                    }
+                } else if (resumeAutoAfterStep && autoRunning && timeline != null) {
+                    timeline.play();
+                }
+            } finally {
+                stepScheduled = false;
+            }
+        });
     }
 
     @FXML
     private void handleNextStep() {
-        advanceOneStep();
+        autoRunning = false;
+
+        if (timeline != null) {
+            timeline.stop();
+            timeline = null;
+        }
+
+        advanceOneStep(false);
     }
 
     @FXML
     private void handleRunAuto() {
+        autoRunning = true;
+
         if (timeline != null) {
             timeline.stop();
-        }
-
-        advanceOneStep();
-
-        if (os.isFinished()) {
-            return;
+            timeline = null;
         }
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            advanceOneStep();
-
-            if (os.isFinished()) {
-                timeline.stop();
+            if (!autoRunning || os == null || os.isFinished()) {
+                if (timeline != null) {
+                    timeline.stop();
+                    timeline = null;
+                }
+                return;
             }
+
+            advanceOneStep(true);
         }));
 
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -195,32 +219,47 @@ public class SimulationController {
 
     @FXML
     private void handlePause() {
+        autoRunning = false;
+
         if (timeline != null) {
             timeline.stop();
+            timeline = null;
         }
     }
 
     @FXML
     private void handleReset() {
+        autoRunning = false;
+
         if (timeline != null) {
             timeline.stop();
+            timeline = null;
         }
+
         initializeSimulation();
     }
 
     @FXML
     private void handleBack() throws Exception {
+        autoRunning = false;
+
         if (timeline != null) {
             timeline.stop();
+            timeline = null;
         }
+
         SceneManager.showSchedulerSetup();
     }
 
     @FXML
     private void handleHome() throws Exception {
+        autoRunning = false;
+
         if (timeline != null) {
             timeline.stop();
+            timeline = null;
         }
+
         SceneManager.showHome();
     }
 
@@ -361,26 +400,27 @@ public class SimulationController {
         }
 
         boolean changed = !Objects.equals(previousDiskSnapshot, snapshot);
-        List<DiskRowData> rows = parseDiskSnapshot(snapshot);
+        List<DiskProcessData> processes = parseDiskSnapshot(snapshot);
 
         diskSlotsBox.getChildren().clear();
 
-        if (rows.isEmpty()) {
+        if (processes.isEmpty()) {
             Label empty = new Label("Disk Empty");
             empty.getStyleClass().add("queue-placeholder");
             diskSlotsBox.getChildren().add(empty);
         } else {
-            for (int i = 0; i < rows.size(); i++) {
-                HBox row = createDiskRow(rows.get(i));
-                diskSlotsBox.getChildren().add(row);
+            for (DiskProcessData processData : processes) {
+                VBox card = createDiskCard(processData);
+                diskSlotsBox.getChildren().add(card);
 
                 if (changed) {
-                    animateMemoryRow(row);
+                    animateMemoryRow(card);
                 }
             }
         }
 
         previousDiskSnapshot = snapshot;
+        forceDiskScrollTheme();
     }
 
     private Label createProcessChip(String processName) {
@@ -424,18 +464,73 @@ public class SimulationController {
         return row;
     }
 
-    private HBox createDiskRow(DiskRowData rowData) {
-        Label chip = new Label(rowData.processName);
+    private VBox createDiskCard(DiskProcessData processData) {
+        Label chip = new Label(processData.processName);
         chip.getStyleClass().add("memory-chip");
-        chip.getStyleClass().add(rowData.chipStyleClass);
+        chip.getStyleClass().add(processData.chipStyleClass);
+        chip.getStyleClass().add("disk-process-chip");
 
-        Label detail = new Label(rowData.detailText);
+        VBox rowsBox = new VBox(6);
+        rowsBox.getStyleClass().add("disk-card-rows");
+
+        for (String line : processData.details) {
+            rowsBox.getChildren().add(createDiskDetailRow(line));
+        }
+
+        VBox card = new VBox(8, chip, rowsBox);
+        card.getStyleClass().add("disk-process-card");
+        return card;
+    }
+
+    private HBox createDiskDetailRow(String rawLine) {
+        Label miniChip = new Label(classifyDiskWord(rawLine));
+        miniChip.getStyleClass().add("disk-mini-chip");
+
+        Label detail = new Label(cleanDiskDetail(rawLine));
         detail.getStyleClass().add("disk-detail");
         detail.setWrapText(true);
+        detail.setMaxWidth(Double.MAX_VALUE);
 
-        HBox row = new HBox(12, chip, detail);
-        row.getStyleClass().add("disk-slot");
+        Region filler = new Region();
+        filler.getStyleClass().add("memory-bar");
+        HBox.setHgrow(filler, Priority.ALWAYS);
+
+        HBox row = new HBox(10, miniChip, filler, detail);
+        row.getStyleClass().add("disk-detail-row");
         return row;
+    }
+
+    private void forceDiskScrollTheme() {
+        if (diskScrollPane == null) {
+            return;
+        }
+
+        Platform.runLater(() -> {
+            diskScrollPane.setStyle(
+                    "-fx-background: transparent;"
+                    + "-fx-background-color: transparent;"
+                    + "-fx-border-color: transparent;"
+            );
+
+            Node viewport = diskScrollPane.lookup(".viewport");
+            if (viewport != null) {
+                viewport.setStyle(
+                        "-fx-background-color: linear-gradient(to bottom, rgba(21,18,69,0.98), rgba(13,11,43,0.99));"
+                        + "-fx-background-insets: 0;"
+                        + "-fx-background-radius: 22;"
+                );
+            }
+
+            Node content = diskScrollPane.getContent();
+            if (content != null) {
+                content.setStyle("-fx-background-color: transparent;");
+            }
+
+            Node corner = diskScrollPane.lookup(".corner");
+            if (corner != null) {
+                corner.setStyle("-fx-background-color: transparent;");
+            }
+        });
     }
 
     private void animateChip(Node node, int index) {
@@ -543,72 +638,52 @@ public class SimulationController {
         return rows;
     }
 
-    private List<DiskRowData> parseDiskSnapshot(String snapshot) {
-        List<DiskRowData> rows = new ArrayList<>();
+    private List<DiskProcessData> parseDiskSnapshot(String snapshot) {
+        List<DiskProcessData> processes = new ArrayList<>();
         if (snapshot == null || snapshot.isBlank()) {
-            return rows;
+            return processes;
         }
 
         String[] lines = snapshot.split("\\R");
-        String currentOwner = null;
+        DiskProcessData current = null;
 
         for (String line : lines) {
             String trimmed = line.trim();
 
-            if (trimmed.isEmpty()
-                    || trimmed.startsWith("----DISK")
-                    || trimmed.startsWith("-------------")) {
+            if (trimmed.isEmpty() || trimmed.startsWith("----DISK") || trimmed.startsWith("-------------")) {
                 continue;
             }
 
             Matcher pidMatcher = Pattern.compile("^PID\\s*=\\s*(\\d+)$").matcher(trimmed);
             if (pidMatcher.find()) {
-                currentOwner = "P" + pidMatcher.group(1);
-                rows.add(new DiskRowData(currentOwner, "PCB • PID = " + pidMatcher.group(1), processClass(currentOwner)));
+                String processName = "P" + pidMatcher.group(1);
+                current = new DiskProcessData(processName, processClass(processName));
+                current.details.add(trimmed);
+                processes.add(current);
                 continue;
             }
 
-            if (trimmed.startsWith("State")) {
-                rows.add(new DiskRowData(
-                        currentOwner != null ? currentOwner : "SYS",
-                        "PCB • " + trimmed,
-                        currentOwner != null ? processClass(currentOwner) : "generic-chip"
-                ));
-                continue;
+            if (current == null) {
+                current = new DiskProcessData("SYS", "generic-chip");
+                processes.add(current);
             }
 
-            if (trimmed.startsWith("PC") || trimmed.startsWith("MemStart") || trimmed.startsWith("MemEnd")) {
-                rows.add(new DiskRowData(
-                        currentOwner != null ? currentOwner : "SYS",
-                        "PCB • " + trimmed,
-                        currentOwner != null ? processClass(currentOwner) : "generic-chip"
-                ));
-                continue;
-            }
-
-            if (trimmed.startsWith("Instruction_")) {
-                rows.add(new DiskRowData(
-                        currentOwner != null ? currentOwner : "SYS",
-                        cleanDiskDetail(trimmed),
-                        currentOwner != null ? processClass(currentOwner) : "generic-chip"
-                ));
-                continue;
-            }
-
-            rows.add(new DiskRowData(
-                    currentOwner != null ? currentOwner : "SYS",
-                    cleanDiskDetail(trimmed),
-                    currentOwner != null ? processClass(currentOwner) : "generic-chip"
-            ));
+            current.details.add(trimmed);
         }
 
-        return rows;
+        return processes;
     }
 
     private String cleanDiskDetail(String text) {
         return text
-                .replaceFirst("^Instruction_\\d+\\s*=\\s*", "Instr • ")
-                .replace("_", " ");
+                .replaceFirst("^Instruction_(\\d+)\\s*=\\s*", "Instruction $1 • ")
+                .replaceFirst("^PID\\s*=\\s*", "PID • ")
+                .replaceFirst("^State\\s*=\\s*", "State • ")
+                .replaceFirst("^PC\\s*=\\s*", "PC • ")
+                .replaceFirst("^MemStart\\s*=\\s*", "MemStart • ")
+                .replaceFirst("^MemEnd\\s*=\\s*", "MemEnd • ")
+                .replaceFirst("^arrivalTime\\s*=\\s*", "Arrival • ")
+                .replaceFirst("^waitingTime\\s*=\\s*", "Waiting • ");
     }
 
     private String processClass(String processName) {
@@ -643,6 +718,34 @@ public class SimulationController {
         return "Data";
     }
 
+    private String classifyDiskWord(String rawValue) {
+        if (rawValue.startsWith("PID")) {
+            return "PID";
+        }
+        if (rawValue.startsWith("State")) {
+            return "State";
+        }
+        if (rawValue.startsWith("PC")) {
+            return "PC";
+        }
+        if (rawValue.startsWith("MemStart")) {
+            return "Start";
+        }
+        if (rawValue.startsWith("MemEnd")) {
+            return "End";
+        }
+        if (rawValue.startsWith("arrivalTime")) {
+            return "Arr";
+        }
+        if (rawValue.startsWith("waitingTime")) {
+            return "Wait";
+        }
+        if (rawValue.startsWith("Instruction_")) {
+            return "Instr";
+        }
+        return "Data";
+    }
+
     private void showCompletionPopup() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Simulation Complete");
@@ -668,15 +771,14 @@ public class SimulationController {
         }
     }
 
-    private static class DiskRowData {
+    private static class DiskProcessData {
 
         final String processName;
-        final String detailText;
         final String chipStyleClass;
+        final List<String> details = new ArrayList<>();
 
-        DiskRowData(String processName, String detailText, String chipStyleClass) {
+        DiskProcessData(String processName, String chipStyleClass) {
             this.processName = processName;
-            this.detailText = detailText;
             this.chipStyleClass = chipStyleClass;
         }
     }

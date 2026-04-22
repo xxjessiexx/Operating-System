@@ -62,8 +62,17 @@
             <VBox spacing="16" prefWidth="480">
                 <VBox spacing="10" styleClass="hud-panel">
                     <Label text="Disk Contents" styleClass="section-title"/>
-                    <StackPane styleClass="inner-display">
-                        <VBox fx:id="diskSlotsBox" spacing="10" styleClass="disk-slots-box"/>
+                    <StackPane styleClass="inner-display disk-display-shell">
+                        <ScrollPane fx:id="diskScrollPane"
+                                    fitToWidth="true"
+                                    pannable="true"
+                                    prefHeight="210"
+                                    maxHeight="210"
+                                    styleClass="memory-scroll disk-scroll-pane">
+                            <content>
+                                <VBox fx:id="diskSlotsBox" spacing="8" styleClass="disk-slots-box"/>
+                            </content>
+                        </ScrollPane>
                     </StackPane>
                 </VBox>
 
