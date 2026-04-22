@@ -1,77 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.SimulationController"
             styleClass="root">
 
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="top-bar">
-            <HBox spacing="10" alignment="CENTER_LEFT">
-    <Button text="← Back" onAction="#handleBack" styleClass="reset-btn"/>
-    <Button text="Home" onAction="#handleHome" styleClass="auto-btn"/>
-</HBox>
-            <Label text="OS Simulation Dashboard" styleClass="title"/>
-            <Pane HBox.hgrow="ALWAYS"/>
-            <Label text="Global Time:" styleClass="section-title"/>
-            <Label fx:id="globalTimeLabel" text="0" styleClass="global-time"/>
-            <Pane HBox.hgrow="ALWAYS"/>
-            <Button text="Next Step" onAction="#handleNextStep" styleClass="next-btn"/>
-            <Button text="Run Auto" onAction="#handleRunAuto" styleClass="auto-btn"/>
-            <Button text="Pause" onAction="#handlePause" styleClass="pause-btn"/>
-            <Button text="Reset" onAction="#handleReset" styleClass="reset-btn"/>
-        </HBox>
+        <VBox spacing="0">
+            <HBox alignment="CENTER_LEFT" spacing="18" styleClass="top-bar">
+                <Button text="← Back" onAction="#handleBack" styleClass="nav-btn"/>
+                <Button text="Home" onAction="#handleHome" styleClass="nav-btn"/>
+
+                <Label text="OS Simulation Dashboard" styleClass="sim-title"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <Label text="Global Time:" styleClass="section-title"/>
+                <Label fx:id="globalTimeLabel" text="0" styleClass="global-time"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <Button text="Next Step" onAction="#handleNextStep" styleClass="next-btn"/>
+                <Button text="Run Auto" onAction="#handleRunAuto" styleClass="auto-btn"/>
+                <Button text="Pause" onAction="#handlePause" styleClass="pause-btn"/>
+                <Button text="Reset" onAction="#handleReset" styleClass="reset-btn"/>
+            </HBox>
+            <Pane styleClass="top-strip"/>
+        </VBox>
     </top>
 
     <center>
-        <HBox spacing="16" BorderPane.alignment="CENTER">
+        <HBox spacing="18">
             <padding>
-                <Insets top="16" right="16" bottom="16" left="16"/>
+                <Insets top="18" right="18" bottom="18" left="18"/>
             </padding>
 
-            <!-- LEFT: MEMORY -->
-            <VBox spacing="12" HBox.hgrow="ALWAYS" prefWidth="700" styleClass="card">
+            <VBox spacing="14" HBox.hgrow="ALWAYS" prefWidth="760" styleClass="hud-panel">
                 <Label text="Memory Contents" styleClass="section-title"/>
-                <TextArea fx:id="memoryArea" editable="false" wrapText="false" VBox.vgrow="ALWAYS"/>
+                <StackPane styleClass="inner-display" VBox.vgrow="ALWAYS">
+                    <ScrollPane fitToWidth="true" pannable="true" styleClass="memory-scroll" VBox.vgrow="ALWAYS">
+                        <content>
+                            <VBox fx:id="memorySlotsBox" spacing="10" styleClass="memory-slots-box"/>
+                        </content>
+                    </ScrollPane>
+                </StackPane>
             </VBox>
 
-            <!-- MIDDLE: DISK + QUEUES -->
-            <VBox spacing="16" prefWidth="360">
-                <VBox spacing="10" styleClass="card">
+            <VBox spacing="16" prefWidth="420">
+                <VBox spacing="10" styleClass="hud-panel">
                     <Label text="Disk Contents" styleClass="section-title"/>
-                    <TextArea fx:id="diskArea" editable="false" wrapText="true" prefRowCount="5"/>
+                    <StackPane styleClass="inner-display">
+                        <VBox fx:id="diskSlotsBox" spacing="10" styleClass="disk-slots-box"/>
+                    </StackPane>
                 </VBox>
 
-                <VBox spacing="10" styleClass="card">
+                <VBox spacing="10" styleClass="hud-panel">
                     <Label text="Ready Queue" styleClass="section-title"/>
-                    <TextArea fx:id="readyQueueArea" editable="false" wrapText="true" prefRowCount="4"/>
+                    <StackPane styleClass="inner-display">
+                        <FlowPane fx:id="readyQueuePane" hgap="12" vgap="12" prefWrapLength="300" styleClass="queue-pane"/>
+                    </StackPane>
 
                     <Label text="Blocked Queue" styleClass="section-title"/>
-                    <TextArea fx:id="blockedQueueArea" editable="false" wrapText="true" prefRowCount="4"/>
+                    <StackPane styleClass="inner-display">
+                        <FlowPane fx:id="blockedQueuePane" hgap="12" vgap="12" prefWrapLength="300" styleClass="queue-pane"/>
+                    </StackPane>
                 </VBox>
             </VBox>
 
-            <!-- RIGHT: INFO -->
-            <VBox spacing="16" prefWidth="260" styleClass="card">
+            <VBox spacing="16" prefWidth="295" styleClass="hud-panel">
                 <Label text="Running Process" styleClass="section-title"/>
                 <Label fx:id="runningProcessLabel" text="-" styleClass="state-label"/>
 
-                <Separator/>
+                <Separator styleClass="info-divider"/>
 
                 <Label text="Current Instruction" styleClass="section-title"/>
                 <Label fx:id="currentInstructionLabel" text="-" wrapText="true"/>
 
-                <Separator/>
+                <Separator styleClass="info-divider"/>
 
                 <Label text="Scheduler Info" styleClass="section-title"/>
                 <Label fx:id="algorithmLabel" text="Algorithm: -"/>
                 <Label fx:id="quantumLabel" text="Quantum: -"/>
                 <Label fx:id="usedTimeLabel" text="Used Time: -"/>
 
-                <Separator/>
+                <Separator styleClass="info-divider"/>
 
                 <Label text="Process States" styleClass="section-title"/>
                 <Label fx:id="p1StateLabel" text="P1: -"/>

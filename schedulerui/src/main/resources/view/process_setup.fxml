@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controller.ProcessSetupController">
+           fx:controller="controller.ProcessSetupController"
+           styleClass="page-shell">
 
-    <VBox alignment="CENTER" spacing="20" maxWidth="420" styleClass="card">
-        <padding>
-            <Insets top="30" right="30" bottom="30" left="30"/>
-        </padding>
-        <HBox spacing="10" alignment="CENTER_LEFT">
-    <Button text="← Back" onAction="#handleBack" styleClass="reset-btn"/>
-    <Button text="Home" onAction="#handleHome" styleClass="auto-btn"/>
-</HBox>
+    <children>
+        <Region styleClass="backdrop-glow"/>
+        <Region styleClass="backdrop-ring-left" StackPane.alignment="TOP_LEFT"/>
+        <Region styleClass="backdrop-ring-right" StackPane.alignment="BOTTOM_RIGHT"/>
 
-        <Label text="OS Simulation Setup" styleClass="title-label"/>
-        <Label text="Enter the arrival time for each process" styleClass="section-title"/>
+        <StackPane styleClass="center-wrap">
+            <VBox alignment="CENTER" spacing="20" maxWidth="470" styleClass="main-card">
+                <padding>
+                    <Insets top="30" right="34" bottom="30" left="34"/>
+                </padding>
 
-        <TextField fx:id="p1ArrivalField" promptText="Process 1 Arrival Time"/>
-        <TextField fx:id="p2ArrivalField" promptText="Process 2 Arrival Time"/>
-        <TextField fx:id="p3ArrivalField" promptText="Process 3 Arrival Time"/>
+                <HBox spacing="14" alignment="CENTER_LEFT">
+                    <Button text="← Back" onAction="#handleBack" styleClass="nav-btn"/>
+                    <Button text="Home" onAction="#handleHome" styleClass="nav-btn"/>
+                </HBox>
 
-        <Button fx:id="nextButton" text="Next" onAction="#handleNext"/>
-    </VBox>
+                <Label text="OS Simulation Setup" styleClass="title-label"/>
+                <Label text="Enter the arrival time for each process" styleClass="section-title"/>
+
+                <TextField fx:id="p1ArrivalField" promptText="Process 1 Arrival Time"/>
+                <TextField fx:id="p2ArrivalField" promptText="Process 2 Arrival Time"/>
+                <TextField fx:id="p3ArrivalField" promptText="Process 3 Arrival Time"/>
+
+                <Button fx:id="nextButton" text="Next" onAction="#handleNext"/>
+            </VBox>
+        </StackPane>
+    </children>
 </StackPane>

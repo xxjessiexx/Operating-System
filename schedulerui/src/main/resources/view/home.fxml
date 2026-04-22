@@ -3,29 +3,38 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="controller.HomeController">
+           fx:controller="controller.HomeController"
+           styleClass="page-shell">
 
-    <VBox alignment="CENTER" spacing="20" maxWidth="420" styleClass="card">
-        <padding>
-            <Insets top="30" right="30" bottom="30" left="30"/>
-        </padding>
+    <children>
+        <Region styleClass="backdrop-glow"/>
+        <Region styleClass="backdrop-ring-left" StackPane.alignment="TOP_LEFT"/>
+        <Region styleClass="backdrop-ring-right" StackPane.alignment="BOTTOM_RIGHT"/>
 
-        <Label text="OS Scheduling Simulator" styleClass="title-label"/>
-        <Label text="Welcome" styleClass="section-title"/>
-        <Label text="Visualize process scheduling, memory, disk, and execution flow."
-               wrapText="true"
-               style="-fx-font-size: 14px; -fx-text-alignment: center;"/>
+        <StackPane styleClass="center-wrap">
+            <VBox alignment="CENTER" spacing="22" maxWidth="460" styleClass="main-card">
+                <padding>
+                    <Insets top="34" right="34" bottom="34" left="34"/>
+                </padding>
 
-        <Button text="Start Simulation"
-                onAction="#handleStart"
-                styleClass="success-button"/>
+                <Label text="OS Scheduling Simulator" styleClass="title-label"/>
+                <Label text="Welcome" styleClass="section-title"/>
+                <Label text="Visualize process scheduling, memory, disk, and execution flow."
+                       styleClass="subtitle-label"/>
 
-        <Button text="Exit"
-                onAction="#handleExit"
-                styleClass="danger-button"/>
-    </VBox>
+                <Button text="Start Simulation"
+                        onAction="#handleStart"
+                        styleClass="success-button"/>
+
+                <Button text="Exit"
+                        onAction="#handleExit"
+                        styleClass="danger-button"/>
+            </VBox>
+        </StackPane>
+    </children>
 </StackPane>

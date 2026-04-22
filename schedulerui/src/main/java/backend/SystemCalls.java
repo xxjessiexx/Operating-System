@@ -7,8 +7,14 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 public class SystemCalls {
 
@@ -32,11 +38,48 @@ public class SystemCalls {
     }
 
     public String input(int processId, String instruction, String variableName) {
-        TextInputDialog dialog = new TextInputDialog();
+        Dialog<String> dialog = new Dialog<>();
         dialog.initOwner(app.SceneManager.getStage());
         dialog.setTitle("Process Input");
-        dialog.setHeaderText("Process P" + processId);
-        dialog.setContentText("Instruction: " + instruction + "\nEnter value for " + variableName + ":");
+        dialog.setHeaderText(null);
+
+        ButtonType okButtonType
+                = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType
+                = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        dialog.getDialogPane().getButtonTypes().addAll(okButtonType, cancelButtonType);
+
+        VBox content = new VBox(14);
+        content.setStyle("-fx-padding: 18;");
+
+        Label title = new Label("Process P" + processId);
+        title.getStyleClass().add("section-title");
+
+        Label info = new Label(
+                "Instruction: " + instruction + "\nEnter value for " + variableName + ":"
+        );
+        info.setWrapText(true);
+
+        TextField inputField = new TextField();
+        inputField.setPromptText("Enter value");
+
+        content.getChildren().addAll(title, info, inputField);
+        dialog.getDialogPane().setContent(content);
+
+        dialog.getDialogPane().getStylesheets().add(
+                app.SceneManager.class.getResource("/view/styles.css").toExternalForm()
+        );
+        dialog.getDialogPane().getStyleClass().add("dialog-pane-dark");
+
+        Platform.runLater(inputField::requestFocus);
+
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == okButtonType) {
+                return inputField.getText();
+            }
+            return "";
+        });
 
         Optional<String> result = dialog.showAndWait();
         return result.orElse("");
@@ -72,7 +115,6 @@ public class SystemCalls {
     }
 
     public MemoryWord readFromMemory(Memory memory, int address) {
-
         return memory.readWord(address);
     }
 
@@ -80,5 +122,4 @@ public class SystemCalls {
         MemoryWord word = new MemoryWord(name, value);
         memory.writeWord(address, word);
     }
-
 }
