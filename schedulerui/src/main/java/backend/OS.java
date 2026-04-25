@@ -28,6 +28,7 @@ public class OS {
     String pq1Snapshot = "[]";
     String pq2Snapshot = "[]";
     String pq3Snapshot = "[]";
+    private boolean[] terminatedProcesses = new boolean[4];
 
     public OS(String schedulerAlgorithm, int quantum) {
         this.schedulerAlgorithm = schedulerAlgorithm;
@@ -89,6 +90,7 @@ public class OS {
         finished = false;
         nextPid = 1;
         currentProcess = null;
+        terminatedProcesses = new boolean[4];
 
         memory = new Memory();
         scheduler = new Scheduler();
@@ -176,7 +178,7 @@ public class OS {
             if (p.pcb != null
                     && p.arrivalTime != globalTime
                     && (p.pcb.processState.equals(ProcessState.BLOCKED)
-                            || p.pcb.processState.equals(ProcessState.READY))) {
+                    || p.pcb.processState.equals(ProcessState.READY))) {
 
                 p.waitingTime++;
                 System.out.println("at process: " + p + " global time incremented: " + globalTime);
@@ -214,11 +216,14 @@ public class OS {
                 System.out.println(currentProcess + " terminated");
                 memory.deallocate(currentProcess);
                 scheduler.removeTerminatedProcess(currentProcess);
+
+                if (currentProcess.pcb != null
+                        && currentProcess.pcb.processID >= 1
+                        && currentProcess.pcb.processID <= 3) {
+                    terminatedProcesses[currentProcess.pcb.processID] = true;
+                }
+
                 toRemove.add(currentProcess);
-            } else if (schedulerAlgorithm.equals("MultilevelFeedbackQueue")) {
-                scheduler.updateMLFQ(currentProcess, globalTime);
-            } else if (schedulerAlgorithm.equals("RoundRobin")) {
-                scheduler.usedTime++;
             }
         }
 
@@ -234,7 +239,7 @@ public class OS {
     }
 
     public void updateAllProcessesInMemory(ArrayList<Process> processes) { // new updates all porcesses not just current
-                                                                           // one
+        // one
         for (Process p : processes) {
             if (p != null && p.pcb != null && p.inMemory) {
                 memory.updateMemory(p);
@@ -369,13 +374,17 @@ public class OS {
         }
 
         boolean acquired = mutex.semWait(p); // tries to acquire the resource, if it is not available, it blocks the
-                                             // process and adds it to the mutex's blocked queue
+        // process and adds it to the mutex's blocked queue
 
         if (!acquired) {
             /// the proces state is already set to blocked in mutex's semwait
             scheduler.removeBlockedProcess(p); // if the process is blocked, remove it from the scheduler so it won't be
-                                               // scheduled to run until it is unblocked
-        } ////// THIS removes the process from the ready queues + add it to the blocked
+            // scheduled to run until it is unblocked
+        }
+
+    
+
+    ////// THIS removes the process from the ready queues + add it to the blocked
           ////// queue + change its state to blocked
     }
 
@@ -389,11 +398,11 @@ public class OS {
         }
 
         Process unblockedProcess = mutex.semSignal(p); // unblocks the next process waiting for the resource, if there
-                                                       // is one, and returns it
+        // is one, and returns it
 
         if (unblockedProcess != null) {
             scheduler.addUnblockedProcess(unblockedProcess, globalTime); // adds the unblocked process back to the
-                                                                         // scheduler so it can be scheduled to run
+            // scheduler so it can be scheduled to run
             // + remove from blocked queue + change state to ready
         }
     }
@@ -433,7 +442,7 @@ public class OS {
     }
 
     public String getReadyQueueSnapshot() {
-    return readyQueueSnapshot;
+        return readyQueueSnapshot;
     }
 
     public String getBlockedQueueSnapshot() {
@@ -465,11 +474,20 @@ public class OS {
 
     public String getProcessStateSnapshot(int pid) {
         for (Process p : processes) {
-            if (p.pcb != null && p.pcb.processID == pid) {
+            if (p.orderNo == pid) {
+                if (p.pcb == null) {
+                    return "NOT CREATED";
+                }
+
                 return p.pcb.processState.toString();
             }
         }
-        return "NOT CREATED / FINISHED";
+
+        if (pid >= 1 && pid < terminatedProcesses.length && terminatedProcesses[pid]) {
+            return "TERMINATED";
+        }
+
+        return "NOT CREATED";
     }
 
     public String getAlgorithm() {

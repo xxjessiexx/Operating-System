@@ -109,8 +109,6 @@ public class Memory {
         return process.pcb.memEnd - 2;
     }
 
-     
-                                                                           
     public Object getVariableValue(Process process, String variableName) { // returns null if variable mot found or if
     if (process != null && process.inMemory) {                              // already the value is null
         int start = getVariablesStart(process);
