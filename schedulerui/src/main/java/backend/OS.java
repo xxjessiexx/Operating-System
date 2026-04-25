@@ -224,6 +224,12 @@ public class OS {
                 }
 
                 toRemove.add(currentProcess);
+
+            } else if (schedulerAlgorithm.equals("MultilevelFeedbackQueue")) {
+                scheduler.updateMLFQ(currentProcess, globalTime);
+
+            } else if (schedulerAlgorithm.equals("RoundRobin")) {
+                scheduler.usedTime++;
             }
         }
 
